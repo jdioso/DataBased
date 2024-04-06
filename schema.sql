@@ -46,6 +46,10 @@ CREATE TABLE events (
   FOREIGN KEY(universityID),
 );
 
+INSERT INTO users (email, password)
+VALUES
+('test@ucf.edu', 'testingAccount');
+
 -- Below is sample code for the template that was here beforehand will reference later
 -- INSERT INTO notes (title, content)
 -- VALUES
