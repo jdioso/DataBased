@@ -1,8 +1,17 @@
-const express = require('express');
+// Update imports to ESM syntax
+import express from 'express';
+import rsoController from '../controllers/rsoController.js';
+
 const router = express.Router();
-const userController = require('../controllers/userController');
 
-router.post('/register', userController.register);
-router.post('/login', userController.login);
+// // User routes
+// router.post('/register', userController.register);
+// router.post('/login', userController.login);
 
-module.exports = router;
+// RSO routes
+router.post('/rso/add', rsoController.addRSO);
+router.delete('/rso/delete/:rsold', rsoController.deleteRSO); // Made route consistent with RESTful practices
+router.put('/rso/edit/:rsold', rsoController.editRSO);
+
+// Export router using ESM syntax
+export default router;
