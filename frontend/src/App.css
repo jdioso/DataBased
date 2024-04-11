@@ -1,38 +1,140 @@
-.App {
-  text-align: center;
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:400|Jua:400");
+
+/*css reset start*/
+html {
+   box-sizing: border-box;
+   font-size: 16px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+*,
+*:before,
+*:after {
+   box-sizing: inherit;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+   margin: 0;
+   padding: 0;
+   font-weight: normal;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+ol,
+ul {
+   list-style: none;
 }
 
-.App-link {
-  color: #61dafb;
+img {
+   max-width: 100%;
+   height: auto;
+}
+/*css reset end*/
+
+:root {
+   --background: #564a94;
+   --text: #f2ecf8;
+   --primary: #f2ecf8;
+   --secondary: #27254c;
+   --accent: #46b2d2;
+   --shadow-primary: #181529;
+
+   --heading: 2.369rem;
+   --subheading: 1.333rem;
+   --button-text-lg: 1rem;
+   --button-text-sm: 0.75rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body {
+   height: 100%;
+   width: 100vw;
+   background-color: var(--background);
+   font-family: "Ubuntu";
+   font-weight: 400;
+   color: var(--background);
+
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+   font-family: "Jua";
+   font-weight: 700;
+   color: var(--text);
+}
+
+html {
+   font-size: 100%;
+} /* 16px */
+
+h1 {
+   font-size: 4.21rem; /* 67.36px */
+}
+
+h2 {
+   font-size: 3.158rem; /* 50.56px */
+}
+
+h3,
+.heading {
+   font-size: 2.369rem; /* 37.92px */
+}
+
+h4 {
+   font-size: 1.777rem; /* 28.48px */
+}
+
+h5,
+.subheading {
+   font-size: 1.333rem; /* 21.28px */
+}
+
+small,
+.button-sm {
+   font-size: 0.75rem; /* 12px */
+}
+
+.button-lg {
+   font-size: 1rem;
+}
+.container {
+   width: 100%;
+   padding: 20px 40px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: stretch;
+}
+
+.flex-row {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+}
+
+.flex-col {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+}
+
+.flex-grow {
+   flex-grow: 1;
 }
