@@ -18,14 +18,19 @@ CREATE TABLE super_admin (
 CREATE TABLE university (
   universityID PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(64),
+  domain VARCHAR(32),
   location VARCHAR(256),
   description VARCHAR(1024),
+  numStudents integer,
+  picture VARCHAR(2048),
   FOREIGN KEY(userID),
 );
 
 CREATE TABLE rso (
   rsoID integer PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(64),
+  numMembers INT,
+  description VARCHAR(1024),
   FOREIGN KEY(userID),
 );
 
@@ -44,6 +49,14 @@ CREATE TABLE events (
   contactNumber VARCHAR(16),
   description VARCHAR(1024),
   FOREIGN KEY(universityID),
+  FOREIGN KEY(commentID),
+);
+
+CREATE TABLE comments (
+  commentID integer PRIMARY KEY AUTO_INCREMENT,
+  text VARCHAR(1024),
+  FOREIGN KEY(userID),
+  FOREIGN KEY(eventID),
 );
 
 INSERT INTO users (email, password)
