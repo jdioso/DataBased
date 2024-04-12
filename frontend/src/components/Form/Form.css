@@ -1,0 +1,78 @@
+@font-face {
+    font-family: "Jua";
+    src: local("Jua-Regular.ttf"),
+     url("../assets/Jua-Regular.ttf") format("truetype");
+}
+
+* {
+    margin: 0; 
+    box-sizing: border-box; 
+}
+
+center {
+    background-color: var(--primaryColor);
+}
+
+:root {
+    --textColor: #F2ECF8; 
+    --backgroundColor: #564A94; 
+    --primaryColor: #F2ECF8; 
+    --secondaryColor: #27254C;
+    --accentColor: #46B2D2;  
+}
+
+.wrapper-login {
+    margin-top: 4.2em; 
+}
+
+#formDiv {
+    width: 45em; 
+    height: max-content;
+    border-color: none; 
+    border-radius: 10px; 
+    border-style: solid;
+    background-color: var(--primaryColor);
+    padding-top: 2em;
+    padding-bottom: 3.2em; 
+}
+
+#formTitle {
+    font-family: 'Jua';
+    font-size: 3rem;
+    color: var(--backgroundColor);
+    background-color: var(--primaryColor);
+}
+
+#formInput {
+    width: 16em; 
+    font-family: 'Jua';
+    font-size: 1.8rem;
+    text-align: center;
+    color: var(--backgroundColor); 
+    height: 3em; 
+    padding-top: 0.2em; 
+    padding-bottom: 0.2em; 
+    background-color: white;
+    border-radius: 10px; 
+    border: none; 
+    margin-top: 15px; 
+    margin-bottom: 18px; 
+}
+
+#formButton {
+    font-family: 'Jua';
+    font-size: 1.4rem; 
+    padding-top: 0.1em; 
+    padding-bottom: 0.1em; 
+    padding-right: 0.1em; 
+    padding-left: 0.1em; 
+    background-color: var(--accentColor);
+    color: var(--textColor); 
+    cursor: pointer;
+    border-radius: 10px;
+    border-color: var(--accentColor);
+    border-style: solid;
+    width: 6.6em; 
+    height: 3em; 
+    margin-bottom: 40px; 
+}
