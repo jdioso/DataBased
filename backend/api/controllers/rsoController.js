@@ -1,5 +1,3 @@
-
-// Add RSO controller
 const addRSO = async (req, res) => {
     try {
         const { userID, name } = req.body;
@@ -11,7 +9,6 @@ const addRSO = async (req, res) => {
     }
 };
 
-// Delete RSO controller
 const deleteRSO = async (req, res) => {
     const rsold = req.params.rsold;
     try {
@@ -27,7 +24,6 @@ const deleteRSO = async (req, res) => {
     }
 };
 
-// Edit RSO controller
 const editRSO = async (req, res) => {
     const rsold = req.params.rsold;
     const { userID, name } = req.body;
@@ -44,5 +40,4 @@ const editRSO = async (req, res) => {
     }
 };
 
-// Export the controller functions
 export { addRSO, deleteRSO, editRSO };
