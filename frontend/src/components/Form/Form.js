@@ -1,7 +1,7 @@
 import React from 'react';
-import "../styles/Login.css"; 
+import "./Form.css"; 
 
-function Login()
+function Form()
 {
     return(
         <div class='wrapper-login d-flex align-items-center justify-content-center'>
