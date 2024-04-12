@@ -1,8 +1,10 @@
-const express = require('express');
+import express from 'express';
+import { addRSO, deleteRSO, editRSO } from '../controllers/rsoController.js';
+
 const router = express.Router();
-const userController = require('../controllers/userController');
 
-router.post('/register', userController.register);
-router.post('/login', userController.login);
+router.post('/rso/add', addRSO);
+router.delete('/rso/delete/:rsold', deleteRSO);
+router.put('/rso/edit/:rsold', editRSO);
 
-module.exports = router;
+export default router;
