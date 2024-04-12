@@ -13,7 +13,7 @@ app.use(express.json()); // Parses JSON request body
 app.use('/api/users', userRoutes);
 
 // Setting up the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.MYSQL_PORT || 3000;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
