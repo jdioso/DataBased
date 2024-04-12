@@ -2,7 +2,7 @@
    box-sizing: border-box;
    padding: 10px 20px;
    height: 15%;
-   width: 100vw;
+   width: 100%;
    background-color: var(--secondary);
 
    display: flex;

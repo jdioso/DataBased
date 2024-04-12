@@ -1,52 +1,65 @@
 import React from "react";
-import Navbar from "../../components/Navbar/Navbar";
 import Button from "../../components/Button/Button";
-import Card from "../../components/Card/Card";
+import Navbar from "../../components/Navbar/Navbar";
+import Square from "../../components/Square/Square";
+import styles from "./Dashboard.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+   const navigate = useNavigate();
+
    const getMyOrgs = async () => {};
+   const openUniversityInfo = async () => {
+      navigate("/university");
+   };
    return (
       <>
          <Navbar />
-         <div className="container">
-            <div className="flex-row">
+         <div className={styles.container}>
+            <div className={styles.flexRow}>
                <h1 className="subheading flex-grow">University</h1>
-               <Button>Open University</Button>
+               <Button
+                  onClick={(e) => {
+                     e.preventDefault();
+                     openUniversityInfo();
+                  }}
+               >
+                  Open University
+               </Button>
             </div>
-            <div className="flex-col">
+            <div className={styles.flexCol}>
                <h1 className="subheading">My Organizations</h1>
                <div
                   style={{
-                     maxWidth: "100%",
                      display: "flex",
                      flexWrap: "wrap",
                      gap: "30px",
                   }}
                >
-                  <Card cardTitle="Organization Name">
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
-                  <Card cardTitle="Organization Name">
+                  </Square>
+                  <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
-                  </Card>
+                  </Square>
                </div>
             </div>
          </div>

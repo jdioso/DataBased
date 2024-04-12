@@ -8,16 +8,18 @@ import Org from "../pages/Org/Org";
 import University from "../pages/University/University";
 function App() {
    return (
-      <BrowserRouter>
-         <Routes>
-            <Route index element={<Dashboard />} />
-            <Route path="discover" element={<Discover />} />
-            <Route path="event" element={<Event />} />
-            <Route path="org" element={<Org />} />
-            <Route path="university" element={<University />} />
-            <Route path="login" element={<Login />} />
-         </Routes>
-      </BrowserRouter>
+      <div className="App">
+         <BrowserRouter>
+            <Routes>
+               <Route index element={<Dashboard />} />
+               <Route path="discover" element={<Discover />} />
+               <Route path="event" element={<Event />} />
+               <Route path="org" element={<Org />} />
+               <Route path="university" element={<University />} />
+               <Route path="login" element={<Login />} />
+            </Routes>
+         </BrowserRouter>
+      </div>
    );
 }
 

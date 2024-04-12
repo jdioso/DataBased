@@ -1,4 +1,6 @@
-.card {
+.square {
+   height: 200px;
+   width: 200px;
    padding: 20px;
    background-color: var(--primary);
    border-radius: 15px;
@@ -7,13 +9,19 @@
 
    display: flex;
    flex-direction: column;
-   justify-content: flex-start;
-   align-items: start;
-
-   overflow-y: auto;
+   justify-content: center;
+   align-items: center;
 }
 
-.cardTitle {
+.squareTitle {
    font-size: var(--subheading);
    color: var(--background);
+}
+
+.squareControls {
+   flex-grow: 1;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-end;
+   align-items: center;
 }
