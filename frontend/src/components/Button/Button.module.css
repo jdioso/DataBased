@@ -39,3 +39,7 @@
    min-width: 200px;
    font-size: 24px;
 }
+
+.hug {
+   min-width: 0;
+}

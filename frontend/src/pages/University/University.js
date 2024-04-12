@@ -12,7 +12,7 @@ export default function University() {
    return (
       <>
          <Navbar></Navbar>
-         <h1 className="subheading">University</h1>
+         <h1 className={styles.header}>University</h1>
          <div className={styles.container}>
             <div className={styles.sidebarWrapper}>
                <Sidebar className={styles.sidebar}>
@@ -88,38 +88,73 @@ export default function University() {
                </div>
             </div>
             <div className={styles.eventsWrapper}>
-               <h2 className="subheading">Public Events</h2>
+               <h2 className="subheading"> Events</h2>
                <div className={styles.events}>
-                  <Card cardTitle="Everyone Welcome"></Card>
-                  <Card cardTitle="University Only"></Card>
+                  <Card cardTitle="Everyone Welcome">
+                     <ul className={styles.eventList}>
+                        <li className={styles.eventItem}>
+                           <h2 className={styles.eventItemTitle}>Event Name</h2>
+                           <h2 className={styles.eventItemDate}>
+                              Date:**/**/****
+                           </h2>
+                           <Button size="sm" hug={true}>
+                              Info
+                           </Button>
+                        </li>
+                        <li className={styles.eventItem}>
+                           <h2 className={styles.eventItemTitle}>Event Name</h2>
+                           <h2 className={styles.eventItemDate}>
+                              Date:**/**/****
+                           </h2>
+                           <Button size="sm" hug={true}>
+                              Info
+                           </Button>
+                        </li>
+                        <li className={styles.eventItem}>
+                           <h2 className={styles.eventItemTitle}>Event Name</h2>
+                           <h2 className={styles.eventItemDate}>
+                              Date:**/**/****
+                           </h2>
+                           <Button size="sm" hug={true}>
+                              Info
+                           </Button>
+                        </li>
+                     </ul>
+                  </Card>
+                  <Card cardTitle="University Only">
+                     <ul className={styles.eventList}>
+                        <li className={styles.eventItem}>
+                           <h2 className={styles.eventItemTitle}>Event Name</h2>
+                           <h2 className={styles.eventItemDate}>
+                              Date:**/**/****
+                           </h2>
+                           <Button size="sm" hug={true}>
+                              Info
+                           </Button>
+                        </li>
+                        <li className={styles.eventItem}>
+                           <h2 className={styles.eventItemTitle}>Event Name</h2>
+                           <h2 className={styles.eventItemDate}>
+                              Date:**/**/****
+                           </h2>
+                           <Button size="sm" hug={true}>
+                              Info
+                           </Button>
+                        </li>
+                        <li className={styles.eventItem}>
+                           <h2 className={styles.eventItemTitle}>Event Name</h2>
+                           <h2 className={styles.eventItemDate}>
+                              Date:**/**/****
+                           </h2>
+                           <Button size="sm" hug={true}>
+                              Info
+                           </Button>
+                        </li>
+                     </ul>
+                  </Card>
                </div>
             </div>
          </div>
       </>
    );
 }
-/* 
-   Navbar
-   Header
-   Row Container
-      Sidebar (300px)
-      Content/Col container (flex grow)
-         Banner
-         Org container
-            Title (Organizations)
-            Carousel
-               Flexbox
-               Controls
-         Events lists container
-            Public event container
-               Title
-               List
-                  Event list elements
-            Private event container
-               Title
-               List
-                  Event list elements
-
-              
-
-*/
