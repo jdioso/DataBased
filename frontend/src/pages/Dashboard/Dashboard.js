@@ -9,8 +9,11 @@ export default function Dashboard() {
    const navigate = useNavigate();
 
    const getMyOrgs = async () => {};
-   const openUniversityInfo = async () => {
+   const openUniversity = async () => {
       navigate("/university");
+   };
+   const openOrg = async () => {
+      navigate("/org");
    };
    return (
       <>
@@ -21,7 +24,7 @@ export default function Dashboard() {
                <Button
                   onClick={(e) => {
                      e.preventDefault();
-                     openUniversityInfo();
+                     openUniversity();
                   }}
                >
                   Open University
@@ -37,16 +40,48 @@ export default function Dashboard() {
                   }}
                >
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>{" "}
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>{" "}
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>{" "}
                   </Square>
                   <Square squareTitle="Organization Name">
                      <Button size="sm">Open</Button>
