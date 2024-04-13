@@ -92,16 +92,81 @@ export default function Dashboard() {
                      </Button>{" "}
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Organization Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Organization Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Organization Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                </div>
             </div>

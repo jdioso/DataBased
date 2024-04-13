@@ -4,7 +4,13 @@ import styles from "./Org.module.css";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import { useNavigate } from "react-router-dom";
 export default function Org() {
+   const navigate = useNavigate();
+
+   const openEvent = async () => {
+      navigate("/event");
+   };
    useEffect(() => {
       window.scrollTo(0, 0);
    }, []);
@@ -55,8 +61,14 @@ export default function Org() {
                         <h2 className={styles.eventItemDate}>
                            Date:xxx/xx/xxx
                         </h2>
-                        <Button size="sm" hug={true}>
-                           Info
+                        <Button
+                           size="sm"
+                           onClick={(e) => {
+                              e.preventDefault();
+                              openEvent();
+                           }}
+                        >
+                           Open
                         </Button>
                      </li>
                      <li className={styles.eventItem}>
@@ -64,8 +76,14 @@ export default function Org() {
                         <h2 className={styles.eventItemDate}>
                            Date:xxx/xx/xxx
                         </h2>
-                        <Button size="sm" hug={true}>
-                           Info
+                        <Button
+                           size="sm"
+                           onClick={(e) => {
+                              e.preventDefault();
+                              openEvent();
+                           }}
+                        >
+                           Open
                         </Button>
                      </li>
                      <li className={styles.eventItem}>
@@ -73,8 +91,44 @@ export default function Org() {
                         <h2 className={styles.eventItemDate}>
                            Date:xxx/xx/xxx
                         </h2>
-                        <Button size="sm" hug={true}>
-                           Info
+                        <Button
+                           size="sm"
+                           onClick={(e) => {
+                              e.preventDefault();
+                              openEvent();
+                           }}
+                        >
+                           Open
+                        </Button>
+                     </li>
+                     <li className={styles.eventItem}>
+                        <h2 className={styles.eventItemTitle}>Event Name</h2>
+                        <h2 className={styles.eventItemDate}>
+                           Date:xxx/xx/xxx
+                        </h2>
+                        <Button
+                           size="sm"
+                           onClick={(e) => {
+                              e.preventDefault();
+                              openEvent();
+                           }}
+                        >
+                           Open
+                        </Button>
+                     </li>
+                     <li className={styles.eventItem}>
+                        <h2 className={styles.eventItemTitle}>Event Name</h2>
+                        <h2 className={styles.eventItemDate}>
+                           Date:xxx/xx/xxx
+                        </h2>
+                        <Button
+                           size="sm"
+                           onClick={(e) => {
+                              e.preventDefault();
+                              openEvent();
+                           }}
+                        >
+                           Open
                         </Button>
                      </li>
                   </ul>
