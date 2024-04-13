@@ -3,6 +3,7 @@ const db = require('../models');
 
 const router = express.Router();
 
+// Create User
 router.post('/register', async (req, res) => {
 	const { email, password } = req.body;
 	if (!email || !password) {

@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes'); // Ensure the path matches yo
 const dbRoute = require('./routes/dbRoute'); // Ensure the path matches your structure
 const eventRoutes = require('./routes/eventRoutes')
 const universityRoutes = require('./routes/universityRoutes') // Ensure the path matches your structure
+const rsoRoutes = require('./routes/rsoRoutes');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use('/api/users', userRoutes);
 app.use('/test-db', dbRoute);
 app.use('/api/events', eventRoutes);
 app.use('/api/universities', universityRoutes);
+app.use('/api/rso', rsoRoutes);
 
 // Setting up the server
 const PORT = process.env.NODE_PORT || 8080;
