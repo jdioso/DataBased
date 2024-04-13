@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
 			if (err) {
 				return res.status(500).send('Error registering new user');
 			}
-			res.status(201).send('User registered');
+			res.status(201).json({ message: 'User registered', userID: results.insertId });  // Returning userID to the client
 		});
 	} catch (err) {
 		res.status(500).send("Server error");
@@ -41,9 +41,10 @@ router.post('/login', (req, res) => {
 			return res.status(401).send('Invalid credentials');
 		}
 
-		res.status(200).send('User logged in successfully');
+		res.status(200).json({ message: 'User logged in successfully', userID: user.userID });  // Returning userID to the client
 	});
 });
+
 
 // Get User Details
 router.get('/user/:id', (req, res) => {
