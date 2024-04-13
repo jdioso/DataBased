@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "../../components/Card/Card";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
@@ -8,6 +8,9 @@ import Button from "../../components/Button/Button";
 import Square from "../../components/Square/Square";
 
 export default function University() {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+   }, []);
    return (
       <>
          <Navbar></Navbar>

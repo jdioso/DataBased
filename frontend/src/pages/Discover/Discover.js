@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Discover.module.css";
 import Button from "../../components/Button/Button";
@@ -15,6 +15,14 @@ export default function Discover() {
    const openOrg = async () => {
       navigate("/org");
    };
+
+   const openEvent = async () => {
+      navigate("/event");
+   };
+
+   useEffect(() => {
+      window.scrollTo(0, 0);
+   }, []);
    return (
       <>
          <Navbar></Navbar>
@@ -34,29 +42,104 @@ export default function Discover() {
                   </Button>
                </div>
                <div className={styles.slider}>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="Event Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openEvent();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                </div>
             </div>
@@ -67,28 +150,81 @@ export default function Discover() {
                </div>
                <div className={styles.slider}>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                   <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openOrg();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                </div>
             </div>
@@ -100,29 +236,82 @@ export default function Discover() {
                   <input placeholder="Enter University"></input>
                </div>
                <div className={styles.slider}>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
+                  </Square>{" "}
+                  <Square squareTitle="University Name">
+                     <Button
+                        size="sm"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           openUniversity();
+                        }}
+                     >
+                        Open
+                     </Button>
                   </Square>
                </div>
             </div>

@@ -42,10 +42,11 @@
    display: flex;
    overflow-x: auto;
    gap: 20px;
-   scroll-snap-type: mandatory;
+   scroll-snap-type: x mandatory;
 }
 .slider > * {
    flex-shrink: 0;
+   scroll-snap-align: start;
 }
 
 .eventsWrapper {

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Org.module.css";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Sidebar from "../../components/Sidebar/Sidebar";
 export default function Org() {
+   useEffect(() => {
+      window.scrollTo(0, 0);
+   }, []);
    return (
       <>
          <Navbar />

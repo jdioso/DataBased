@@ -9,7 +9,7 @@ import University from "../pages/University/University";
 function App() {
    return (
       <div className="App">
-         <BrowserRouter>
+         <BrowserRouter primary={false}>
             <Routes>
                <Route index element={<Dashboard />} />
                <Route path="discover" element={<Discover />} />
