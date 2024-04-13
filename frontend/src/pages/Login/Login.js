@@ -17,7 +17,7 @@ export default function Login() {
                   <center><input className={styles.formInput} type="password" /><br /></center>
                   <center><Button size="sm">Submit</Button></center>
                </Form>
-               <Form formTitle="Register">
+               {/* <Form formTitle="Register">
                   <h2 className={styles.formDescriptor}>First Name</h2>
                   <center><input className={styles.formInput} type="text" /><br /></center>
                   <h2 className={styles.formDescriptor}>Last Name</h2>
@@ -83,7 +83,7 @@ export default function Login() {
                   <button className={styles.uploadPictureButton}>Upload Picture</button>
                   <br/><br/><br/><br/>
                   <center><Button size="sm">Submit</Button></center>
-               </Form>
+               </Form> */}
             </div>
          </div>
       </>
