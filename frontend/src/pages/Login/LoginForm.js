@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../../components/Navbar/Navbar";
 import Button from "../../components/Button/Button"; 
 import Form from "../../components/Form/Form";
 import styles from "./Login.module.css";
@@ -14,7 +13,6 @@ export default function Login() {
 
    return (
       <>
-         <Navbar />
          <div className={styles.container}>
             <div className={styles.flexRow}>
                <Form formTitle="Login">
@@ -22,8 +20,9 @@ export default function Login() {
                   <center><input className={styles.formInput} type="text" /><br /></center>
                   <h2 className={styles.formDescriptor}>Password</h2>
                   <center><input className={styles.formInput} type="password" /><br /></center>
-                  <center><Button size="sm" onClick={openDashboard}>Submit</Button></center>
+                  <center><Button size="sm" onClick={openDashboard}>Login</Button></center>
                </Form>
+
                {/* <Form formTitle="Register">
                   <h2 className={styles.formDescriptor}>First Name</h2>
                   <center><input className={styles.formInput} type="text" /><br /></center>
