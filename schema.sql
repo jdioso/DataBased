@@ -1,70 +1,84 @@
-CREATE DATABASE infinite_rso;
+-- Create the database if it does not exist and use it
+CREATE DATABASE IF NOT EXISTS infinite_rso;
 USE infinite_rso;
 
+-- Create user table
 CREATE TABLE user (
-  userID integer PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR(64) NOT NULL,
-  password VARCHAR(64) NOT NULL,
+                      userID INT AUTO_INCREMENT PRIMARY KEY,
+                      email VARCHAR(64) NOT NULL,
+                      password VARCHAR(64) NOT NULL
 );
 
+-- Create admin table
 CREATE TABLE admin (
-  FOREIGN KEY(universityID) REFERENCES user(userID),
+                       adminID INT AUTO_INCREMENT PRIMARY KEY,
+                       universityID INT,
+                       FOREIGN KEY (universityID) REFERENCES user(userID)
 );
 
+-- Create super_admin table
 CREATE TABLE super_admin (
-  FOREIGN KEY(universityID) REFERENCES user(userID),
+                             superAdminID INT AUTO_INCREMENT PRIMARY KEY,
+                             universityID INT,
+                             FOREIGN KEY (universityID) REFERENCES user(userID)
 );
 
+-- Create university table
 CREATE TABLE university (
-  universityID PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(64),
-  domain VARCHAR(32),
-  location VARCHAR(256),
-  description VARCHAR(1024),
-  numStudents integer,
-  picture VARCHAR(2048),
-  FOREIGN KEY(userID),
+                            universityID INT AUTO_INCREMENT PRIMARY KEY,
+                            name VARCHAR(64),
+                            domain VARCHAR(32),
+                            location VARCHAR(256),
+                            description VARCHAR(1024),
+                            numStudents INT,
+                            picture VARCHAR(2048),
+                            userID INT,
+                            FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
+-- Create rso table
 CREATE TABLE rso (
-  rsoID integer PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(64),
-  numMembers INT,
-  description VARCHAR(1024),
-  FOREIGN KEY(userID),
+                     rsoID INT AUTO_INCREMENT PRIMARY KEY,
+                     name VARCHAR(64),
+                     numMembers INT,
+                     description VARCHAR(1024),
+                     userID INT,
+                     FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
+-- Create events table without the commentID foreign key initially
 CREATE TABLE events (
-  eventID integer PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(64),
-  eventType VARCHAR(16),
-  privacy VARCHAR(16),
-  approved BOOLEAN,
-  time TIME,
-  date DATE,
-  longitude DECIMAL(11, 7),
-  latitude DECIMAL(10, 8),
-  contactName VARCHAR(64),
-  contactEmail VARCHAR(64),
-  contactNumber VARCHAR(16),
-  description VARCHAR(1024),
-  FOREIGN KEY(universityID),
-  FOREIGN KEY(commentID),
+                        eventID INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(64),
+                        eventType VARCHAR(16),
+                        privacy VARCHAR(16),
+                        approved BOOLEAN,
+                        time TIME,
+                        date DATE,
+                        longitude DECIMAL(11, 7),
+                        latitude DECIMAL(10, 8),
+                        contactName VARCHAR(64),
+                        contactEmail VARCHAR(64),
+                        contactNumber VARCHAR(16),
+                        description VARCHAR(1024),
+                        universityID INT,
+                        FOREIGN KEY (universityID) REFERENCES university(universityID)
 );
 
+-- Create comments table without the eventID foreign key initially
 CREATE TABLE comments (
-  commentID integer PRIMARY KEY AUTO_INCREMENT,
-  text VARCHAR(1024),
-  FOREIGN KEY(userID),
-  FOREIGN KEY(eventID),
+                          commentID INT AUTO_INCREMENT PRIMARY KEY,
+                          text VARCHAR(1024),
+                          userID INT,
+                          eventID INT,  -- Add without foreign key constraint
+                          FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
-INSERT INTO users (email, password)
-VALUES
-('test@ucf.edu', 'testingAccount');
+-- Now, add the cross-referencing foreign keys
+ALTER TABLE events ADD COLUMN commentID INT;
+ALTER TABLE events ADD CONSTRAINT FK_CommentID FOREIGN KEY (commentID) REFERENCES comments(commentID);
+ALTER TABLE comments ADD CONSTRAINT FK_EventID FOREIGN KEY (eventID) REFERENCES events(eventID);
 
--- Below is sample code for the template that was here beforehand will reference later
--- INSERT INTO notes (title, content)
--- VALUES
--- ('My First Note', 'A note about something'),
--- ('My Second Note', 'A note about something else');
+-- Insert sample data into user table
+INSERT INTO user (email, password)
+VALUES ('test@ucf.edu', 'testingAccount');

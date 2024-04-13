@@ -28,6 +28,14 @@ export default function Navbar() {
             >
                Discover
             </Button>
+            <Button
+               onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/login ");
+               }}
+            >
+               Login
+            </Button>
          </div>
       </div>
    );
