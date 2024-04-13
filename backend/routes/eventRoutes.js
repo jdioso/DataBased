@@ -1,12 +1,12 @@
 const express = require('express');
-const { Event } = require('../models/events');
+const db = require('../models');
 const router = express.Router();
 
 // Create Event
 router.post('/add', async (req, res) => {
   try {
     const eventData = req.body;
-    const newEvent = await Event.create(eventData);
+    const newEvent = await db.events.create(eventData);
     res.status(201).json({ message: 'Event created', eventID: newEvent.eventID });
   } catch (err) {
     console.error(err);
@@ -18,7 +18,7 @@ router.post('/add', async (req, res) => {
 router.delete('/delete', async (req, res) => {
   const { id } = req.params;
   try {
-    const deleted = await Event.destroy({ where: { eventID: id } });
+    const deleted = await db.events.destroy({ where: { eventID: id } });
     if (deleted) {
       res.status(200).json({ message: 'Event deleted', eventID: id });
     } else {
@@ -35,7 +35,7 @@ router.put('/edit', async (req, res) => {
   const { id } = req.params;
   const eventData = req.body;
   try {
-    const [updated] = await Event.update(eventData, { where: { eventID: id } });
+    const [updated] = await db.events.update(eventData, { where: { eventID: id } });
     if (updated) {
       res.status(200).json({ message: 'Event updated', eventID: id });
     } else {
@@ -50,8 +50,8 @@ router.put('/edit', async (req, res) => {
 // Get All Events
 router.get('/searchAll', async (req, res) => {
     try {
-      const events = await Event.findAll();
-      res.status(200).json(events);
+      const eventsList = await db.events.findAll();
+      res.status(200).json(eventsList);
     } catch (err) {
       console.error(err);
       res.status(500).send('Server error');
@@ -62,9 +62,9 @@ router.get('/searchAll', async (req, res) => {
 router.get('/searchUni', async (req, res) => {
     const { universityID } = req.params;
     try {
-      const events = await Event.findAll({ where: { universityID: universityID } });
-      if (events.length > 0) {
-        res.status(200).json(events);
+      const eventsList = await db.events.findAll({ where: { universityID: universityID } });
+      if (db.events.length > 0) {
+        res.status(200).json(eventsList);
       } else {
         res.status(404).send('No events found for this university');
       }
@@ -78,9 +78,9 @@ router.get('/searchUni', async (req, res) => {
 router.get('/searchRSO', async (req, res) => {
     const { rsoID } = req.params;
     try {
-      const events = await Event.findAll({ where: { rsoID: rsoID } });
-      if (events.length > 0) {
-        res.status(200).json(events);
+      const eventsList = await db.events.findAll({ where: { rsoID: rsoID } });
+      if (db.events.length > 0) {
+        res.status(200).json(eventsList);
       } else {
         res.status(404).send('No events found for this RSO');
       }

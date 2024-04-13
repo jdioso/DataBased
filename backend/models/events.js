@@ -60,7 +60,7 @@ const defineEvent = (sequelize, DataTypes) => {
       allowNull: true
     }
   }, {
-    tableName: 'Events', // Specify table name
+    tableName: 'events', // Specify table name
     timestamps: false // Disable createdAt and updatedAt columns
   });
 

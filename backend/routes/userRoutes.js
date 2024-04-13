@@ -1,5 +1,5 @@
 const express = require('express');
-const { users } = require('../models');
+const db = require('../models');
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post('/register', async (req, res) => {
 
 	try {
 		// Store the password directly without hashing
-		const newUser = await users.create({
+		const newUser = await db.users.create({
 			email,
 			password
 		});
@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
 	try {
-		const user = await users.findOne({ where: { email: req.body.email } });
+		const user = await db.users.findOne({ where: { email: req.body.email } });
 		if (!user) {
 			return res.status(401).send('No user found with that email');
 		}
@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
 router.get('/user/:id', async (req, res) => {
 	const { id } = req.params;
 	try {
-		const user = await users.findByPk(id, {
+		const user = await db.users.findByPk(id, {
 			attributes: ['userID', 'email'] // Limiting the returned attributes
 		});
 		if (user) {
