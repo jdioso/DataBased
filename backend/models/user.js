@@ -13,7 +13,15 @@ const defineUser = (sequelize, DataTypes) => {
 		password: {
 			type: DataTypes.STRING(64),
 			allowNull: false
-		}
+		},
+		firstName: {
+			type: DataTypes.STRING(64),
+			allowNull: false
+		},
+		lastName: {
+			type: DataTypes.STRING(64),
+			allowNull: false
+		},
 	}, {
 		tableName: 'user',
 		timestamps: false  // Disable Sequelize's automatic timestamping

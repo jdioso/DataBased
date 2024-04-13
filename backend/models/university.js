@@ -21,14 +21,14 @@ const defineUniversity = (sequelize, DataTypes) => {
 	      type: DataTypes.INTEGER,
 	      allowNull: false
 	    },
+		numStudents: {
+			type: DataTypes.INTEGER,
+			allowNull: false
+		},
 	    picture: {
 	      type: DataTypes.STRING(2024),
 	      allowNull: true
 	    },
-	    numStudents: {
-	      type: DataTypes.INTEGER,
-	      allowNull: false
-	    }
 	  }, {
 	    tableName: 'university', // Specify table name
 	    timestamps: false // Disable createdAt and updatedAt columns
