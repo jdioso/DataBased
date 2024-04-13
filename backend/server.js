@@ -1,4 +1,4 @@
-require('dotenv').config(); // to use environment variables from .env file
+require('dotenv').config({ path: '../.env' });  // Adjust the path accordingly
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes'); // Ensure the path matches your structure
@@ -13,7 +13,7 @@ app.use(express.json()); // Parses JSON request body
 app.use('/api/users', userRoutes);
 
 // Setting up the server
-const PORT = process.env.MYSQL_PORT || 3000;
+const PORT = process.env.NODE_PORT || 8080;
 app.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
