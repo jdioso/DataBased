@@ -19,6 +19,7 @@ app.use('/api/users', userRoutes);
 app.use('/test-db', dbRoute);
 app.use('/api/events', eventRoutes);
 app.use('/api/universities', universityRoutes);
+app.use('/api/rso', rsoRoutes);
 
 // Setting up the server
 const PORT = process.env.NODE_PORT || 8080;

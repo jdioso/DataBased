@@ -7,12 +7,11 @@ const router = express.Router();
 router.post('/add', async (req, res) => {
 	try {
 		const { userID, name, numMembers, description, memberIDs } = req.body;
-		const newRSO = await db.RSO.create({
+		const newRSO = await db.rsos.create({
 			userID,
 			name,
 			numMembers,
 			description,
-			memberIDs
 		});
 		res.status(201).json({ message: 'RSO created successfully', rsoID: newRSO.rsoID });
 	} catch (err) {
@@ -25,7 +24,7 @@ router.post('/add', async (req, res) => {
 router.put('/edit', async (req, res) => {
 	const { id } = req.body;
 	try {
-		const updatedRSO = await db.RSO.update(req.body, {
+		const updatedRSO = await db.rsos.update(req.body, {
 			where: { rsoID: id }
 		});
 		if (updatedRSO[0] === 1) {

@@ -25,15 +25,14 @@ const defineRSO = (sequelize, DataTypes) => {
 	  },
 	  memberIDs: {
 		type: DataTypes.ARRAY(DataTypes.INTEGER),
-		allowNull: false
+		allowNull: true,
 	  }
 	}, {
-	  tableName: 'RSOs', // Specify table name
+	  tableName: 'rso', // Specify table name
 	  timestamps: false // Disable createdAt and updatedAt columns
 	});
-  
+
 	return RSO;
   };
-  
+
   module.exports = defineRSO;
-  
