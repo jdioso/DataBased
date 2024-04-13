@@ -11,13 +11,9 @@ CREATE TABLE user (
 
 -- Create admin table
 CREATE TABLE admin (
-<<<<<<< HEAD
-  FOREIGN KEY(rsoID) REFERENCES user(userID),
-=======
                        adminID INT AUTO_INCREMENT PRIMARY KEY,
-                       universityID INT,
-                       FOREIGN KEY (universityID) REFERENCES user(userID)
->>>>>>> 6b7c05948341f598fbcbd33c75562eb912d50b65
+                       rsoID INT,
+                       FOREIGN KEY (rsoID) REFERENCES user(userID)
 );
 
 -- Create super_admin table
@@ -71,20 +67,12 @@ CREATE TABLE events (
 
 -- Create comments table without the eventID foreign key initially
 CREATE TABLE comments (
-<<<<<<< HEAD
-  commentID integer PRIMARY KEY AUTO_INCREMENT,
-  text VARCHAR(1024),
-  rating int,
-  timestamp TIMESTAMP,
-  FOREIGN KEY(userID),
-  FOREIGN KEY(eventID),
-=======
                           commentID INT AUTO_INCREMENT PRIMARY KEY,
                           text VARCHAR(1024),
                           userID INT,
+                          rating INT,
                           eventID INT,  -- Add without foreign key constraint
                           FOREIGN KEY (userID) REFERENCES user(userID)
->>>>>>> 6b7c05948341f598fbcbd33c75562eb912d50b65
 );
 
 -- Now, add the cross-referencing foreign keys
