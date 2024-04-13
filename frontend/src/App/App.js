@@ -11,12 +11,12 @@ function App() {
       <div className="App">
          <BrowserRouter primary={false}>
             <Routes>
-               <Route index element={<Dashboard />} />
+               <Route index element={<Login />} />
+               <Route path="dashboard" element={<Dashboard />} />
                <Route path="discover" element={<Discover />} />
                <Route path="event" element={<Event />} />
                <Route path="org" element={<Org />} />
                <Route path="university" element={<University />} />
-               <Route path="login" element={<Login />} />
             </Routes>
          </BrowserRouter>
       </div>
