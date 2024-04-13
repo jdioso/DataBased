@@ -19,12 +19,9 @@ db.sequelize = sequelize;
 
 // Models import
 db.users = require('./user')(sequelize, Sequelize);
-db.admins = require('./admin')(sequelize, Sequelize);
-db.superAdmins = require('./super_admin')(sequelize, Sequelize);
 db.universities = require('./university')(sequelize, Sequelize);
 db.rsos = require('./rso')(sequelize, Sequelize);
 db.events = require('./events')(sequelize, Sequelize);
-db.comments = require('./comments')(sequelize, Sequelize);
 db.rso_members = require('./rso_members')(sequelize, Sequelize);
 
 module.exports = db;
