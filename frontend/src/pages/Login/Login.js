@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
    const navigate = useNavigate();
-   
+
    const openDashboard = async () => {
       navigate("/dashboard");
    };
@@ -22,7 +22,7 @@ export default function Login() {
                   <center><input className={styles.formInput} type="text" /><br /></center>
                   <h2 className={styles.formDescriptor}>Password</h2>
                   <center><input className={styles.formInput} type="password" /><br /></center>
-                  <center><Button size="sm">Submit</Button></center>
+                  <center><Button size="sm" onClick={openDashboard}>Submit</Button></center>
                </Form>
                {/* <Form formTitle="Register">
                   <h2 className={styles.formDescriptor}>First Name</h2>
