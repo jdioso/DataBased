@@ -1,34 +1,27 @@
-import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import Button from "../../components/Button/Button";
-import LoginForm from "../../pages/Login/LoginForm";
-import RegisterForm from "../../pages/Register/RegisterForm";
+import React from "react";
+import Button from "../../components/Button/Button"; 
+import Form from "../../components/Form/Form";
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 export default function Login() {
    const navigate = useNavigate();
 
-   const 
    const openDashboard = async () => {
       navigate("/dashboard");
    };
 
-   const [isLoginForm, setShowLoginForm] = useState(true);
-
-   const toggleComponent = () => {
-      setShowLoginForm((prevState) => !prevState);
-   };
-
    return (
       <>
-         <Navbar />
          <div className={styles.container}>
-            <div className={styles.flexCol}>
-               {isLoginForm ? <LoginForm /> : <RegisterForm />}
-               <Button size="sm" onClick={toggleComponent}>
-                  {isLoginForm ? "Change to Register" : "Change to Login"}
-               </Button>
+            <div className={styles.flexRow}>
+               <Form formTitle="Login">
+                  <h2 className={styles.formDescriptor}>Username</h2>
+                  <center><input className={styles.formInput} type="text" /><br /></center>
+                  <h2 className={styles.formDescriptor}>Password</h2>
+                  <center><input className={styles.formInput} type="password" /><br /></center>
+                  <center><Button size="sm" onClick={openDashboard}>Login</Button></center>
+               </Form>
 
                {/* <Form formTitle="Register">
                   <h2 className={styles.formDescriptor}>First Name</h2>
