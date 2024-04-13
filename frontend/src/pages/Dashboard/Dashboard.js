@@ -1,14 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import Navbar from "../../components/Navbar/Navbar";
 import Square from "../../components/Square/Square";
 import styles from "./Dashboard.module.css";
-import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
    const navigate = useNavigate();
 
-   const getMyOrgs = async () => {};
+   // const getMyOrgs = async () => {};
    const openUniversity = async () => {
       navigate("/university");
    };

@@ -1,5 +1,4 @@
 import React from "react";
-import Card from "../Card/Card";
 import styles from "./Square.module.css";
 
 // A square is a 200x200 card

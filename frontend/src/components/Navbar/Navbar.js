@@ -8,7 +8,7 @@ export default function Navbar() {
 
    return (
       <div className={styles.navbar}>
-         <img src={logo} className={styles.logo} />
+         <img src={logo} className={styles.logo} alt="logo" />
          <h1 className={styles.appName}>Infinite RSO</h1>
          <div className={styles.navControls}>
             <Button>Admin Toggle</Button>

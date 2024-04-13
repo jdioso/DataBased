@@ -18,6 +18,18 @@ export default function Org() {
                         typesetting industry. Lorem Ipsum has been the
                         industry's standard dummy text ever since the 1500s,
                         when an unksnown printer took a galley of type and.
+                        Lorem Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the
+                        industry's standard dummy text ever since the 1500s,
+                        when an unksnown printer took a galley of type and.Lorem
+                        Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the
+                        industry's standard dummy text ever since the 1500s,
+                        when an unksnown printer took a galley of type and.Lorem
+                        Ipsum is simply dummy text of the printing and
+                        typesetting industry. Lorem Ipsum has been the
+                        industry's standard dummy text ever since the 1500s,
+                        when an unksnown printer took a galley of type and.
                      </p>
                      INFO LOGO
                   </div>
@@ -33,7 +45,7 @@ export default function Org() {
             </div>
 
             <div className={styles.eventsWrapper}>
-               <Card cardTitle="Events" className={styles.events}>
+               <Card cardTitle="Events">
                   <ul className={styles.eventList}>
                      <li className={styles.eventItem}>
                         <h2 className={styles.eventItemTitle}>Event Name</h2>

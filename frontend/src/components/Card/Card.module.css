@@ -5,6 +5,7 @@
    box-shadow: 0 6px 10px var(--shadow-primary);
    color: var(--background);
 
+   flex-grow: 1;
    display: flex;
    flex-direction: column;
    justify-content: flex-start;

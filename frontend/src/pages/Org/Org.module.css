@@ -1,5 +1,5 @@
 .container {
-   height: 100%;
+   flex-grow: 1;
    box-sizing: border-box;
    padding: 20px 40px;
 
@@ -15,8 +15,6 @@
    font-size: var(--heading);
    text-align: center;
 }
-.sidebarWrapper {
-}
 
 .eventsWrapper {
    flex-grow: 1;
@@ -24,12 +22,6 @@
    flex-direction: column;
 }
 
-.events {
-   flex-grow: 1;
-   display: flex;
-   align-items: stretch;
-   gap: 20px;
-}
 .events > * {
    height: 100%;
    flex: 1 0 0;

@@ -4,9 +4,8 @@ import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import styles from "./University.module.css";
 
-import { useNavigate } from "react-router-dom";
-import Square from "../../components/Square/Square";
 import Button from "../../components/Button/Button";
+import Square from "../../components/Square/Square";
 
 export default function University() {
    return (
