@@ -9,9 +9,13 @@ export default function Dashboard() {
    const navigate = useNavigate();
 
    // const getMyOrgs = async () => {};
+
+   // grabs information of selected university and opens university info page
    const openUniversity = async () => {
       navigate("/university");
    };
+
+   // grabs information of selected org and opens university info page
    const openOrg = async () => {
       navigate("/org");
    };

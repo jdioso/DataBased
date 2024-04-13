@@ -1,0 +1,44 @@
+.container {
+   box-sizing: border-box;
+   width: 100%;
+   padding: 20px 40px;
+   display: flex;
+   flex-direction: column;
+   align-items: stretch;
+   gap: 30px;
+}
+
+.slider {
+   padding: 10px 0;
+   width: 100%;
+   display: flex;
+   overflow-x: auto;
+   gap: 20px;
+   scroll-snap-type: mandatory;
+}
+.slider > * {
+   flex-shrink: 0;
+}
+
+.section {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+   gap: 10px;
+}
+
+.sectionHeader {
+   display: flex;
+   gap: 20px;
+}
+.sectionHeaderTitle {
+   font-size: var(--subheading);
+}
+
+input {
+   padding: 5px;
+   flex-grow: 1;
+   border: none;
+   border-radius: 5px;
+}

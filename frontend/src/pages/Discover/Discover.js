@@ -1,11 +1,132 @@
 import React from "react";
 import Navbar from "../../components/Navbar/Navbar";
-
+import styles from "./Discover.module.css";
+import Button from "../../components/Button/Button";
+import { useNavigate } from "react-router-dom";
+import Square from "../../components/Square/Square";
 export default function Discover() {
+   const navigate = useNavigate();
+
+   // grabs information of selected university and opens university info page
+   const openUniversity = async () => {
+      navigate("/university");
+   };
+   // grabs information of selected org and opens university info page
+   const openOrg = async () => {
+      navigate("/org");
+   };
    return (
       <>
          <Navbar></Navbar>
-         <h1 className="heading">Discover</h1>;
+         <div className={styles.container}>
+            <div className={styles.section}>
+               <div className={styles.sectionHeader}>
+                  <h1 className={styles.sectionHeaderTitle}>
+                     Events at My University{" "}
+                  </h1>
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        openUniversity();
+                     }}
+                  >
+                     See All
+                  </Button>
+               </div>
+               <div className={styles.slider}>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+               </div>
+            </div>
+            <div className={styles.section}>
+               <div className={styles.sectionHeader}>
+                  <h1 className={styles.sectionHeaderTitle}>Search By RSO</h1>
+                  <input placeholder="Enter RSO"></input>
+               </div>
+               <div className={styles.slider}>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+               </div>
+            </div>
+            <div className={styles.section}>
+               <div className={styles.sectionHeader}>
+                  <h1 className={styles.sectionHeaderTitle}>
+                     Search By University
+                  </h1>
+                  <input placeholder="Enter University"></input>
+               </div>
+               <div className={styles.slider}>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+                  <Square squareTitle="Organization Name">
+                     <Button size="sm">Open</Button>
+                  </Square>
+               </div>
+            </div>
+         </div>
       </>
    );
 }

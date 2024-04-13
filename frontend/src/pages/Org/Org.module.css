@@ -28,13 +28,14 @@
 }
 
 .eventList {
-   padding: 10px 5px;
+   padding: px 5px;
    width: 100%;
    list-style: none;
    display: flex;
    flex-direction: column;
    gap: 10px;
    overflow-y: auto;
+   border-radius: 10px;
 }
 .eventItem {
    padding: 10px 10px;
@@ -58,4 +59,12 @@
 .eventItemDate {
    font-size: 1rem;
    color: var(--background);
+}
+
+.section {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+   gap: 10px;
 }

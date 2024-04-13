@@ -8,7 +8,7 @@ export default function Card({ cardTitle, children, ...other }) {
    return (
       <div className={styles.card}>
          <h2 className={styles.cardTitle}>{cardTitle}</h2>
-         {children}
+         <div className={styles.cardContent}>{children}</div>
       </div>
    );
 }
