@@ -3,8 +3,14 @@ import Navbar from "../../components/Navbar/Navbar";
 import Button from "../../components/Button/Button"; 
 import Form from "../../components/Form/Form";
 import styles from "./Login.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+
+   const openDashboard = async () => {
+      navigate("/dashboard");
+   };
+
    return (
       <>
          <Navbar />
