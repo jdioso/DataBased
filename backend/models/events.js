@@ -57,8 +57,12 @@ const defineEvent = (sequelize, DataTypes) => {
     },
     rsoID: {
       type: DataTypes.INTEGER,
-      allowNull: true
-    }
+      allowNull: false
+    },
+	approved: {
+	  type: DataTypes.BOOLEAN,
+	  allowNull: false
+	}
   }, {
     tableName: 'events', // Specify table name
     timestamps: false // Disable createdAt and updatedAt columns

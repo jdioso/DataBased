@@ -1,4 +1,5 @@
 // Define RSO model
+const defineRSO = (sequelize, DataTypes) => {
 const RSO = sequelize.define('RSO', {
     rsoID: {
       type: DataTypes.INTEGER,
@@ -28,6 +29,9 @@ const RSO = sequelize.define('RSO', {
   }, {
     tableName: 'RSOs', // Specify table name
     timestamps: false // Disable createdAt and updatedAt columns
-  });
-  
-  module.exports = RSO;
+  }
+  );
+	  return RSO;
+}
+
+module.exports = defineRSO;
