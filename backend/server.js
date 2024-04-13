@@ -3,7 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes'); // Ensure the path matches your structure
 const dbRoute = require('./routes/dbRoute'); // Ensure the path matches your structure
-const eventRoutes = require('./routes/eventRoutes') 
+const eventRoutes = require('./routes/eventRoutes')
+const universityRoutes = require('./routes/universityRoutes') // Ensure the path matches your structure
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json()); // Parses JSON request body
 app.use('/api/users', userRoutes);
 app.use('/test-db', dbRoute);
 app.use('/api/events', eventRoutes);
+app.use('/api/universities', universityRoutes);
 
 // Setting up the server
 const PORT = process.env.NODE_PORT || 8080;

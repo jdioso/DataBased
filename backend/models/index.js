@@ -19,5 +19,6 @@ db.sequelize = sequelize;
 
 db.users = require('./user')(sequelize, Sequelize);
 db.events = require('./events')(sequelize, Sequelize);
+db.university = require('./university')(sequelize, Sequelize);
 
 module.exports = db;
