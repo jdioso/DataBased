@@ -6,7 +6,8 @@ import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-
+   const navigate = useNavigate();
+   
    const openDashboard = async () => {
       navigate("/dashboard");
    };
