@@ -1,5 +1,4 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const { users } = require('../models');
 
 const router = express.Router();
@@ -11,10 +10,10 @@ router.post('/register', async (req, res) => {
 	}
 
 	try {
-		const hashedPassword = await bcrypt.hash(password, 8);
+		// Store the password directly without hashing
 		const newUser = await users.create({
 			email,
-			password: hashedPassword
+			password
 		});
 		res.status(201).json({ message: 'User registered', userID: newUser.userID });
 	} catch (err) {
@@ -30,7 +29,8 @@ router.post('/login', async (req, res) => {
 			return res.status(401).send('No user found with that email');
 		}
 
-		const isMatch = await bcrypt.compare(req.body.password, user.password);
+		// Compare the plain text password directly
+		const isMatch = (req.body.password === user.password);
 		if (!isMatch) {
 			return res.status(401).send('Password incorrect');
 		}
