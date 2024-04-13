@@ -12,8 +12,8 @@ CREATE TABLE user (
 -- Create admin table
 CREATE TABLE admin (
                        adminID INT AUTO_INCREMENT PRIMARY KEY,
-                       universityID INT,
-                       FOREIGN KEY (universityID) REFERENCES user(userID)
+                       rsoID INT,
+                       FOREIGN KEY (rsoID) REFERENCES user(userID)
 );
 
 -- Create super_admin table
@@ -70,6 +70,7 @@ CREATE TABLE comments (
                           commentID INT AUTO_INCREMENT PRIMARY KEY,
                           text VARCHAR(1024),
                           userID INT,
+                          rating INT,
                           eventID INT,  -- Add without foreign key constraint
                           FOREIGN KEY (userID) REFERENCES user(userID)
 );
