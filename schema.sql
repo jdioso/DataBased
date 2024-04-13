@@ -8,7 +8,7 @@ CREATE TABLE user (
 );
 
 CREATE TABLE admin (
-  FOREIGN KEY(universityID) REFERENCES user(userID),
+  FOREIGN KEY(rsoID) REFERENCES user(userID),
 );
 
 CREATE TABLE super_admin (
@@ -55,6 +55,8 @@ CREATE TABLE events (
 CREATE TABLE comments (
   commentID integer PRIMARY KEY AUTO_INCREMENT,
   text VARCHAR(1024),
+  rating int,
+  timestamp TIMESTAMP,
   FOREIGN KEY(userID),
   FOREIGN KEY(eventID),
 );
