@@ -1,0 +1,32 @@
+:root {
+    --textColor: #F2ECF8; 
+    --backgroundColor: #564A94; 
+    --primaryColor: #F2ECF8; 
+    --secondaryColor: #27254C;
+    --accentColor: #46B2D2;  
+}
+
+.form {
+    width: 50em; 
+    height: max-content;
+    border-color: none; 
+    border-radius: 10px; 
+    border-style: solid;
+    background-color: var(--primaryColor);
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em; 
+    padding-right: 1em; 
+    margin: auto;  
+}
+
+.formTitle {
+    font-family: 'Jua';
+    font-size: 2rem;
+    color: var(--backgroundColor);
+    background-color: var(--primaryColor);
+    text-align: center; 
+    padding-bottom: 1.5em; 
+}
+
+

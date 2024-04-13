@@ -1,0 +1,27 @@
+.navbar {
+   box-sizing: border-box;
+   padding: 10px 20px;
+   height: 15%;
+   width: 100%;
+   background-color: var(--secondary);
+
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 30px;
+}
+
+.logo {
+   height: 75px;
+}
+
+.appName {
+   font-size: var(--heading);
+   flex-grow: 1;
+}
+
+.navControls {
+   display: flex;
+   justify-content: center;
+   gap: 20px;
+}

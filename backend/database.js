@@ -1,29 +1,30 @@
-import mysql from 'mysql2';
+require('dotenv').config();
+const mysql = require('mysql');
+const util = require('util');
 
-import 'dotenv/config';
-console.log(process.env)
-
+// Create a MySQL connection pool (recommended for production use)
 const pool = mysql.createPool({
-	host: process.env.MYSQL_HOST,
-	user: process.env.MYSQL_USER,
-	password: process.env.MYSQL_PASSWORD,
-	database: process.env.MYSQL_DATABASE,
-}).promise();
+	connectionLimit : 10,
+	host            : process.env.MYSQL_HOST,
+	user            : process.env.MYSQL_USER,
+	password        : process.env.MYSQL_PASSWORD,
+	database        : process.env.MYSQL_DATABASE,
+	port: process.env.AWS_PORT
+});
 
-export async function getNotes() {
-	const [rows] = await pool.query('SELECT * FROM notes');
-	return rows;
-}
+// Attempt to catch connection errors
+pool.getConnection((err, connection) => {
+	if (err) {
+		console.error('Error connecting to the database: ' + err.stack);
+		return;
+	}
+	if (connection) {
+		console.log('Connected to the RDS database as ID ' + connection.threadId);
+		connection.release();
+	}
+});
 
-export async function getNote(id) {
-	const [rows] = await pool.query('SELECT * FROM notes WHERE id = ?', [id]);
-	return rows[0];
-}
+// Promisify for Node.js async/await.
+pool.query = util.promisify(pool.query);
 
-export async function createNote( title, content ) {
-	const [result] = await pool.query('INSERT INTO notes (title, content) VALUES (?, ?)', [title, content]);
-	return result.insertId;
-}
-
-const result = await createNote('Hello', 'World');
-console.log(result);
+module.exports = pool;

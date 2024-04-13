@@ -1,17 +1,21 @@
-import express from 'express';
+require('dotenv').config({ path: '../.env' });  // Adjust the path accordingly
+const express = require('express');
+const cors = require('cors');
+const userRoutes = require('./routes/userRoutes'); // Ensure the path matches your structure
+const dbRoute = require('./routes/dbRoute'); // Ensure the path matches your structure
 
 const app = express();
-const port = 5000;
 
-app.use(express.json());
+// Middleware
+app.use(cors()); // Enables CORS
+app.use(express.json()); // Parses JSON request body
 
+// Routes
+app.use('/api/users', userRoutes);
+app.use('/test-db', dbRoute);
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-res.status(500).send('Something broke!');
-})
-
-app.listen(port, () => {
-    console.log(`Server listening on ${port}`);
+// Setting up the server
+const PORT = process.env.NODE_PORT || 8080;
+app.listen(PORT, () => {
+	console.log(`Server is running on port ${PORT}`);
 });
-

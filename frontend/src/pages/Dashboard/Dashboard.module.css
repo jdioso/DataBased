@@ -1,0 +1,30 @@
+.container {
+   width: 100%;
+   padding: 20px 40px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: stretch;
+}
+
+.flexRow {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
+}
+
+.flexCol {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: stretch;
+   gap: 10px;
+}
+
+.flexGrow {
+   flex-grow: 1;
+}

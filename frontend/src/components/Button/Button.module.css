@@ -1,0 +1,45 @@
+.buttonSm,
+.buttonMd,
+.buttonLg {
+   padding: 10px;
+   background-color: var(--accent);
+   color: var(--text);
+   font-family: "Jua";
+   text-align: center;
+   cursor: pointer;
+   outline: inherit;
+   border: none;
+   border-radius: 10px;
+   box-shadow: 0 2px 6px var(--shadow-primary);
+}
+
+.buttonSm:hover,
+.buttonLg:hover {
+   filter: brightness(0.8);
+}
+
+.buttonSm:active,
+.buttonLg:active {
+   filter: brightness(0.6);
+}
+.buttonSm {
+   padding: 5px;
+   min-height: 20px;
+   min-width: 80px;
+   font-size: 12px;
+}
+.buttonMd {
+   min-height: 25px;
+   min-width: 90px;
+   font-size: 16px;
+}
+
+.buttonLg {
+   min-height: 58px;
+   min-width: 200px;
+   font-size: 24px;
+}
+
+.hug {
+   min-width: 0;
+}

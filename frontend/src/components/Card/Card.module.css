@@ -1,0 +1,19 @@
+.card {
+   padding: 20px;
+   background-color: var(--primary);
+   border-radius: 15px;
+   box-shadow: 0 6px 10px var(--shadow-primary);
+   color: var(--background);
+
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: start;
+
+   overflow-y: auto;
+}
+
+.cardTitle {
+   font-size: var(--subheading);
+   color: var(--background);
+}
