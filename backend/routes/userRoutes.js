@@ -4,16 +4,18 @@ const db = require('../models');
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-	const { email, password } = req.body;
-	if (!email || !password) {
-		return res.status(400).send('Email and password are required');
+	const { email, password, firstName, lastName } = req.body;
+	if (!email || !password || !firstName || !lastName) {
+		return res.status(400).send('All fields are required');
 	}
 
 	try {
 		// Store the password directly without hashing
 		const newUser = await db.users.create({
 			email,
-			password
+			password,
+			firstName,
+			lastName
 		});
 		res.status(201).json({ message: 'User registered', userID: newUser.userID });
 	} catch (err) {
