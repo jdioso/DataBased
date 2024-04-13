@@ -1,9 +1,9 @@
 const express = require('express');
-const Event = require('../models/eventModel'); // Import the Event model
+const { Event } = require('../models/events');
 const router = express.Router();
 
 // Create Event
-router.post('/events', async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
     const eventData = req.body;
     const newEvent = await Event.create(eventData);
@@ -15,7 +15,7 @@ router.post('/events', async (req, res) => {
 });
 
 // Delete Event
-router.delete('/events/:id', async (req, res) => {
+router.delete('/delete', async (req, res) => {
   const { id } = req.params;
   try {
     const deleted = await Event.destroy({ where: { eventID: id } });
@@ -31,7 +31,7 @@ router.delete('/events/:id', async (req, res) => {
 });
 
 // Edit Event
-router.put('/events/:id', async (req, res) => {
+router.put('/edit', async (req, res) => {
   const { id } = req.params;
   const eventData = req.body;
   try {
@@ -48,7 +48,7 @@ router.put('/events/:id', async (req, res) => {
 });
 
 // Get All Events
-router.get('/events', async (req, res) => {
+router.get('/searchAll', async (req, res) => {
     try {
       const events = await Event.findAll();
       res.status(200).json(events);
@@ -59,7 +59,7 @@ router.get('/events', async (req, res) => {
 });
 
 // Get Events by University ID
-router.get('/events/:universityID', async (req, res) => {
+router.get('/searchUni', async (req, res) => {
     const { universityID } = req.params;
     try {
       const events = await Event.findAll({ where: { universityID: universityID } });
@@ -75,7 +75,7 @@ router.get('/events/:universityID', async (req, res) => {
 });
 
 // Get Events by RSO ID
-router.get('/events/:rsoID', async (req, res) => {
+router.get('/searchRSO', async (req, res) => {
     const { rsoID } = req.params;
     try {
       const events = await Event.findAll({ where: { rsoID: rsoID } });

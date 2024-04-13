@@ -1,5 +1,7 @@
-// Define Event model
-const Event = sequelize.define('Event', {
+// eventModel.js
+
+const defineEvent = (sequelize, DataTypes) => {
+  const Event = sequelize.define('Event', {
     eventID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -54,12 +56,15 @@ const Event = sequelize.define('Event', {
       allowNull: false
     },
     rsoID: {
-        type: DataTypes.INTEGER,
-        allowNull: true
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   }, {
-    tableName: 'events', // Specify table name
+    tableName: 'Events', // Specify table name
     timestamps: false // Disable createdAt and updatedAt columns
   });
-  
-  module.exports = Event;
+
+  return Event;
+};
+
+module.exports = defineEvent;
