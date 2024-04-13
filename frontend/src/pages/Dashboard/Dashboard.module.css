@@ -1,4 +1,5 @@
 .container {
+   flex-grow: 1;
    width: 100%;
    padding: 20px 40px;
    display: flex;
@@ -7,17 +8,7 @@
    align-items: stretch;
 }
 
-.flexRow {
-   padding: 10px 20px;
-   display: flex;
-   flex-direction: row;
-   justify-content: flex-start;
-   align-items: center;
-   gap: 10px;
-}
-
-.flexCol {
-   padding: 10px 20px;
+.section {
    display: flex;
    flex-direction: column;
    justify-content: flex-start;
@@ -25,6 +16,19 @@
    gap: 10px;
 }
 
-.flexGrow {
+.sectionHeader {
+   display: flex;
+   gap: 20px;
+}
+.sectionHeaderTitle {
+   font-size: var(--subheading);
    flex-grow: 1;
+}
+
+.flexRow {
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
 }

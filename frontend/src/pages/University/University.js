@@ -56,8 +56,10 @@ export default function University() {
                   backgroundPosition: "center",
                }}
             ></div>
-            <div className={styles.orgs}>
-               <h2 className="subheading">Organizations</h2>
+            <div className={`${styles.section} ${styles.orgs}`}>
+               <div className={styles.sectionHeader}>
+                  <h2 className={styles.sectionHeaderTitle}>Organizations</h2>
+               </div>
 
                <div className={styles.slider}>
                   <Square squareTitle="Organization Name">
@@ -86,8 +88,11 @@ export default function University() {
                   </Square>
                </div>
             </div>
-            <div className={styles.eventsWrapper}>
-               <h2 className="subheading"> Events</h2>
+            <div className={`${styles.section} ${styles.eventsWrapper}`}>
+               <div className={styles.sectionHeader}>
+                  <h2 className={styles.sectionHeaderTitle}>Events</h2>
+               </div>
+
                <div className={styles.events}>
                   <Card cardTitle="Everyone Welcome">
                      <ul className={styles.eventList}>

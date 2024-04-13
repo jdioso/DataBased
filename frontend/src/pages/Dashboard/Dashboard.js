@@ -19,8 +19,8 @@ export default function Dashboard() {
       <>
          <Navbar />
          <div className={styles.container}>
-            <div className={styles.flexRow}>
-               <h1 className="subheading flex-grow">University</h1>
+            <div className={styles.sectionHeader}>
+               <h1 className={styles.sectionHeaderTitle}>University</h1>
                <Button
                   onClick={(e) => {
                      e.preventDefault();
@@ -30,8 +30,12 @@ export default function Dashboard() {
                   Open University
                </Button>
             </div>
-            <div className={styles.flexCol}>
-               <h1 className="subheading">My Organizations</h1>
+            <div className={styles.section}>
+               <div className={styles.sectionHeader}>
+                  <h1 className={styles.sectionHeaderTitle}>
+                     My Organizations
+                  </h1>
+               </div>
                <div
                   style={{
                      display: "flex",
