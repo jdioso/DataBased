@@ -18,6 +18,7 @@ CREATE TABLE rso (
                      description VARCHAR(1024),
                      userID INT, -- Foreign key to user who is the RSO leader
                      FOREIGN KEY (userID) REFERENCES user(userID)
+
 );
 
 -- Create admin table linked to an RSO

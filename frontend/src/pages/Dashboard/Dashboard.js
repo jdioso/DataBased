@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../components/Button/Button";
+import Form from "../../components/Form/Form";
 import Navbar from "../../components/Navbar/Navbar";
 import Square from "../../components/Square/Square";
 import styles from "./Dashboard.module.css";
