@@ -23,10 +23,6 @@ const defineRSO_Members = (sequelize, DataTypes) => {
 		timestamps: false,
 		id: false // Disable auto-increment on the id
 	});
-	// In your RSO_Members model definition file
-	RSO_Members.associate = function(models) {
-		RSO_Members.belongsTo(models.user, { foreignKey: 'userID', as: 'user' }); // Check how 'User' model is defined in Sequelize
-	};
 
 
 	return RSO_Members;
