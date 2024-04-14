@@ -1,5 +1,5 @@
 const express = require('express');
-const db  = require('../models'); // Adjust according to your models' structure
+const db = require('../models'); // Adjust according to your models' structure
 const router = express.Router();
 
 // Function to handle validation errors
@@ -9,19 +9,28 @@ const handleValidationError = (err, res) => {
 	res.status(400).json({ message: "Validation errors", details: errors });
 };
 
-// Create University
+// Create University, figure out picture later
 router.post('/add', async (req, res) => {
 	try {
-		const universityData = req.body;
-		if (!universityData.name || !universityData.location || !universityData.numStudents) {
+		const { name, location, description, userID, numStudents, picture } = req.body;
+			if (!name || !location || !description || !userID || !numStudents) {
 			return res.status(400).send('Missing required fields');
 		}
-		const newUniversity = await db.university.create(universityData);
+
+		// Check for duplicate name
+		const existingUniversity = await db.university.findOne({ where: { name } });
+		if (existingUniversity) {
+			return res.status(409).json({ message: 'A university with this name already exists.' });
+		}
+		const newUniversity = await db.university.create({ name, location, description, userID, numStudents, picture });
 		res.status(201).json({ message: 'University created', universityID: newUniversity.universityID });
 	} catch (err) {
 		console.error('Error creating university:', err.message);
-		if (err.name === 'SequelizeValidationError') return handleValidationError(err, res);
-		res.status(500).send('Server error');
+		if (err.name === 'SequelizeValidationError') {
+			handleValidationError(err, res);
+		} else {
+			res.status(500).json({ message: 'Server error', error: err.message });
+		}
 	}
 });
 
@@ -34,29 +43,66 @@ router.delete('/delete/:id', async (req, res) => {
 		if (deleted) {
 			res.status(200).json({ message: 'University deleted', universityID: id, eventsDeleted: deletedEvents });
 		} else {
-			res.status(404).send('University not found');
+			res.status(404).json({ message: 'University not found', universityID: id });
 		}
 	} catch (err) {
 		console.error('Error deleting university:', err.message);
-		res.status(500).send('Server error');
+		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
 
 // Edit University
 router.put('/edit/:id', async (req, res) => {
 	const { id } = req.params;
-	const universityData = req.body;
+	const updateData = req.body;
 	try {
-		const [updated] = await db.university.update(universityData, { where: { universityID: id } });
+		if (Object.keys(updateData).length === 0) {
+			return res.status(400).json({ message: "No data provided for update." });
+		}
+
+		// First, check if the university exists
+		const university = await db.university.findByPk(id);
+		if (!university) {
+			return res.status(404).json({ message: 'University not found', universityID: id });
+		}
+
+		// Check for empty strings in the update fields
+		for (const key in updateData) {
+			if (updateData.hasOwnProperty(key) && updateData[key].trim() === "") {
+				return res.status(400).json({ message: `Invalid update: ${key} cannot be empty.` });
+			}
+		}
+
+		// If name is in the request and it's different from the current name
+		if (updateData.name && updateData.name !== university.name) {
+			// Check if another university with the new name already exists
+			const existingUniversity = await db.university.findOne({ where: { name: updateData.name } });
+			if (existingUniversity) {
+				return res.status(409).json({ message: 'Another university with this name already exists.', name: updateData.name });
+			}
+		}
+
+		// Check if the update data is different from existing data
+		const needsUpdate = Object.keys(updateData).some(key => university[key] !== updateData[key]);
+		if (!needsUpdate) {
+			return res.status(200).json({ message: 'No changes were made to the university.', universityID: id });
+		}
+
+		// Proceed with the update if changes are needed
+		const [updated] = await db.university.update(updateData, { where: { universityID: id } });
 		if (updated) {
 			res.status(200).json({ message: 'University updated', universityID: id });
 		} else {
-			res.status(404).send('University not found');
+			// If for some reason the update fails
+			res.status(500).json({ message: 'Failed to update university', universityID: id });
 		}
 	} catch (err) {
 		console.error('Error updating university:', err.message);
-		if (err.name === 'SequelizeValidationError') return handleValidationError(err, res);
-		res.status(500).send('Server error');
+		if (err.name === 'SequelizeValidationError') {
+			handleValidationError(err, res);
+		} else {
+			res.status(500).json({ message: 'Server error', error: err.message });
+		}
 	}
 });
 
@@ -67,7 +113,7 @@ router.get('/searchAll', async (req, res) => {
 		res.status(200).json(universityList);
 	} catch (err) {
 		console.error('Error fetching all universities:', err.message);
-		res.status(500).send('Server error');
+		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
 
@@ -79,11 +125,11 @@ router.get('/search/:id', async (req, res) => {
 		if (university) {
 			res.status(200).json(university);
 		} else {
-			res.status(404).send('University not found');
+			res.status(404).json({ message: 'University not found', universityID: id });
 		}
 	} catch (err) {
 		console.error('Error fetching university:', err.message);
-		res.status(500).send('Server error');
+		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
 
