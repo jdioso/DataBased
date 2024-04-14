@@ -35,9 +35,9 @@ CREATE TABLE university (
                             location VARCHAR(256),
                             description VARCHAR(1024),
                             numStudents INT,
-                            picture VARCHAR(2048),
                             userID INT,
-                            FOREIGN KEY (userID) REFERENCES user(userID)
+                            FOREIGN KEY (userID) REFERENCES user(userID),
+                            FOREIGN KEY ()
 );
 
 -- Create events table with rsoID which can be NULL and a foreign key
@@ -79,6 +79,13 @@ CREATE TABLE rso_members (
                              PRIMARY KEY (rsoID, userID),
                              FOREIGN KEY (rsoID) REFERENCES rso(rsoID),
                              FOREIGN KEY (userID) REFERENCES user(userID)
+);
+
+CREATE TABLE university_pictures (
+                                    picID INT AUTO_INCREMENT PRIMARY KEY,
+                                    universityID INT,
+                                    picture_url VARCHAR(2048),
+                                    FOREIGN KEY (universityID) REFERENCES university(universityID)
 );
 
 -- Insert sample data into user table
