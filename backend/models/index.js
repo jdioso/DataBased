@@ -22,6 +22,7 @@ db.users = require('./user')(sequelize, Sequelize);
 db.comments = require('./comments')(sequelize, Sequelize);
 db.university = require('./university')(sequelize, Sequelize);
 db.rsos = require('./rso')(sequelize, Sequelize);
+db.rsoMem = require('./rso_members')(sequelize, Sequelize);
 db.events = require('./events')(sequelize, Sequelize);
 db.rso_members = require('./rso_members')(sequelize, Sequelize);
 

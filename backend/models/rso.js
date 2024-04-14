@@ -23,10 +23,6 @@ const defineRSO = (sequelize, DataTypes) => {
 		type: DataTypes.STRING(1024),
 		allowNull: false
 	  },
-	  memberIDs: {
-		type: DataTypes.ARRAY(DataTypes.INTEGER),
-		allowNull: true,
-	  }
 	}, {
 	  tableName: 'rso', // Specify table name
 	  timestamps: false // Disable createdAt and updatedAt columns

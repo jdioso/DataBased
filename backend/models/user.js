@@ -27,6 +27,15 @@ const defineUser = (sequelize, DataTypes) => {
 		timestamps: false  // Disable Sequelize's automatic timestamping
 	});
 
+	// // Define the relationship between User and RSO
+	// User.associate = models => {
+	// 	User.belongsToMany(models.rsos, {
+	// 		through: models.rso_members,
+	// 		foreignKey: 'userID',
+	// 		as: 'rsos'
+	// 	});
+	// };
+
 	return User;
 };
 
