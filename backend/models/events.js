@@ -61,7 +61,7 @@ const defineEvent = (sequelize, DataTypes) => {
     },
 	approved: {
 	  type: DataTypes.BOOLEAN,
-	  allowNull: false
+	  allowNull: true
 	}
   }, {
     tableName: 'events', // Specify table name
