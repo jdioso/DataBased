@@ -22,10 +22,6 @@ const defineRSO = (sequelize, DataTypes) => {
 	  description: {
 		type: DataTypes.STRING(1024),
 		allowNull: false
-	  },
-	  memberIDs: {
-		type: DataTypes.ARRAY(DataTypes.INTEGER),
-		allowNull: true,
 	  }
 	}, {
 	  tableName: 'rso', // Specify table name

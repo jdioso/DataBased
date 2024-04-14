@@ -7,11 +7,13 @@ const router = express.Router();
 router.post('/add', async (req, res) => {
 	try {
 		const { userID, name, numMembers, description, memberIDs } = req.body;
+
 		const newRSO = await db.rsos.create({
 			userID,
 			name,
 			numMembers,
 			description,
+			memberIDs
 		});
 		res.status(201).json({ message: 'RSO created successfully', rsoID: newRSO.rsoID });
 	} catch (err) {
@@ -42,7 +44,7 @@ router.put('/edit', async (req, res) => {
 router.delete('/delete', async (req, res) => {
 	const { id } = req.body;
 	try {
-		const deletedCount = await db.RSO.destroy({ where: { rsoID: id } });
+		const deletedCount = await db.rsos.destroy({ where: { rsoID: id } });
 		if (deletedCount === 1) {
 			res.status(200).send('RSO deleted successfully');
 		} else {
@@ -57,7 +59,7 @@ router.delete('/delete', async (req, res) => {
 // Search all RSOs
 router.get('/searchAll', async (req, res) => {
 	try {
-		const allRSOs = await db.RSO.findAll();
+		const allRSOs = await db.rsos.findAll();
 		res.status(200).json(allRSOs);
 	} catch (err) {
 		console.error(err);
@@ -66,26 +68,19 @@ router.get('/searchAll', async (req, res) => {
 });
 
 // Search RSOs by name
-router.get('/rso', async (req, res) => {
+router.get('/searchAll/:name', async (req, res) => {
+	const { name } = req.params;
 	try {
-		const { name } = req.query;
-		if (!name) {
-			return res.status(400).send('Name parameter is required');
+		const RSO = await db.rsos.findOne({ where: { name } });
+		if (RSO) {
+			res.status(200).json(RSO);
+		} else {
+			res.status(404).send('RSO not found');
 		}
-
-		const rsoByName = await db.RSO.findAll({
-			where: {
-				name: {
-					[db.Sequelize.Op.iLike]: `%${name}%` // Case-insensitive search
-				}
-			}
-		});
-
-		res.status(200).json(rsoByName);
 	} catch (err) {
-		console.error(err);
-		res.status(500).send('Server error');
-	}
+        console.error('Error fetching RSO:', err.message);
+        res.status(500).send('Server error');
+    }
 });
 
 module.exports = router;
