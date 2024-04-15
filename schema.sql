@@ -7,7 +7,9 @@ CREATE TABLE user (
                       email VARCHAR(64) NOT NULL,
                       password VARCHAR(64) NOT NULL,
                       firstName VARCHAR(64) NOT NULL,
-                      lastName VARCHAR(64) NOT NULL
+                      lastName VARCHAR(64) NOT NULL,
+                      universityID INT,
+                      FOREIGN KEY (universityID) REFERENCES university(universityID)
 );
 
 -- Create rso table
@@ -16,8 +18,8 @@ CREATE TABLE rso (
                      name VARCHAR(64),
                      numMembers INT,
                      description VARCHAR(1024),
-                     userID INT, -- Foreign key to user who is the RSO leader
-                     FOREIGN KEY (userID) REFERENCES user(userID)
+                     adminID INT, -- Foreign key to user who is the RSO admin
+                     FOREIGN KEY (adminID) REFERENCES admin(adminID)
 );
 
 -- Create admin table linked to an RSO
@@ -29,6 +31,15 @@ CREATE TABLE admin (
                        FOREIGN KEY (rsoID) REFERENCES rso(rsoID)
 );
 
+-- Create super admin table linked to a university
+CREATE TABLE super_admin (
+                            saID INT AUTO_INCREMENT PRIMARY KEY,
+                            universityID INT,
+                            userID INT,
+                            FOREIGN KEY (userID) REFERENCES user(userID),
+                            FOREIGN KEY (universityID) REFERENCES university(universityID)
+);
+
 -- Create university table
 CREATE TABLE university (
                             universityID INT AUTO_INCREMENT PRIMARY KEY,
@@ -36,9 +47,8 @@ CREATE TABLE university (
                             location VARCHAR(256),
                             description VARCHAR(1024),
                             numStudents INT,
-                            userID INT,
-                            FOREIGN KEY (userID) REFERENCES user(userID),
-                            FOREIGN KEY ()
+                            saID INT, 
+                            FOREIGN KEY (saID) REFERENCES super_admin(saID),
 );
 
 -- Create events table with rsoID which can be NULL and a foreign key
