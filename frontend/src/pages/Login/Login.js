@@ -5,10 +5,8 @@ import LoginForm from "../../pages/Login/LoginForm";
 import RegisterForm from "../../pages/Register/RegisterForm";
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
-
 export default function Login() {
    const navigate = useNavigate();
-
    const openDashboard = async () => {
       navigate("/dashboard");
    };
