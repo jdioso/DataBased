@@ -4,7 +4,7 @@ USE infinite_rso;
 -- Create user table with first name and last name
 CREATE TABLE user (
                       userID INT AUTO_INCREMENT PRIMARY KEY,
-                      email VARCHAR(64) NOT NULL,
+                      email VARCHAR(64) NOT NULL UNIQUE,
                       password VARCHAR(64) NOT NULL,
                       firstName VARCHAR(64) NOT NULL,
                       lastName VARCHAR(64) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE user (
 -- Create rso table
 CREATE TABLE rso (
                      rsoID INT AUTO_INCREMENT PRIMARY KEY,
-                     name VARCHAR(64),
+                     name VARCHAR(64) NOT NULL UNIQUE,
                      numMembers INT,
                      description VARCHAR(1024),
                      adminID INT, -- Foreign key to user who is the RSO admin
@@ -43,8 +43,8 @@ CREATE TABLE super_admin (
 -- Create university table
 CREATE TABLE university (
                             universityID INT AUTO_INCREMENT PRIMARY KEY,
-                            name VARCHAR(64),
-                            location VARCHAR(256),
+                            name VARCHAR(64) NOT NULL UNIQUE,
+                            location VARCHAR(256) NOT NULL,
                             description VARCHAR(1024),
                             numStudents INT,
                             saID INT, 
@@ -54,9 +54,9 @@ CREATE TABLE university (
 -- Create events table with rsoID which can be NULL and a foreign key
 CREATE TABLE events (
                         eventID INT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(64),
-                        eventType VARCHAR(16),
-                        privacy VARCHAR(16),
+                        name VARCHAR(64) NOT NULL,
+                        eventType VARCHAR(16) NOT NULL,
+                        privacy VARCHAR(16) NOT NULL,
                         approved BOOLEAN,
                         time TIME,
                         date DATE,
@@ -99,6 +99,10 @@ CREATE TABLE university_pictures (
                                     picture_url VARCHAR(2048),
                                     FOREIGN KEY (universityID) REFERENCES university(universityID)
 );
+
+-- Index events by date and time
+CREATE INDEX IDX_events_date ON events (date);
+CREATE INDEX IDX_events_time ON events (time);
 
 -- Insert sample data into user table
 INSERT INTO user (email, password, firstName, lastName)
