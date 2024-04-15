@@ -1,8 +1,12 @@
-require('dotenv').config({ path: '../.env' });  // Adjust the path accordingly
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes'); // Ensure the path matches your structure
-const dbRoute = require('./routes/dbRoute'); // Ensure the path matches your structure
+const userRoutes = require('./routes/userRoutes');
+const dbRoute = require('./routes/dbRoute');
+const eventRoutes = require('./routes/eventRoutes')
+const universityRoutes = require('./routes/universityRoutes')
+const commentRoutes = require('./routes/commentRoutes')
+const rsoRoutes = require('./routes/rsoRoutes');
 
 const app = express();
 
@@ -13,6 +17,10 @@ app.use(express.json()); // Parses JSON request body
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/test-db', dbRoute);
+app.use('/api/events', eventRoutes);
+app.use('/api/universities', universityRoutes);
+app.use('/api/rso', rsoRoutes);
+app.use('/api/comments', commentRoutes);
 
 // Setting up the server
 const PORT = process.env.NODE_PORT || 8080;
