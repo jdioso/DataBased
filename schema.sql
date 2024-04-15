@@ -18,13 +18,14 @@ CREATE TABLE rso (
                      description VARCHAR(1024),
                      userID INT, -- Foreign key to user who is the RSO leader
                      FOREIGN KEY (userID) REFERENCES user(userID)
-
 );
 
 -- Create admin table linked to an RSO
 CREATE TABLE admin (
                        adminID INT AUTO_INCREMENT PRIMARY KEY,
                        rsoID INT,
+                       userID INT,
+                       FOREIGN KEY (userID) REFERENCES user(userID),
                        FOREIGN KEY (rsoID) REFERENCES rso(rsoID)
 );
 
@@ -81,6 +82,7 @@ CREATE TABLE rso_members (
                              FOREIGN KEY (userID) REFERENCES user(userID)
 );
 
+-- Create university_pictures 
 CREATE TABLE university_pictures (
                                     picID INT AUTO_INCREMENT PRIMARY KEY,
                                     universityID INT,
