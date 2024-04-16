@@ -128,6 +128,8 @@ CREATE INDEX IDX_events_date ON events (date);
 CREATE INDEX IDX_events_time ON events (time);
 
 -- Trigger to update status of RSO based on member count
+DELIMITER $$
+
 CREATE TRIGGER update_rso_status
     AFTER INSERT ON rso_members
     FOR EACH ROW
@@ -144,5 +146,7 @@ BEGIN
     END IF;
 
     UPDATE rso SET status = rso_status WHERE rsoID = NEW.rsoID;
-END;
+END$$
+
+DELIMITER ;
 
