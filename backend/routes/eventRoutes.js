@@ -213,5 +213,77 @@ router.get('/searchByType', async (req, res) => {
 	}
 });
 
+// Get all events by RSO ID
+router.get('/SearchRSOEvents/:rsoID', async (req, res) => {
+	const { rsoID } = req.params;
+
+	try {
+		const events = await db.events.findAll({
+			where: { rsoID } // Filters events by the specified RSO ID
+		});
+
+		if (events.length > 0) {
+			res.status(200).json(events);
+		} else {
+			res.status(404).json({ message: 'No events found for this RSO' });
+		}
+	} catch (err) {
+		console.error('Error retrieving events:', err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
+router.get('/universityEvents/:universityID', async (req, res) => {
+	const { universityID } = req.params;
+
+	try {
+		const universityEvents = await db.events.findAll({
+			where: {
+				universityID, // Match the university ID
+				rsoID: null   // Ensure rsoID is null to classify as a university event
+			}
+		});
+
+		if (universityEvents.length > 0) {
+			res.status(200).json(universityEvents);
+		} else {
+			res.status(404).json({ message: 'No university events found for this university' });
+		}
+	} catch (err) {
+		console.error('Error retrieving university events:', err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
+router.get('/universityEvents/:universityID/:privacy', async (req, res) => {
+	const { universityID, privacy } = req.params;
+
+	const validPrivacies = ['private', 'public'];
+	if (!validPrivacies.includes(privacy.toLowerCase())) {
+		return res.status(400).json({ message: 'Invalid privacy level specified. Please use "private" or "public".' });
+	}
+
+	try {
+		const events = await db.events.findAll({
+			where: {
+				universityID,
+				rsoID: null,
+				privacy: privacy.toLowerCase() // Match the privacy level
+			}
+		});
+
+		if (events.length > 0) {
+			res.status(200).json(events);
+		} else {
+			res.status(404).json({ message: `No ${privacy} university events found for this university` });
+		}
+	} catch (err) {
+		console.error(`Error retrieving ${privacy} university events:`, err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
+
+
 
 module.exports = router;
