@@ -12,7 +12,7 @@ const handleValidationError = (err, res) => {
 // Create University, figure out picture later
 router.post('/add', async (req, res) => {
 	try {
-		const { name, location, description, saID, numStudents, domain, picture } = req.body;
+		const { name, location, description, saID, numStudents, domain} = req.body;
 		if (!name || !location || !description || !saID || !domain || !numStudents) {
 			return res.status(400).send('Missing required fields');
 		}
@@ -22,7 +22,7 @@ router.post('/add', async (req, res) => {
 		if (existingUniversity) {
 			return res.status(409).json({ message: 'A university with this name already exists.' });
 		}
-		const newUniversity = await db.university.create({ name, location, description, saID, domain, numStudents, picture });
+		const newUniversity = await db.university.create({ name, location, description, saID, domain, numStudents });
 		res.status(201).json({ message: 'University created', universityID: newUniversity.universityID });
 	} catch (err) {
 		console.error('Error creating university:', err.message);
@@ -138,19 +138,20 @@ router.get('/search/:id', async (req, res) => {
 });
 
 // Get University by domain
-router.get('/search/:domain', async (req, res) => {
+router.get('/searchByDomain/:domain', async (req, res) => {
 	const { domain } = req.params;
 	try {
 		const existingUniversity = await db.university.findOne({ where: { domain } });
 		if (existingUniversity) {
 			res.status(200).json(existingUniversity);
 		} else {
-			res.status(404).json({ message: 'University not found', domain: domain });
+			res.status(404).json({ message: 'University not found for domain', domain });
 		}
 	} catch (err) {
-		console.error('Error fetching university:', err.message);
+		console.error('Error fetching university by domain:', err.message);
 		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
+
 
 module.exports = router;

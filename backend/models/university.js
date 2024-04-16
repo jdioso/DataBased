@@ -21,10 +21,6 @@ const defineUniversity = (sequelize, DataTypes) => {
 		saID: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			references: {
-				model: 'super_admin',
-				key: 'saID'
-			}
 		},
 		domain: {
             type: DataTypes.STRING(64),
@@ -34,10 +30,6 @@ const defineUniversity = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		picture: {
-			type: DataTypes.STRING(2048),
-			allowNull: true
-		}
 	}, {
 		tableName: 'university',
 		timestamps: false
