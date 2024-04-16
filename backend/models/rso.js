@@ -10,6 +10,10 @@ const defineRSO = (sequelize, DataTypes) => {
 			allowNull: false,
 			// Reference to an admin will be established in index.js as a foreign key association
 		},
+		status: {
+			type: DataTypes.BOOLEAN,
+			allowNull: true
+		},
 		name: {
 			type: DataTypes.STRING(64),
 			allowNull: false,

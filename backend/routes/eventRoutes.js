@@ -151,15 +151,14 @@ router.get('/searchUni/:universityID', async (req, res) => {
 	}
 });
 
-// Get Public Events by Univeristy ID
 router.get('/searchUni/:type/:universityID', async (req, res) => {
 	const { universityID, eventType } = req.params;
 	try {
-        const eventsList = await db.events.findAll({ 
-            where: { 
+        const eventsList = await db.events.findAll({
+            where: {
                 universityID: universityID,
                 type: eventType
-            } 
+            }
         });
 		if (eventsList.length > 0) {
 			res.status(200).json(eventsList);
