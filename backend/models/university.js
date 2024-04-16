@@ -34,10 +34,6 @@ const defineUniversity = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER,
 			allowNull: false
 		},
-		domain: {
-			type: DataTypes.STRING(64),
-			allowNull: false
-		},
 		picture: {
 			type: DataTypes.STRING(2048),
 			allowNull: true
