@@ -43,6 +43,7 @@ CREATE TABLE university (
                             description VARCHAR(1024),
                             numStudents INT,
                             saID INT,
+                            domain VARCHAR(64) NOT NULL,
                             UNIQUE(name)
 );
 
