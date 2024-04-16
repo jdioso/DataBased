@@ -22,32 +22,40 @@ db.users = require('./user')(sequelize, Sequelize);
 db.comments = require('./comments')(sequelize, Sequelize);
 db.university = require('./university')(sequelize, Sequelize);
 db.rsos = require('./rso')(sequelize, Sequelize);
-db.rsoMem = require('./rso_members')(sequelize, Sequelize);
-db.events = require('./events')(sequelize, Sequelize);
 db.rso_members = require('./rso_members')(sequelize, Sequelize);
+db.events = require('./events')(sequelize, Sequelize);
 db.admins = require('./admin')(sequelize, Sequelize);
 db.super_admins = require('./super_admin')(sequelize, Sequelize);
 
-// Even though foreign keys in the database enforce data integrity. We use sequelize to enforce the relationships in the code.
-// This makes it easier to query the database and get the data we need.
-db.rsoMem.belongsTo(db.users, { as: 'user', foreignKey: 'userID' }); // rsoMem.userID -> users.userID
-db.users.hasMany(db.rsoMem, { as: 'rsoMem', foreignKey: 'userID' })
+// Associations
+db.users.hasMany(db.comments, { foreignKey: 'userID' });
+db.comments.belongsTo(db.users, { foreignKey: 'userID' });
 
-// Example:
-// the " as: 'user' " is used to rename the association and must match exactly the name of the association in the model above.
-// changing one to 'users' will cause an error.
-// code snippet from backend/routes/rsoRoutes.js where this is used:
+db.users.belongsToMany(db.rsos, { through: db.rso_members, foreignKey: 'userID', otherKey: 'rsoID' });
+db.rsos.belongsToMany(db.users, { through: db.rso_members, foreignKey: 'rsoID', otherKey: 'userID' });
 
-/* router.get('/:rsoID/members'...
-const members = await db.rsoMem.findAll({
-			where: { rsoID },
-			include: [{
-				model: db.users,
-				as: 'user',
-				attributes: ['userID', 'email', 'firstName', 'lastName']
-			}]
-		});
-		...
- */
+db.users.hasMany(db.admins, { foreignKey: 'userID' });
+db.admins.belongsTo(db.users, { foreignKey: 'userID' });
+
+db.users.hasMany(db.super_admins, { foreignKey: 'userID' });
+db.super_admins.belongsTo(db.users, { foreignKey: 'userID' });
+
+db.university.hasMany(db.users, { foreignKey: 'universityID' });
+db.users.belongsTo(db.university, { foreignKey: 'universityID' });
+
+db.university.hasMany(db.events, { foreignKey: 'universityID' });
+db.events.belongsTo(db.university, { foreignKey: 'universityID' });
+
+db.rsos.hasMany(db.events, { foreignKey: 'rsoID' });
+db.events.belongsTo(db.rsos, { foreignKey: 'rsoID' });
+
+db.university.hasMany(db.super_admins, { foreignKey: 'universityID' });
+db.super_admins.belongsTo(db.university, { foreignKey: 'universityID' });
+
+db.comments.belongsTo(db.events, { foreignKey: 'eventID' });
+db.events.hasMany(db.comments, { foreignKey: 'eventID' });
+
+db.university.belongsTo(db.super_admins, { foreignKey: 'saID' });
+db.super_admins.hasOne(db.university, { foreignKey: 'saID' });
 
 module.exports = db;

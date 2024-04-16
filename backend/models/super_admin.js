@@ -7,13 +7,23 @@ const defineSA = (sequelize, DataTypes) => {
 		},
         userID: {
 			type: DataTypes.INTEGER,
+	        allowNull: false,
+	        references: {
+		        model: 'user',
+		        key: 'userID'
+	        }
 		},
-        univeristyID: {
-            type: DataTypes.INTEGER,
-        }
+		universityID: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+			references: {
+				model: 'university',
+				key: 'universityID'
+			}
+		}
 	}, {
 		tableName: 'super_admin',
-		timestamps: false  // Disable Sequelize's automatic timestamping
+		timestamps: false
 	});
 
 	return SA;

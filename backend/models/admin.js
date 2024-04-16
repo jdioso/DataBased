@@ -5,12 +5,16 @@ const defineAdmin = (sequelize, DataTypes) => {
 			primaryKey: true,
 			autoIncrement: true
 		},
-        userID: {
+		userID: {
 			type: DataTypes.INTEGER,
+			references: {
+				model: 'user',
+				key: 'userID',
+			}
 		}
 	}, {
 		tableName: 'admin',
-		timestamps: false  // Disable Sequelize's automatic timestamping
+		timestamps: false
 	});
 
 	return Admin;
