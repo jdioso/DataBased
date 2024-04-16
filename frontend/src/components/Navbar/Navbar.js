@@ -11,7 +11,6 @@ export default function Navbar() {
          <img src={logo} className={styles.logo} alt="logo" />
          <h1 className={styles.appName}>Infinite RSO</h1>
          <div className={styles.navControls}>
-            <Button>Admin Toggle</Button>
             <Button
                onClick={(e) => {
                   e.preventDefault();
@@ -31,7 +30,7 @@ export default function Navbar() {
             <Button
                onClick={(e) => {
                   e.preventDefault();
-                  navigate("/login ");
+                  navigate("/ ");
                }}
             >
                Login
