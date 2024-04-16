@@ -1,5 +1,3 @@
-// models/RSO.js
-
 const defineRSO = (sequelize, DataTypes) => {
 	const RSO = sequelize.define('RSO', {
 	  rsoID: {

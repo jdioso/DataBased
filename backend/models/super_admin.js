@@ -7,14 +7,12 @@ const defineSA = (sequelize, DataTypes) => {
 		},
         userID: {
 			type: DataTypes.INTEGER,
-			autoIncrement: true
 		},
         univeristyID: {
             type: DataTypes.INTEGER,
-            autoIncrement: true
         }
 	}, {
-		tableName: 'SA',
+		tableName: 'super_admin',
 		timestamps: false  // Disable Sequelize's automatic timestamping
 	});
 

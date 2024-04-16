@@ -4,7 +4,7 @@ const db = require('../models');
 const router = express.Router();
 
 // Create Admin
-router.post('/register', async (req, res) => {
+router.post('/registerAdmin', async (req, res) => {
 	const { userID } = req.body;
 	try {
 		const newAdmin = await db.admins.create({
@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Create Super Admin
-router.post('/register', async (req, res) => {
+router.post('/registerSA', async (req, res) => {
 	const { userID, universityID } = req.body;
 	try {
 		const newSA = await db.super_admins.create({
@@ -31,5 +31,7 @@ router.post('/register', async (req, res) => {
 		res.status(500).json({ error: 'Failed to register super admin due to internal server error.' });
 	}
 });
+
+
 
 module.exports = router;  // Don't forget to export the router

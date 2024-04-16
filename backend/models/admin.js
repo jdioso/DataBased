@@ -7,10 +7,9 @@ const defineAdmin = (sequelize, DataTypes) => {
 		},
         userID: {
 			type: DataTypes.INTEGER,
-			autoIncrement: true
 		}
 	}, {
-		tableName: 'Admin',
+		tableName: 'admin',
 		timestamps: false  // Disable Sequelize's automatic timestamping
 	});
 
