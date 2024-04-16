@@ -8,7 +8,7 @@ const defineUniversity = (sequelize, DataTypes) => {
 		name: {
 			type: DataTypes.STRING(64),
 			allowNull: false,
-			unique: true  // Ensure no duplicate names
+			unique: true
 		},
 		location: {
 			type: DataTypes.STRING(256),
@@ -28,6 +28,10 @@ const defineUniversity = (sequelize, DataTypes) => {
 		},
 		numStudents: {
 			type: DataTypes.INTEGER,
+			allowNull: false
+		},
+		domain: {
+			type: DataTypes.STRING(64),
 			allowNull: false
 		},
 		picture: {
