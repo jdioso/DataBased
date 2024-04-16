@@ -12,8 +12,9 @@ const handleValidationError = (err, res) => {
 // Create University, figure out picture later
 router.post('/add', async (req, res) => {
 	try {
-		const { name, location, description, userID, numStudents, picture } = req.body;
-			if (!name || !location || !description || !userID || !numStudents) {
+		const { name, location, description, saID, numStudents, domain } = req.body;
+
+		if (!name || !location || !description || !saID || !domain || !numStudents) {
 			return res.status(400).send('Missing required fields');
 		}
 
@@ -22,8 +23,30 @@ router.post('/add', async (req, res) => {
 		if (existingUniversity) {
 			return res.status(409).json({ message: 'A university with this name already exists.' });
 		}
-		const newUniversity = await db.university.create({ name, location, description, userID, numStudents, picture });
-		res.status(201).json({ message: 'University created', universityID: newUniversity.universityID });
+
+		// Start a transaction
+		const result = await db.sequelize.transaction(async (transaction) => {
+			// Create the university
+			const newUniversity = await db.university.create({
+				name,
+				location,
+				description,
+				saID,
+				domain,
+				numStudents
+			}, { transaction });
+
+			await db.super_admins.update({
+				universityID: newUniversity.universityID
+			}, {
+				where: { saID },
+				transaction
+			});
+
+			return newUniversity;
+		});
+
+		res.status(201).json({ message: 'University created', universityID: result.universityID });
 	} catch (err) {
 		console.error('Error creating university:', err.message);
 		if (err.name === 'SequelizeValidationError') {
@@ -33,6 +56,7 @@ router.post('/add', async (req, res) => {
 		}
 	}
 });
+
 
 // Delete University
 router.delete('/delete/:id', async (req, res) => {
@@ -69,13 +93,17 @@ router.put('/edit/:id', async (req, res) => {
 		// Check for empty strings in the update fields
 		for (const key in updateData) {
 			if (updateData.hasOwnProperty(key) && updateData[key].trim() === "") {
-				return res.status(400).json({ message: `Invalid update: ${key} cannot be empty.` });
-			}
+					return res.status(400).json({ message: `Invalid update: ${key} cannot be empty.` });
+				}
 		}
 
-		// If name is in the request and it's different from the current name
+		// Check foreign key existence for saID
+		if (updateData.saID && !(await db.super_admin.findByPk(updateData.saID))) {
+			return res.status(404).json({ message: 'Super Admin not found for the given saID', saID: updateData.saID });
+		}
+
+		// If name is in the request, and it's different from the current name
 		if (updateData.name && updateData.name !== university.name) {
-			// Check if another university with the new name already exists
 			const existingUniversity = await db.university.findOne({ where: { name: updateData.name } });
 			if (existingUniversity) {
 				return res.status(409).json({ message: 'Another university with this name already exists.', name: updateData.name });
@@ -93,7 +121,6 @@ router.put('/edit/:id', async (req, res) => {
 		if (updated) {
 			res.status(200).json({ message: 'University updated', universityID: id });
 		} else {
-			// If for some reason the update fails
 			res.status(500).json({ message: 'Failed to update university', universityID: id });
 		}
 	} catch (err) {
@@ -105,6 +132,7 @@ router.put('/edit/:id', async (req, res) => {
 		}
 	}
 });
+
 
 // Get All Universities
 router.get('/searchAll', async (req, res) => {
@@ -132,5 +160,24 @@ router.get('/search/:id', async (req, res) => {
 		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
+
+// Get University by domain
+router.get('/searchByDomain/:domain', async (req, res) => {
+	const { domain } = req.params;
+	try {
+		const existingUniversity = await db.university.findOne({ where: { domain } });
+		if (existingUniversity) {
+			res.status(200).json(existingUniversity);
+		} else {
+			res.status(404).json({ message: 'University not found for domain', domain });
+		}
+	} catch (err) {
+		console.error('Error fetching university by domain:', err.message);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+
+
 
 module.exports = router;

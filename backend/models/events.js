@@ -57,7 +57,7 @@ const defineEvent = (sequelize, DataTypes) => {
     },
     rsoID: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
 	approved: {
 	  type: DataTypes.BOOLEAN,
