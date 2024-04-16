@@ -83,7 +83,7 @@ CREATE TABLE rso_members (
                              PRIMARY KEY (rsoID, userID)
 );
 
--- Create university_pictures 
+-- Create university_pictures
 CREATE TABLE university_pictures (
                                     picID INT AUTO_INCREMENT PRIMARY KEY,
                                     universityID INT,
@@ -129,19 +129,20 @@ CREATE INDEX IDX_events_time ON events (time);
 
 -- Trigger to update status of RSO based on member count
 CREATE TRIGGER update_rso_status
-AFTER INSERT ON rso_members
-FOR EACH ROW
+    AFTER INSERT ON rso_members
+    FOR EACH ROW
 BEGIN
     DECLARE num_members INT;
     DECLARE rso_status BOOLEAN;
 
     SELECT COUNT(*) INTO num_members FROM rso_members WHERE rsoID = NEW.rsoID;
 
-    IF num_member < 5 THEN
+    IF num_members < 5 THEN
         SET rso_status = FALSE;
     ELSE
         SET rso_status = TRUE;
     END IF;
 
-    UDPATE rso SET status = rso_status WHERE rsoID = NEW.rsoID;
+    UPDATE rso SET status = rso_status WHERE rsoID = NEW.rsoID;
 END;
+
