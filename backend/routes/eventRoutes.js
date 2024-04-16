@@ -151,6 +151,27 @@ router.get('/searchUni/:universityID', async (req, res) => {
 	}
 });
 
+// Get Public Events by Univeristy ID
+router.get('/searchUni/:type/:universityID', async (req, res) => {
+	const { universityID, eventType } = req.params;
+	try {
+        const eventsList = await db.events.findAll({ 
+            where: { 
+                universityID: universityID,
+                type: eventType
+            } 
+        });
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: 'No events found for this University', universityID });
+		}
+	} catch (err) {
+		logError(err, 'Retrieve', `public events for University ${universityID}`);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
 // Get Events by RSO ID
 router.get('/searchRSO/:rsoID', async (req, res) => {
 	const { rsoID } = req.params;
@@ -166,6 +187,7 @@ router.get('/searchRSO/:rsoID', async (req, res) => {
 		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
+
 // Fetch Events by Type (RSO or University)
 router.get('/searchByType', async (req, res) => {
 	const { type } = req.query;  // Expect 'rso' or 'university' as query parameter
