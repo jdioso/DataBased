@@ -7,7 +7,7 @@ const defineRSO = (sequelize, DataTypes) => {
 		primaryKey: true,
 		autoIncrement: true
 	  },
-	  userID: {
+	  adminID: {
 		type: DataTypes.INTEGER,
 		allowNull: false
 	  },

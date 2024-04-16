@@ -17,7 +17,7 @@ const defineUniversity = (sequelize, DataTypes) => {
 	      type: DataTypes.STRING(1024),
 	      allowNull: false
 	    },
-	    userID: {
+	    saID: {
 	      type: DataTypes.INTEGER,
 	      allowNull: false
 	    },

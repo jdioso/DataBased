@@ -25,6 +25,8 @@ db.rsos = require('./rso')(sequelize, Sequelize);
 db.rsoMem = require('./rso_members')(sequelize, Sequelize);
 db.events = require('./events')(sequelize, Sequelize);
 db.rso_members = require('./rso_members')(sequelize, Sequelize);
+db.admins = require('./admin')(sequelize, Sequelize);
+db.super_admins = require('./sa')(sequelize, Sequelize);
 
 // Even though foreign keys in the database enforce data integrity. We use sequelize to enforce the relationships in the code.
 // This makes it easier to query the database and get the data we need.
