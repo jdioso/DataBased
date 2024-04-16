@@ -25,7 +25,6 @@ CREATE TABLE rso (
 -- Create admin table linked to an RSO
 CREATE TABLE admin (
                        adminID INT AUTO_INCREMENT PRIMARY KEY,
-                       rsoID INT,
                        userID INT
 );
 
