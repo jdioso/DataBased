@@ -25,7 +25,6 @@ CREATE TABLE rso (
 -- Create admin table linked to an RSO
 CREATE TABLE admin (
                        adminID INT AUTO_INCREMENT PRIMARY KEY,
-                       rsoID INT,
                        userID INT
 );
 
@@ -44,6 +43,7 @@ CREATE TABLE university (
                             description VARCHAR(1024),
                             numStudents INT,
                             saID INT,
+                            domain VARCHAR(64) NOT NULL,
                             UNIQUE(name)
 );
 
@@ -97,8 +97,7 @@ ALTER TABLE rso
 ADD FOREIGN KEY (adminID) REFERENCES admin(adminID);
 
 ALTER TABLE admin
-ADD FOREIGN KEY (userID) REFERENCES user(userID),
-ADD FOREIGN KEY (rsoID) REFERENCES rso(rsoID);
+ADD FOREIGN KEY (userID) REFERENCES user(userID);
 
 ALTER TABLE super_admin
 ADD FOREIGN KEY (userID) REFERENCES user(userID),
