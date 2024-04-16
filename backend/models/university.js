@@ -26,6 +26,10 @@ const defineUniversity = (sequelize, DataTypes) => {
 				key: 'saID'
 			}
 		},
+		domain: {
+            type: DataTypes.STRING(64),
+            allowNull: false
+        },
 		numStudents: {
 			type: DataTypes.INTEGER,
 			allowNull: false

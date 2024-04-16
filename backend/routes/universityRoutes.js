@@ -12,8 +12,8 @@ const handleValidationError = (err, res) => {
 // Create University, figure out picture later
 router.post('/add', async (req, res) => {
 	try {
-		const { name, location, description, userID, numStudents, picture } = req.body;
-			if (!name || !location || !description || !userID || !numStudents) {
+		const { name, location, description, saID, domain, numStudents, picture } = req.body;
+			if (!name || !location || !description || !saID || !numStudents || domain) {
 			return res.status(400).send('Missing required fields');
 		}
 
@@ -126,6 +126,22 @@ router.get('/search/:id', async (req, res) => {
 			res.status(200).json(university);
 		} else {
 			res.status(404).json({ message: 'University not found', universityID: id });
+		}
+	} catch (err) {
+		console.error('Error fetching university:', err.message);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+// Get University by domain
+router.get('/search/:domain', async (req, res) => {
+	const { domain } = req.params;
+	try {
+		const existingUniversity = await db.university.findOne({ where: { domain } });
+		if (existingUniversity) {
+			res.status(200).json(existingUniversity);
+		} else {
+			res.status(404).json({ message: 'University not found', domain: domain });
 		}
 	} catch (err) {
 		console.error('Error fetching university:', err.message);
