@@ -1,152 +1,196 @@
-CREATE DATABASE IF NOT EXISTS infinite_rso;
-USE infinite_rso;
+const express = require('express');
+const db = require('../models');
+const router = express.Router();
 
--- Create user table with first name and last name
-CREATE TABLE user (
-                      userID INT AUTO_INCREMENT PRIMARY KEY,
-                      email VARCHAR(64) NOT NULL,
-                      password VARCHAR(64) NOT NULL,
-                      firstName VARCHAR(64) NOT NULL,
-                      lastName VARCHAR(64) NOT NULL,
-                      universityID INT,
-                      UNIQUE(email)
-);
+// Function to handle validation errors
+const handleValidationError = (err, res) => {
+	const errors = err.errors.map(e => e.message);
+	console.error('Validation errors', errors);
+	res.status(400).json({ message: "Validation errors", details: errors });
+};
 
--- Create rso table
-CREATE TABLE rso (
-                     rsoID INT AUTO_INCREMENT PRIMARY KEY,
-                     name VARCHAR(64) NOT NULL,
-                     status BOOLEAN,
-                     numMembers INT,
-                     description VARCHAR(1024),
-                     adminID INT, -- Foreign key to user who is the RSO admin
-                     UNIQUE(name)
-);
+// Function for logging errors
+const logError = (err, operation, specifics = '') => {
+	console.error(`${operation} error${specifics ? ` for ${specifics}` : ''}:`, err.message);
 
--- Create admin table linked to an RSO
-CREATE TABLE admin (
-                       adminID INT AUTO_INCREMENT PRIMARY KEY,
-                       userID INT
-);
+};
 
--- Create super admin table linked to a university
-CREATE TABLE super_admin (
-                            saID INT AUTO_INCREMENT PRIMARY KEY,
-                            universityID INT,
-                            userID INT
-);
+// Check for duplicate event names
+const checkDuplicateEventName = async (name, eventId = null) => {
+	// Check if any event other than the current one has the same name
+	const criteria = {
+		where: { name: name },
+	};
+	if (eventId) criteria.where.eventID = { [db.Sequelize.Op.ne]: eventId };  // Exclude current event in case of update
+	const event = await db.events.findOne(criteria);
+	return !!event;
+};
 
--- Create university table
-CREATE TABLE university (
-                            universityID INT AUTO_INCREMENT PRIMARY KEY,
-                            name VARCHAR(64) NOT NULL,
-                            location VARCHAR(256) NOT NULL,
-                            description VARCHAR(1024),
-                            numStudents INT,
-                            saID INT,
-                            domain VARCHAR(64) NOT NULL,
-                            UNIQUE(name)
-);
+const isEmpty = (value) => {
+	if (value === null || value === undefined) return true;
+	return typeof value === 'string' && value.trim() === '';
 
--- Create events table with rsoID which can be NULL and a foreign key
-CREATE TABLE events (
-                        eventID INT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(64) NOT NULL,
-                        eventType VARCHAR(16) NOT NULL,
-                        privacy VARCHAR(16) NOT NULL,
-                        approved BOOLEAN,
-                        time TIME,
-                        date DATE,
-                        longitude DECIMAL(11, 7),
-                        latitude DECIMAL(10, 8),
-                        contactName VARCHAR(64),
-                        contactEmail VARCHAR(64),
-                        contactNumber VARCHAR(16),
-                        description VARCHAR(1024),
-                        universityID INT,
-                        rsoID INT DEFAULT NULL
-);
+};
 
--- Create comments table with foreign key linking to events and a rating
-CREATE TABLE comments (
-                          commentID INT AUTO_INCREMENT PRIMARY KEY,
-                          text VARCHAR(1024),
-                          rating TINYINT CHECK (rating BETWEEN 1 AND 5),
-                          userID INT,
-                          eventID INT
-);
+// Create Event
+router.post('/add', async (req, res) => {
+	const eventData = req.body;
+	const requiredFields = ['eventType', 'privacy', 'name', 'description', 'latitude', 'longitude',
+		'contactName', 'contactEmail', 'contactNumber', 'time', 'date', 'universityID', 'approved'];
 
--- Create rso_members table to link users to RSOs (handles many-to-many relationship)
-CREATE TABLE rso_members (
-                             rsoID INT,
-                             userID INT,
-                             PRIMARY KEY (rsoID, userID)
-);
-
--- Create university_pictures 
-CREATE TABLE university_pictures (
-                                    picID INT AUTO_INCREMENT PRIMARY KEY,
-                                    universityID INT,
-                                    picture_url VARCHAR(2048)
-);
-
--- Create all foreign key conections between all tables
-ALTER TABLE user
-ADD FOREIGN KEY (universityID) REFERENCES university(universityID);
-
-ALTER TABLE rso
-ADD FOREIGN KEY (adminID) REFERENCES admin(adminID);
-
-ALTER TABLE admin
-ADD FOREIGN KEY (userID) REFERENCES user(userID);
-
-ALTER TABLE super_admin
-ADD FOREIGN KEY (userID) REFERENCES user(userID),
-ADD FOREIGN KEY (universityID) REFERENCES university(universityID);
-
-ALTER TABLE university
-ADD FOREIGN KEY (saID) REFERENCES super_admin(saID);
-
-ALTER TABLE events
-ADD FOREIGN KEY (universityID) REFERENCES university(universityID),
-ADD FOREIGN KEY (rsoID) REFERENCES rso(rsoID);
-
-ALTER TABLE comments
-ADD FOREIGN KEY (userID) REFERENCES user(userID),
-ADD FOREIGN KEY (eventID) REFERENCES events(eventID);
-
-ALTER TABLE rso_members
-ADD FOREIGN KEY (rsoID) REFERENCES rso(rsoID),
-ADD FOREIGN KEY (userID) REFERENCES user(userID);
-
-ALTER TABLE university_pictures
-ADD FOREIGN KEY (universityID) REFERENCES university(universityID);
+	// if eventData.rsoID is provided, add it to the required fields
+	if (eventData.rsoID) requiredFields.push('rsoID');
 
 
--- Index events by date and time
-CREATE INDEX IDX_events_date ON events (date);
-CREATE INDEX IDX_events_time ON events (time);
+	try {
+		for (let field of requiredFields) {
+			if (isEmpty(eventData[field] && field !== 'rsoID')) {
+				return res.status(400).json({ message: `Missing or empty required field: ${field}` });
+			}
+		}
 
--- Trigger to update status of RSO based on member count
-CREATE TRIGGER update_rso_status
-AFTER INSERT ON rso_members
-FOR EACH ROW
-BEGIN
-    DECLARE num_members INT;
-    DECLARE rso_status BOOLEAN;
+		// Check for duplicate names
+		if (await checkDuplicateEventName(eventData.name)) {
+			return res.status(409).json({ message: 'An event with the same name already exists.' });
+		}
 
-    SELECT COUNT(*) INTO num_members FROM rso_members WHERE rsoID = NEW.rsoID;
+		const newEvent = await db.events.create(eventData);
+		res.status(201).json({ message: 'Event created successfully', eventID: newEvent.eventID });
+	} catch (err) {
+		console.error('Error creating event:', err.message);
+		if (err.name === 'SequelizeValidationError') {
+			handleValidationError(err, res);
+		} else {
+			res.status(500).json({ message: 'Server error', error: err.message });
+		}
+	}
+});
 
-    IF num_member < 5 THEN
-        SET rso_status = FALSE;
-    ELSE
-        SET rso_status = TRUE;
-    END IF;
+// Edit Event
+router.put('/edit/:id', async (req, res) => {
+	const { id } = req.params;
+	const eventData = req.body;
 
-    UDPATE rso SET status = rso_status WHERE rsoID = NEW.rsoID;
-END;
+	try {
+		const event = await db.events.findByPk(id);
+		if (!event) {
+			return res.status(404).json({ message: 'Event not found', eventID: id });
+		}
+
+		for (const key in eventData) {
+			if (key !== 'rsoID' && isEmpty(eventData[key])) {
+				return res.status(400).json({ message: `Invalid update: ${key} cannot be empty.` });
+			}
+		}
+
+		// Check for duplicate names on updates if the name is being changed
+		if (eventData.name && eventData.name !== event.name && await checkDuplicateEventName(eventData.name, id)) {
+			return res.status(409).json({ message: 'Another event with the same name already exists.' });
+		}
+
+		const [updated] = await db.events.update(eventData, { where: { eventID: id } });
+		if (updated) {
+			res.status(200).json({ message: 'Event updated successfully', eventID: id });
+		} else {
+			return res.status(500).json({ message: 'Failed to update event', eventID: id });
+		}
+	} catch (err) {
+		console.error('Error updating event:', err.message);
+		if (err.name === 'SequelizeValidationError') {
+			handleValidationError(err, res);
+		} else {
+		res.status(500).json({ message: 'Server error', error: err.message });
+		}
+	}
+});
+
+// Delete Event
+router.delete('/delete/:id', async (req, res) => {
+	const { id } = req.params;
+	try {
+		const deleted = await db.events.destroy({ where: { eventID: id } });
+		if (deleted) {
+			res.status(200).json({ message: 'Event deleted successfully', eventID: id });
+		} else {
+			res.status(404).json({ message: 'Event not found', eventID: id });
+		}
+	} catch (err) {
+		logError(err, 'Delete', `event ${id}`);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+// Get All Events
+router.get('/searchAll', async (req, res) => {
+	try {
+		const eventsList = await db.events.findAll();
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: 'No events found' });
+		}
+	} catch (err) {
+		logError(err, 'Retrieve', 'all events');
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+// Get Events by University ID
+router.get('/searchUni/:universityID', async (req, res) => {
+	const { universityID } = req.params;
+	try {
+		const eventsList = await db.events.findAll({ where: { universityID: universityID } });
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: 'No events found for this university', universityID });
+		}
+	} catch (err) {
+		logError(err, 'Retrieve', `events for university ${universityID}`);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+// Get Events by RSO ID
+router.get('/searchRSO/:rsoID', async (req, res) => {
+	const { rsoID } = req.params;
+	try {
+		const eventsList = await db.events.findAll({ where: { rsoID: rsoID } });
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: 'No events found for this RSO', rsoID });
+		}
+	} catch (err) {
+		logError(err, 'Retrieve', `events for RSO ${rsoID}`);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+// Fetch Events by Type (RSO or University)
+router.get('/searchByType', async (req, res) => {
+	const { type } = req.query;  // Expect 'rso' or 'university' as query parameter
+
+	let queryOptions;
+	if (type === 'rso') {
+		queryOptions = { where: { rsoID: { [db.Sequelize.Op.ne]: null } } };
+	} else if (type === 'university') {
+		queryOptions = { where: { rsoID: null } };
+	} else {
+		return res.status(400).json({ message: 'Invalid event type specified. Use "rso" or "university".' });
+	}
+
+	try {
+		const eventsList = await db.events.findAll(queryOptions);
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: `No events found for the specified type: ${type}` });
+		}
+	} catch (err) {
+		console.error(`Error retrieving ${type} events:`, err.message);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
 
 
--- Insert sample data into user table
-INSERT INTO user (email, password, firstName, lastName)
-VALUES ('test@ucf.edu', 'testingAccount', 'John', 'Doe');
+module.exports = router;
