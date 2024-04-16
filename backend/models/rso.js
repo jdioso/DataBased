@@ -8,7 +8,6 @@ const defineRSO = (sequelize, DataTypes) => {
 		adminID: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			// Reference to an admin will be established in index.js as a foreign key association
 		},
 		status: {
 			type: DataTypes.BOOLEAN,
@@ -17,7 +16,7 @@ const defineRSO = (sequelize, DataTypes) => {
 		name: {
 			type: DataTypes.STRING(64),
 			allowNull: false,
-			unique: true  // Enforce unique constraint for RSO names
+			unique: true
 		},
 		numMembers: {
 			type: DataTypes.INTEGER,

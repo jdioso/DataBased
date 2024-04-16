@@ -11,7 +11,8 @@ const defineSA = (sequelize, DataTypes) => {
 	        references: {
 		        model: 'user',
 		        key: 'userID'
-	        }
+	        },
+	        unique: true
 		},
 		universityID: {
 			type: DataTypes.INTEGER,

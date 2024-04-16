@@ -12,7 +12,8 @@ const handleValidationError = (err, res) => {
 // Create University, figure out picture later
 router.post('/add', async (req, res) => {
 	try {
-		const { name, location, description, saID, numStudents, domain} = req.body;
+		const { name, location, description, saID, numStudents, domain } = req.body;
+
 		if (!name || !location || !description || !saID || !domain || !numStudents) {
 			return res.status(400).send('Missing required fields');
 		}
@@ -22,8 +23,30 @@ router.post('/add', async (req, res) => {
 		if (existingUniversity) {
 			return res.status(409).json({ message: 'A university with this name already exists.' });
 		}
-		const newUniversity = await db.university.create({ name, location, description, saID, domain, numStudents });
-		res.status(201).json({ message: 'University created', universityID: newUniversity.universityID });
+
+		// Start a transaction
+		const result = await db.sequelize.transaction(async (transaction) => {
+			// Create the university
+			const newUniversity = await db.university.create({
+				name,
+				location,
+				description,
+				saID,
+				domain,
+				numStudents
+			}, { transaction });
+
+			await db.super_admins.update({
+				universityID: newUniversity.universityID
+			}, {
+				where: { saID },
+				transaction
+			});
+
+			return newUniversity;
+		});
+
+		res.status(201).json({ message: 'University created', universityID: result.universityID });
 	} catch (err) {
 		console.error('Error creating university:', err.message);
 		if (err.name === 'SequelizeValidationError') {
@@ -33,6 +56,7 @@ router.post('/add', async (req, res) => {
 		}
 	}
 });
+
 
 // Delete University
 router.delete('/delete/:id', async (req, res) => {
@@ -152,6 +176,8 @@ router.get('/searchByDomain/:domain', async (req, res) => {
 		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
+
+
 
 
 module.exports = router;

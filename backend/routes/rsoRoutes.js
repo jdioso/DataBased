@@ -243,4 +243,35 @@ router.get('/searchAll/:rsoID/members', async (req, res) => {
 	}
 });
 
+// Get all RSOs where a specific user is an admin
+router.get('/rsoAdmin/:userID', async (req, res) => {
+	const { userID } = req.params;
+
+	try {
+		// Find the admin entries for the given userID
+		const adminEntries = await db.admins.findAll({
+			where: { userID }
+		});
+
+		// Extract adminIDs from the adminEntries
+		const adminIDs = adminEntries.map(entry => entry.adminID);
+
+		// Find all RSOs where the adminID is in the list of adminIDs we obtained
+		const rsoList = await db.rsos.findAll({
+			where: {
+				adminID: adminIDs
+			}
+		});
+
+		if (rsoList.length > 0) {
+			res.status(200).json(rsoList);
+		} else {
+			res.status(404).json({ message: 'No RSOs found where this user is an admin' });
+		}
+	} catch (err) {
+		console.error('Failed to retrieve RSOs:', err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
 module.exports = router;
