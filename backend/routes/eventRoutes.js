@@ -36,11 +36,15 @@ const isEmpty = (value) => {
 router.post('/add', async (req, res) => {
 	const eventData = req.body;
 	const requiredFields = ['eventType', 'privacy', 'name', 'description', 'latitude', 'longitude',
-		'contactName', 'contactEmail', 'contactNumber', 'time', 'date', 'universityID', 'rsoID', 'approved'];
+		'contactName', 'contactEmail', 'contactNumber', 'time', 'date', 'universityID', 'approved'];
+
+	// if eventData.rsoID is provided, add it to the required fields
+	if (eventData.rsoID) requiredFields.push('rsoID');
+
 
 	try {
 		for (let field of requiredFields) {
-			if (isEmpty(eventData[field])) {
+			if (isEmpty(eventData[field] && field !== 'rsoID')) {
 				return res.status(400).json({ message: `Missing or empty required field: ${field}` });
 			}
 		}
@@ -66,6 +70,7 @@ router.post('/add', async (req, res) => {
 router.put('/edit/:id', async (req, res) => {
 	const { id } = req.params;
 	const eventData = req.body;
+
 	try {
 		const event = await db.events.findByPk(id);
 		if (!event) {
@@ -73,7 +78,7 @@ router.put('/edit/:id', async (req, res) => {
 		}
 
 		for (const key in eventData) {
-			if (isEmpty(eventData[key])) {
+			if (key !== 'rsoID' && isEmpty(eventData[key])) {
 				return res.status(400).json({ message: `Invalid update: ${key} cannot be empty.` });
 			}
 		}
@@ -94,10 +99,11 @@ router.put('/edit/:id', async (req, res) => {
 		if (err.name === 'SequelizeValidationError') {
 			handleValidationError(err, res);
 		} else {
-			res.status(500).json({ message: 'Server error', error: err.message });
+		res.status(500).json({ message: 'Server error', error: err.message });
 		}
 	}
 });
+
 // Delete Event
 router.delete('/delete/:id', async (req, res) => {
 	const { id } = req.params;
@@ -145,6 +151,26 @@ router.get('/searchUni/:universityID', async (req, res) => {
 	}
 });
 
+router.get('/searchUni/:type/:universityID', async (req, res) => {
+	const { universityID, eventType } = req.params;
+	try {
+        const eventsList = await db.events.findAll({
+            where: {
+                universityID: universityID,
+                type: eventType
+            }
+        });
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: 'No events found for this University', universityID });
+		}
+	} catch (err) {
+		logError(err, 'Retrieve', `public events for University ${universityID}`);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
 // Get Events by RSO ID
 router.get('/searchRSO/:rsoID', async (req, res) => {
 	const { rsoID } = req.params;
@@ -160,5 +186,104 @@ router.get('/searchRSO/:rsoID', async (req, res) => {
 		res.status(500).json({ message: 'Server error', error: err.message });
 	}
 });
+
+// Fetch Events by Type (RSO or University)
+router.get('/searchByType', async (req, res) => {
+	const { type } = req.query;  // Expect 'rso' or 'university' as query parameter
+
+	let queryOptions;
+	if (type === 'rso') {
+		queryOptions = { where: { rsoID: { [db.Sequelize.Op.ne]: null } } };
+	} else if (type === 'university') {
+		queryOptions = { where: { rsoID: null } };
+	} else {
+		return res.status(400).json({ message: 'Invalid event type specified. Use "rso" or "university".' });
+	}
+
+	try {
+		const eventsList = await db.events.findAll(queryOptions);
+		if (eventsList.length > 0) {
+			res.status(200).json(eventsList);
+		} else {
+			res.status(404).json({ message: `No events found for the specified type: ${type}` });
+		}
+	} catch (err) {
+		console.error(`Error retrieving ${type} events:`, err.message);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+// Get all events by RSO ID
+router.get('/SearchRSOEvents/:rsoID', async (req, res) => {
+	const { rsoID } = req.params;
+
+	try {
+		const events = await db.events.findAll({
+			where: { rsoID } // Filters events by the specified RSO ID
+		});
+
+		if (events.length > 0) {
+			res.status(200).json(events);
+		} else {
+			res.status(404).json({ message: 'No events found for this RSO' });
+		}
+	} catch (err) {
+		console.error('Error retrieving events:', err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
+router.get('/universityEvents/:universityID', async (req, res) => {
+	const { universityID } = req.params;
+
+	try {
+		const universityEvents = await db.events.findAll({
+			where: {
+				universityID, // Match the university ID
+				rsoID: null   // Ensure rsoID is null to classify as a university event
+			}
+		});
+
+		if (universityEvents.length > 0) {
+			res.status(200).json(universityEvents);
+		} else {
+			res.status(404).json({ message: 'No university events found for this university' });
+		}
+	} catch (err) {
+		console.error('Error retrieving university events:', err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
+router.get('/universityEvents/:universityID/:privacy', async (req, res) => {
+	const { universityID, privacy } = req.params;
+
+	const validPrivacies = ['private', 'public'];
+	if (!validPrivacies.includes(privacy.toLowerCase())) {
+		return res.status(400).json({ message: 'Invalid privacy level specified. Please use "private" or "public".' });
+	}
+
+	try {
+		const events = await db.events.findAll({
+			where: {
+				universityID,
+				rsoID: null,
+				privacy: privacy.toLowerCase() // Match the privacy level
+			}
+		});
+
+		if (events.length > 0) {
+			res.status(200).json(events);
+		} else {
+			res.status(404).json({ message: `No ${privacy} university events found for this university` });
+		}
+	} catch (err) {
+		console.error(`Error retrieving ${privacy} university events:`, err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+});
+
+
+
 
 module.exports = router;

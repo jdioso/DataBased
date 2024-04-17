@@ -2,6 +2,7 @@ import axios from "axios";
 import buildPath from "./Path";
 
 // function to add event
+// if query is successful, returns object with success message and new event's eventID
 async function addEvent(requestBody) {
    if (!requestBody) {
       return {
@@ -57,6 +58,7 @@ async function addEvent(requestBody) {
 }
 
 // function to edit event
+// if query is successful, returns object with success message and edited event's eventID
 async function editEvent(eventID, requestBody) {
    if (eventID != null || !requestBody) {
       return {
@@ -109,11 +111,12 @@ async function editEvent(eventID, requestBody) {
 }
 
 // function to delete event
+// if query is successful, returns object with success message and deleted event's eventID
 async function deleteEvent(eventID = null) {
    if (eventID === null) {
       return {
          message: "Insufficient information to delete event.",
-         commentID: null,
+         eventID: null,
       };
    }
    const url = buildPath(`/api/events/delete/${eventID}`);
@@ -159,12 +162,10 @@ async function deleteEvent(eventID = null) {
 }
 
 // function to get all events
+// if query is successful, returns list of all events
 async function getAllEvents(eventID = null) {
    if ((eventID = null)) {
-      return {
-         message: "Insufficient Information to get all events.",
-         eventID: eventID,
-      };
+      return null;
    }
    const url = buildPath(`/api/events/searchAll`);
 
@@ -202,19 +203,17 @@ async function getAllEvents(eventID = null) {
       }
 
       // return something if there was an error
-      return { message: "Failed to get all events.", eventID: eventID };
+      return null;
    });
    // return data if success
    return response.data;
 }
 
 // function that calls api to search for events by rso
+// if query is successful, returns list of all events from rso associated with 'orgID'
 async function getEventsByOrg(orgID) {
    if ((orgID = null)) {
-      return {
-         message: "Insufficient Information to get events by rso.",
-         orgID: orgID,
-      };
+      return null;
    }
    const url = buildPath(`/api/events/SearchRSOEvents/${orgID}`);
 
@@ -252,7 +251,7 @@ async function getEventsByOrg(orgID) {
       }
 
       // return something if there was an error
-      return { message: "Failed to get events by rso", eventID: null };
+      return null;
    });
    // return data if success
    return response.data;
@@ -260,12 +259,10 @@ async function getEventsByOrg(orgID) {
 
 // function that calls api to search for events by university
 // takes additional privacy category to filter events by privacy
+// if query is successful, returns list of all events from rso associated with inputed university
 async function getEventsByUniversity(universityID, privacy = null) {
    if ((universityID = null)) {
-      return {
-         message: "Insufficient Information to get events by rso.",
-         universityID: null,
-      };
+      return null;
    }
 
    let url = buildPath(`/api/events/universityEvents/${universityID}`);
@@ -309,7 +306,7 @@ async function getEventsByUniversity(universityID, privacy = null) {
       }
 
       // return something if there was an error
-      return { message: "Failed to get events university", universityID: null };
+      return null;
    });
    // return data if success
    return response.data;

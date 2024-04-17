@@ -22,19 +22,14 @@ const defineUser = (sequelize, DataTypes) => {
 			type: DataTypes.STRING(64),
 			allowNull: false
 		},
+		universityID: {
+			type: DataTypes.INTEGER,
+			allowNull: true
+		}
 	}, {
 		tableName: 'user',
-		timestamps: false  // Disable Sequelize's automatic timestamping
+		timestamps: false
 	});
-
-	// // Define the relationship between User and RSO
-	// User.associate = models => {
-	// 	User.belongsToMany(models.rsos, {
-	// 		through: models.rso_members,
-	// 		foreignKey: 'userID',
-	// 		as: 'rsos'
-	// 	});
-	// };
 
 	return User;
 };
