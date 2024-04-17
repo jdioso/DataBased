@@ -235,8 +235,11 @@ router.get('/searchAll/:rsoID/members', async (req, res) => {
 		const members = await db.rso_members.findAll({
 			where: { rsoID }
 		});
-
-		res.status(200).json(members);
+		if (members.length > 0) {
+			res.status(200).json(members);
+		} else {
+			res.status(404).json({ message: 'No members in this RSO' });
+		}
 	} catch (err) {
 		console.error('Failed to retrieve RSO members:', err);
 		res.status(500).json({ error: 'Server error', message: err.message });
@@ -273,5 +276,22 @@ router.get('/rsoAdmin/:userID', async (req, res) => {
 		res.status(500).json({ error: 'Server error', message: err.message });
 	}
 });
+
+router.get('/userRSOs/:userID', async (req, res) => {
+	const userID = req.params;
+	try {
+		const rsoList = await db.rso_members.findAll({
+			where: { userID }
+		});
+		if (rsoList.length > 0) {
+			res.status(200).json(rsoList);
+		} else {
+			res.status(404).json({ message: 'User is not a part of any RSOs '});
+		}
+	} catch (err) {
+		console.error('Failed to retrieve RSOs:', err);
+		res.status(500).json({ error: 'Server error', message: err.message });
+	}
+})
 
 module.exports = router;
