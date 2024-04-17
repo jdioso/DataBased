@@ -16,6 +16,7 @@ CREATE TABLE user (
 CREATE TABLE rso (
                      rsoID INT AUTO_INCREMENT PRIMARY KEY,
                      name VARCHAR(64) NOT NULL,
+                     status BOOLEAN,
                      numMembers INT,
                      description VARCHAR(1024),
                      adminID INT, -- Foreign key to user who is the RSO admin
@@ -82,7 +83,7 @@ CREATE TABLE rso_members (
                              PRIMARY KEY (rsoID, userID)
 );
 
--- Create university_pictures 
+-- Create university_pictures
 CREATE TABLE university_pictures (
                                     picID INT AUTO_INCREMENT PRIMARY KEY,
                                     universityID INT,
@@ -126,6 +127,26 @@ ADD FOREIGN KEY (universityID) REFERENCES university(universityID);
 CREATE INDEX IDX_events_date ON events (date);
 CREATE INDEX IDX_events_time ON events (time);
 
--- Insert sample data into user table
-INSERT INTO user (email, password, firstName, lastName)
-VALUES ('test@ucf.edu', 'testingAccount', 'John', 'Doe');
+-- Trigger to update status of RSO based on member count
+DELIMITER $$
+
+CREATE TRIGGER update_rso_status
+    AFTER INSERT ON rso_members
+    FOR EACH ROW
+BEGIN
+    DECLARE num_members INT;
+    DECLARE rso_status BOOLEAN;
+
+    SELECT COUNT(*) INTO num_members FROM rso_members WHERE rsoID = NEW.rsoID;
+
+    IF num_members < 5 THEN
+        SET rso_status = FALSE;
+    ELSE
+        SET rso_status = TRUE;
+    END IF;
+
+    UPDATE rso SET status = rso_status WHERE rsoID = NEW.rsoID;
+END$$
+
+DELIMITER ;
+
