@@ -67,8 +67,15 @@ export default function Event() {
    // page specific data
    const [eventOrg, setEventOrg] = useState(null);
    const [comments, setComments] = useState([]);
-   // const [formDate, setFormData] = useState(null);
 
+   // function that highlights an element then unhilights it after 3 seconds
+   const highlightCommentForm = () => {
+      const commentForm = document.querySelector("#commentForm");
+      commentForm.classList.add(styles.highlighted);
+      setTimeout(() => {
+         commentForm.classList.remove(styles.highlighted);
+      }, 1000);
+   };
    const addOrEditComment = async () => {
       const requestBody = {
          text: formData.text,
@@ -204,42 +211,45 @@ export default function Event() {
                               <div className={styles.commentRating}>
                                  Rating: {comment.rating}/5
                               </div>
-                           </li>
-                           {currentUser === comment.userID ? (
-                              <div className={styles.commentControls}>
-                                 <Button
-                                    onClick={(e) => {
-                                       e.preventDefault();
-                                       setFormData({
-                                          ...comment,
-                                          commentID: comment.commentID,
-                                       });
-                                       window.location.replace("#commentForm");
-                                    }}
-                                 >
-                                    Edit
-                                 </Button>
-                                 <Button
-                                    onClick={(e) => {
-                                       e.preventDefault();
-                                       deleteComment(comment.commentID);
-                                       commentsEndpoints
-                                          .getEventComments(
-                                             currentEvent.eventID
-                                          )
-                                          .then((comments) => {
-                                             if (comments) {
-                                                setComments([...comments]);
-                                             }
+                              {currentUser === comment.userID ? (
+                                 <div className={styles.commentControls}>
+                                    <Button
+                                       onClick={(e) => {
+                                          e.preventDefault();
+                                          setFormData({
+                                             ...comment,
+                                             commentID: comment.commentID,
                                           });
-                                    }}
-                                 >
-                                    Delete
-                                 </Button>
-                              </div>
-                           ) : (
-                              ""
-                           )}
+                                          window.location.replace(
+                                             "#commentForm"
+                                          );
+                                          highlightCommentForm();
+                                       }}
+                                    >
+                                       Edit
+                                    </Button>
+                                    <Button
+                                       onClick={(e) => {
+                                          e.preventDefault();
+                                          deleteComment(comment.commentID);
+                                          commentsEndpoints
+                                             .getEventComments(
+                                                currentEvent.eventID
+                                             )
+                                             .then((comments) => {
+                                                if (comments) {
+                                                   setComments([...comments]);
+                                                }
+                                             });
+                                       }}
+                                    >
+                                       Delete
+                                    </Button>
+                                 </div>
+                              ) : (
+                                 ""
+                              )}
+                           </li>
                         </>
                      ))}
                </ul>

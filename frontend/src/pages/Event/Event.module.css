@@ -58,6 +58,7 @@
       "controls controls";
 
    gap: 10px;
+   transition: all 0.3s ease-in-out;
 }
 .commentInput {
    grid-area: input;
@@ -93,7 +94,7 @@
    grid-template-rows: auto 1fr;
    grid-template-areas:
       "author rating"
-      "text rating";
+      "text .";
 
    gap: 10px;
 }
@@ -119,4 +120,9 @@
    display: flex;
    flex-direction: column;
    gap: 10px;
+}
+
+.commentForm:hover,
+.highlighted {
+   transform: scale(1.03);
 }

@@ -121,13 +121,14 @@ export default function Discover() {
             </div>
             <div className={styles.section}>
                <div className={styles.sectionHeader}>
-                  <h1 className={styles.sectionHeaderTitle}>Search By RSO</h1>
+                  <h1 className={styles.sectionHeaderTitle}>RSOs</h1>
+                  {/* <h1 className={styles.sectionHeaderTitle}>Search By RSO</h1>
                   <input
                      placeholder="Enter RSO"
                      onChange={(e) => {
                         setOrgInput(e.target.value);
                      }}
-                  ></input>
+                  ></input> */}
                </div>
                <div className={styles.slider}>
                   {orgs &&
@@ -148,7 +149,8 @@ export default function Discover() {
             </div>
             <div className={styles.section}>
                <div className={styles.sectionHeader}>
-                  <h1 className={styles.sectionHeaderTitle}>
+                  <h1 className={styles.sectionHeaderTitle}>Universities</h1>
+                  {/* <h1 className={styles.sectionHeaderTitle}>
                      Search By University
                   </h1>
                   <input
@@ -157,7 +159,7 @@ export default function Discover() {
                         e.preventDefault();
                         setUniversityInput(e.target.value);
                      }}
-                  ></input>
+                  ></input> */}
                </div>
                <div className={styles.slider}>
                   {universityList &&
