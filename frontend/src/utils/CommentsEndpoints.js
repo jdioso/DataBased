@@ -46,12 +46,15 @@ async function addComment(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to post comment.", commentID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to post comment.", commentID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to edit comment
@@ -99,12 +102,15 @@ async function editComment(commentID = null, requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to edit comment.", commentID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to edit comment.", commentID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to delete comment
@@ -150,12 +156,15 @@ async function deleteComment(commentID = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to delete comment.", commentID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to delete comment.", commentID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to get all comments under an event
@@ -201,12 +210,15 @@ async function getEventComments(eventID = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to get event commments", eventID: eventID };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to get event commments", eventID: eventID };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 export { addComment, editComment, deleteComment, getEventComments };

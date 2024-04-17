@@ -46,15 +46,18 @@ async function addEvent(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
+   });
 
-      // return something if there was an error
+   // return for failed request
+   if (!response) {
       return {
          message: "Failed to add event",
          eventID: null,
       };
-   });
-   // return data if success
-   return response.data;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to edit event
@@ -102,12 +105,14 @@ async function editEvent(eventID, requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to edit event.", eventID: null };
    });
-   // return data if success
-   return response.data;
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to edit event.", eventID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to delete event
@@ -153,12 +158,15 @@ async function deleteEvent(eventID = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to delete event", eventID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to delete event", eventID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to get all events
@@ -198,12 +206,14 @@ async function getAllEvents() {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return null;
    });
-   // return data if success
-   return response.data;
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function that calls api to search for events by rso
@@ -246,18 +256,21 @@ async function getEventsByOrg(orgID) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return null;
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function that calls api to search for events by university
 // takes additional privacy category to filter events by privacy
 // if query is successful, returns list of all events from rso associated with inputed university
-async function getEventsByUniversity(universityID, privacy = null) {
+async function getEventsByUniversity(universityID = null, privacy = null) {
    if ((universityID = null)) {
       return null;
    }
@@ -301,12 +314,15 @@ async function getEventsByUniversity(universityID, privacy = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return null;
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function that calls api to search event by event type

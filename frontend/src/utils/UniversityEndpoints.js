@@ -46,12 +46,15 @@ async function addUniversity(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to add new university", universityID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to add new university", universityID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to edit a university's info
@@ -99,12 +102,15 @@ async function editUniversity(universityID = null, requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to edit university.", universityID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to edit university.", universityID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to  delete university
@@ -150,12 +156,15 @@ async function deleteUniversity(universityID = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to delete university.", universityID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return { message: "Failed to delete university.", universityID: null };
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to get a list of all universities
@@ -195,12 +204,15 @@ async function getAllUniversities() {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return null;
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to get a single university's info by id
@@ -246,15 +258,18 @@ async function getUniversityByID(universityID = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
+   });
 
-      // return something if there was an error
+   // return for failed request
+   if (!response) {
       return {
          message: "Failed to get university from id.",
          universityID: universityID,
       };
-   });
-   // return data if success
-   return response.data;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to get a single university's info by the university's email domain
@@ -300,15 +315,18 @@ async function getUniversityByDomain(universityDomain = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
+   });
 
-      // return something if there was an error
+   // return for failed request
+   if (!response) {
       return {
          message: "Failed to get university from id.",
          universityDomain: universityDomain,
       };
-   });
-   // return data if success
-   return response.data;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 export {

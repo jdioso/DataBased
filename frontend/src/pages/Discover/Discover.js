@@ -1,11 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Discover.module.css";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
+import { useSessionStorage } from "usehooks-ts";
 import Square from "../../components/Square/Square";
+import * as uniEndpoints from "../../utils/UniversityEndpoints";
+import * as eventEndpoints from "../../utils/EventEndpoints";
+
 export default function Discover() {
    const navigate = useNavigate();
+
+   // change default value to null later
+   const [myUniversityID, setMyUniversityID] = useSessionStorage(
+      "myUniversityID",
+      1
+   );
+
+   const [myUniversityEvents, setMyUniversityEvents] = useState([]);
 
    // grabs information of selected university and opens university info page
    const openUniversity = async () => {
@@ -22,6 +34,9 @@ export default function Discover() {
 
    useEffect(() => {
       window.scrollTo(0, 0);
+      eventEndpoints.getEventsByUniversity(myUniversityID).then((events) => {
+         setMyUniversityEvents([...events]);
+      });
    }, []);
    return (
       <>
