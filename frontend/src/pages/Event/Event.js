@@ -79,7 +79,21 @@ export default function Event() {
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>Comments</h1>
                </div>
-               <form>Comment form to be added!!!!!</form>
+               <form className={styles.commentForm}>
+                  <input
+                     minLength={1}
+                     maxLength={1024}
+                     placeholder="Leave a comment..."
+                  ></input>
+
+                  <input
+                     type="number"
+                     min={0}
+                     max={5}
+                     placeholder="Leave a comment..."
+                     className={styles.commentRating}
+                  ></input>
+               </form>
                <ul className={styles.commentList}>
                   {comments &&
                      comments.map((comment) => (

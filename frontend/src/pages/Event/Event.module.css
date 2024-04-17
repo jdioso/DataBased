@@ -39,6 +39,32 @@
 .commentSection {
    grid-column: 1/3;
 }
+
+.commentForm {
+   padding: 20px;
+
+   background-color: var(--primary);
+   border-radius: 10px;
+   border: none;
+   box-shadow: 0 2px 6px;
+   color: var(--background);
+
+   display: grid;
+   align-items: center;
+   grid-template-columns: 1fr auto;
+   grid-template-rows: auto 1fr;
+   grid-template-areas:
+      "author rating"
+      "text rating";
+
+   gap: 10px;
+}
+.commentInput {
+}
+.commentRating {
+}
+.commentFormControls {
+}
 .commentList {
    width: 100%;
    display: flex;
@@ -75,5 +101,6 @@
 }
 
 .commentRating {
+   min-width: 100px;
    grid-area: rating;
 }

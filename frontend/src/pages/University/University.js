@@ -1,53 +1,73 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../components/Card/Card";
 import Navbar from "../../components/Navbar/Navbar";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import styles from "./University.module.css";
-
+import { useSessionStorage } from "usehooks-ts";
+import * as eventEndpoints from "../../utils/EventEndpoints";
 import Button from "../../components/Button/Button";
 import Square from "../../components/Square/Square";
 
+const universityPlaceholder = {
+   universityID: 4,
+   name: "UCFItsedlf",
+   location: "Atlanta dummy",
+   description: "smart people factory",
+   saID: 3,
+   domain: "UCF",
+   numStudents: 10000,
+};
+
 export default function University() {
+   // contains data for event page
+   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
+      "currentUniversity",
+      universityPlaceholder
+   );
+   // change default value to null later
+   const [myUniversityID, setMyUniversityID] = useSessionStorage(
+      "myUniversityID",
+      4
+   );
+
+   // page specific data
+   const [publicEvents, setPublicEvents] = useState([]);
+   const [privateEvents, setPrivateEvents] = useState([]);
+
    useEffect(() => {
-      window.scrollTo(0, 0);
-   }, []);
+      // window.scrollTo(0, 0);
+      eventEndpoints
+         .getEventsByUniversity(currentUniversity.universityID, "public")
+         .then((publicEvents) => {
+            if (publicEvents) {
+               setPublicEvents([...publicEvents]);
+            }
+         });
+      eventEndpoints
+         .getEventsByUniversity(currentUniversity.universityID, "private")
+         .then((privateEvents) => {
+            if (privateEvents) {
+               setPublicEvents([...privateEvents]);
+            }
+         });
+   }, [currentUniversity]);
    return (
       <>
          <Navbar></Navbar>
-         <h1 className={styles.header}>University</h1>
+         <h1 className={styles.header}>{currentUniversity.name}</h1>
          <div className={styles.container}>
             <div className={styles.sidebarWrapper}>
                <Sidebar className={styles.sidebar}>
                   <div>
-                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unksnown printer took a galley of type and. when
-                        an unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type andwhen an
-                        unksnown printer took a galley of type and
-                     </p>
+                     <p>Description: {currentUniversity.description}</p>
                      INFO LOGO
                   </div>
                   <div>
-                     <p>Number of Students</p>
+                     <p>Number of Students: {currentUniversity.numStudents}</p>
                      PERSON LOGO
                   </div>
                   <div>
-                     <p>Map</p>
+                     <p>Location: {currentUniversity.location}</p>
                      MAP LOGO
                   </div>
                </Sidebar>
@@ -99,64 +119,44 @@ export default function University() {
                <div className={styles.events}>
                   <Card cardTitle="Everyone Welcome">
                      <ul className={styles.eventList}>
-                        <li className={styles.eventItem}>
-                           <h2 className={styles.eventItemTitle}>Event Name</h2>
-                           <h2 className={styles.eventItemDate}>
-                              Date:**/**/****
-                           </h2>
-                           <Button size="sm" hug={true}>
-                              Info
-                           </Button>
-                        </li>
-                        <li className={styles.eventItem}>
-                           <h2 className={styles.eventItemTitle}>Event Name</h2>
-                           <h2 className={styles.eventItemDate}>
-                              Date:**/**/****
-                           </h2>
-                           <Button size="sm" hug={true}>
-                              Info
-                           </Button>
-                        </li>
-                        <li className={styles.eventItem}>
-                           <h2 className={styles.eventItemTitle}>Event Name</h2>
-                           <h2 className={styles.eventItemDate}>
-                              Date:**/**/****
-                           </h2>
-                           <Button size="sm" hug={true}>
-                              Info
-                           </Button>
-                        </li>
+                        {publicEvents &&
+                           publicEvents.map((event) => (
+                              <li
+                                 className={styles.eventItem}
+                                 key={event.eventID}
+                              >
+                                 <h2 className={styles.eventItemTitle}>
+                                    {event.name}
+                                 </h2>
+                                 <h2 className={styles.eventItemDate}>
+                                    Date:{event.date}
+                                 </h2>
+                                 <Button size="sm" hug={true}>
+                                    Info
+                                 </Button>
+                              </li>
+                           ))}
                      </ul>
                   </Card>
                   <Card cardTitle="University Only">
                      <ul className={styles.eventList}>
-                        <li className={styles.eventItem}>
-                           <h2 className={styles.eventItemTitle}>Event Name</h2>
-                           <h2 className={styles.eventItemDate}>
-                              Date:**/**/****
-                           </h2>
-                           <Button size="sm" hug={true}>
-                              Info
-                           </Button>
-                        </li>
-                        <li className={styles.eventItem}>
-                           <h2 className={styles.eventItemTitle}>Event Name</h2>
-                           <h2 className={styles.eventItemDate}>
-                              Date:**/**/****
-                           </h2>
-                           <Button size="sm" hug={true}>
-                              Info
-                           </Button>
-                        </li>
-                        <li className={styles.eventItem}>
-                           <h2 className={styles.eventItemTitle}>Event Name</h2>
-                           <h2 className={styles.eventItemDate}>
-                              Date:**/**/****
-                           </h2>
-                           <Button size="sm" hug={true}>
-                              Info
-                           </Button>
-                        </li>
+                        {privateEvents &&
+                           privateEvents.map((event) => (
+                              <li
+                                 className={styles.eventItem}
+                                 key={event.eventID}
+                              >
+                                 <h2 className={styles.eventItemTitle}>
+                                    {event.name}
+                                 </h2>
+                                 <h2 className={styles.eventItemDate}>
+                                    Date:{event.date}
+                                 </h2>
+                                 <Button size="sm" hug={true}>
+                                    Info
+                                 </Button>
+                              </li>
+                           ))}
                      </ul>
                   </Card>
                </div>
