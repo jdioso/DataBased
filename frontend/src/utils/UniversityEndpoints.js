@@ -2,11 +2,15 @@ import axios from "axios";
 import buildPath from "./Path";
 
 // function to add all new university
+// if query is successful, returns object with success message and new university's id
 async function addUniversity(requestBody) {
    if (!requestBody) {
-      return null;
+      return {
+         message: "Insufficient information to add new unversity",
+         universityID: null,
+      };
    }
-   const url = buildPath("/api/users/register");
+   const url = buildPath("/api/universities/add");
    let obj = requestBody;
 
    // settings for request
@@ -44,18 +48,22 @@ async function addUniversity(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to add new university", universityID: null };
    });
    // return data if success
    return response.data;
 }
 
 // function to edit a university's info
-async function editUniversity(requestBody) {
-   if (!requestBody) {
-      return null;
+// if query is successful, returns object with success message and edited university's id
+async function editUniversity(universityID = null, requestBody) {
+   if (universityID === null || !requestBody) {
+      return {
+         message: "Insufficient information to edit university.",
+         universityID: null,
+      };
    }
-   const url = buildPath("/api/users/register");
+   const url = buildPath(`/api/universities/edit/${universityID}`);
    let obj = requestBody;
 
    // settings for request
@@ -93,23 +101,26 @@ async function editUniversity(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to edit university.", universityID: null };
    });
    // return data if success
    return response.data;
 }
 
-// function to add new university
-async function deleteUniversity(requestBody) {
-   if (!requestBody) {
-      return null;
+// function to  delete university
+// if query is successful, returns object with success message and deleted university's id
+async function deleteUniversity(universityID = null) {
+   if (universityID === null) {
+      return {
+         message: "Insufficient information to delete university.",
+         universityID: null,
+      };
    }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
+   const url = buildPath(`/api/universities/delete/${universityID}`);
 
    // settings for request
    let config = {
-      method: "post",
+      method: "delete",
       url: url,
       headers: {
          headers: {
@@ -119,7 +130,6 @@ async function deleteUniversity(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -142,19 +152,16 @@ async function deleteUniversity(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to delete university.", universityID: null };
    });
    // return data if success
    return response.data;
 }
 
 // function to get a list of all universities
-async function getAllUniversities(requestBody) {
-   if (!requestBody) {
-      return null;
-   }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
+// if query is successful, returns list of all universities
+async function getAllUniversities() {
+   const url = buildPath("/api/universities/searchAll");
 
    // settings for request
    let config = {
@@ -168,7 +175,6 @@ async function getAllUniversities(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -191,19 +197,22 @@ async function getAllUniversities(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return null;
    });
    // return data if success
    return response.data;
 }
 
 // function to get a single university's info by id
-async function getUniversity(requestBody) {
-   if (!requestBody) {
-      return null;
+// if query is successful, returns university associated with id
+async function getUniversityByID(universityID = null) {
+   if (universityID === null) {
+      return {
+         message: "Insufficient information to get university from id.",
+         universityID: universityID,
+      };
    }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
+   const url = buildPath(`api/universities/search/${universityID}`);
 
    // settings for request
    let config = {
@@ -217,7 +226,6 @@ async function getUniversity(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -240,8 +248,73 @@ async function getUniversity(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return {
+         message: "Failed to get university from id.",
+         universityID: universityID,
+      };
    });
    // return data if success
    return response.data;
 }
+
+// function to get a single university's info by the university's email domain
+// if query is successful, returns university associated with domain
+async function getUniversityByDomain(universityDomain = null) {
+   if (universityDomain === null) {
+      return {
+         message: "Insufficient information to get university from id.",
+         universityDomain: universityDomain,
+      };
+   }
+   const url = buildPath(`api/universities/searchByDomain/${universityDomain}`);
+
+   // settings for request
+   let config = {
+      method: "get",
+      url: url,
+      headers: {
+         headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers":
+               "Origin, X-Requested-With, Content-Type, Accept",
+            "Content-Type": "application/json",
+         },
+      },
+   };
+
+   // handles calling request
+   const response = await axios.request(config).catch((error) => {
+      // handles different error cases
+      if (error.response) {
+         // The request was made and the server responded with a status code
+         // that falls out of the range of 2xx
+         console.log(error.response.data);
+         console.log(error.response.status);
+         console.log(error.response.headers);
+      } else if (error.request) {
+         // The request was made but no response was received
+         // `error.request` is an instance of XMLHttpRequest in the browser
+         // and an instance of http.ClientRequest in node.js
+         console.log(error.request);
+      } else {
+         // Something happened in setting up the request that triggered an Error
+         console.log("Error", error.message);
+      }
+
+      // return something if there was an error
+      return {
+         message: "Failed to get university from id.",
+         universityDomain: universityDomain,
+      };
+   });
+   // return data if success
+   return response.data;
+}
+
+export {
+   addUniversity,
+   editUniversity,
+   deleteUniversity,
+   getAllUniversities,
+   getUniversityByID,
+};

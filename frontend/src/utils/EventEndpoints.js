@@ -2,7 +2,7 @@ import axios from "axios";
 import buildPath from "./Path";
 
 // function to add event
-// if query is successful, returns object with success message and new event's eventID
+// if query is successful, returns object with success message and new event's id
 async function addEvent(requestBody) {
    if (!requestBody) {
       return {
@@ -58,7 +58,7 @@ async function addEvent(requestBody) {
 }
 
 // function to edit event
-// if query is successful, returns object with success message and edited event's eventID
+// if query is successful, returns object with success message and edited event's id
 async function editEvent(eventID, requestBody) {
    if (eventID != null || !requestBody) {
       return {
@@ -111,7 +111,7 @@ async function editEvent(eventID, requestBody) {
 }
 
 // function to delete event
-// if query is successful, returns object with success message and deleted event's eventID
+// if query is successful, returns object with success message and deleted event's id
 async function deleteEvent(eventID = null) {
    if (eventID === null) {
       return {
@@ -163,10 +163,7 @@ async function deleteEvent(eventID = null) {
 
 // function to get all events
 // if query is successful, returns list of all events
-async function getAllEvents(eventID = null) {
-   if ((eventID = null)) {
-      return null;
-   }
+async function getAllEvents() {
    const url = buildPath(`/api/events/searchAll`);
 
    // settings for request
