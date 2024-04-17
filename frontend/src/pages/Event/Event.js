@@ -53,9 +53,10 @@ export default function Event() {
    const [eventOrg, setEventOrg] = useState(null);
    const [comments, setComments] = useState([]);
 
-   // variables that control form
+   // variables that control forms
    const [openEdit, setOpenEdit] = useState(false);
-   const [recordForEdit, setRecordForEdit] = useState(null);
+   const [commentForEdit, setCommentForEdit] = useState(null);
+   const [eventForEdit, setEventForEdit] = useState(null);
 
    // function that checks if current user is an admin of the event's rso
    const canEditEvent = async () => {
@@ -64,6 +65,18 @@ export default function Event() {
       // if so, return true
       // if not return false
       return true;
+   };
+
+   const renderComments = async () => {
+      const comments = await commentsEndpoints.getEventComments(
+         currentEvent.eventID
+      );
+
+      if (comments) {
+         setComments(comments);
+      } else {
+         setComments([]);
+      }
    };
 
    // function that highlights an element then unhilights it after 3 seconds
@@ -87,17 +100,11 @@ export default function Event() {
       } else {
          await commentsEndpoints.addComment(requestBody);
       }
-
       resetForm();
-      commentsEndpoints
-         .getEventComments(currentEvent.eventID)
-         .then((comments) => {
-            if (comments) {
-               setComments(comments);
-            }
-         });
+      renderComments();
    };
 
+   // function that handles deleting comment
    const deleteComment = async (commentID) => {
       const check = window.confirm(
          "Are you sure you want to delete this comment?"
@@ -105,23 +112,29 @@ export default function Event() {
       if (check) {
          await commentsEndpoints.deleteComment(commentID);
       }
-      commentsEndpoints
-         .getEventComments(currentEvent.eventID)
-         .then((comments) => {
-            if (comments) {
-               setComments(comments);
-            }
-         });
+      renderComments();
+   };
+
+   const addOrEditEvent = async (comment, resetForm) => {
+      const requestBody = {
+         text: comment.text,
+         rating: comment.rating,
+         userID: currentUser,
+         eventID: currentEvent.eventID,
+      };
+
+      if (comment.commentID) {
+         await commentsEndpoints.editComment(comment.commentID, requestBody);
+      } else {
+         await commentsEndpoints.addComment(requestBody);
+      }
+
+      resetForm();
+      renderComments();
    };
    useEffect(() => {
       window.scrollTo(0, 0);
-      commentsEndpoints
-         .getEventComments(currentEvent.eventID)
-         .then((comments) => {
-            if (comments) {
-               setComments([...comments]);
-            }
-         });
+      renderComments();
    }, [currentEvent]);
    return (
       <>
@@ -129,21 +142,17 @@ export default function Event() {
          <div className={styles.container}>
             <div className={styles.header}>
                <h1>{currentEvent.name}</h1>
-               {canEditEvent() ? (
-                  <Button
-                     onClick={(e) => {
-                        e.preventDefault();
-                        setOpenEdit(!openEdit);
-                        setRecordForEdit({ ...currentEvent });
-                     }}
-                  >
-                     {openEdit ? "Close" : "Edit"}
-                  </Button>
-               ) : (
-                  ""
-               )}
+               <Button
+                  onClick={(e) => {
+                     e.preventDefault();
+                     setOpenEdit(!openEdit);
+                     setEventForEdit({ ...currentEvent });
+                  }}
+               >
+                  {openEdit ? "Close" : "Edit"}
+               </Button>
             </div>
-            {openEdit ? <EventForm recordForEdit={recordForEdit} /> : ""}
+            {openEdit ? <EventForm recordForEdit={eventForEdit} /> : ""}
 
             <Card cardTitle="Info">
                {/* <p>Affipated RSO: RSO Name</p> */}
@@ -170,7 +179,7 @@ export default function Event() {
                   <h1 className={styles.sectionHeaderTitle}>Comments</h1>
                </div>
                <CommentForm
-                  recordForEdit={recordForEdit}
+                  recordForEdit={commentForEdit}
                   addOrEdit={addOrEditComment}
                />
                <ul className={styles.commentList}>
@@ -195,7 +204,7 @@ export default function Event() {
                                     <Button
                                        onClick={(e) => {
                                           e.preventDefault();
-                                          setRecordForEdit({
+                                          setCommentForEdit({
                                              ...comment,
                                              commentID: comment.commentID,
                                           });
@@ -211,15 +220,7 @@ export default function Event() {
                                        onClick={(e) => {
                                           e.preventDefault();
                                           deleteComment(comment.commentID);
-                                          commentsEndpoints
-                                             .getEventComments(
-                                                currentEvent.eventID
-                                             )
-                                             .then((comments) => {
-                                                if (comments) {
-                                                   setComments([...comments]);
-                                                }
-                                             });
+                                          renderComments();
                                        }}
                                     >
                                        Delete
