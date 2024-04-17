@@ -210,7 +210,7 @@ async function getAllEvents() {
 // function that calls api to search for events by rso
 // if query is successful, returns list of all events from rso associated with 'orgID'
 async function getEventsByOrg(orgID) {
-   if ((orgID = null)) {
+   if (orgID === null) {
       return null;
    }
    const url = buildPath(`/api/events/SearchRSOEvents/${orgID}`);

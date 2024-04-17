@@ -18,17 +18,22 @@ const orgPlaceholder = {
 export default function Org() {
    const navigate = useNavigate();
 
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
-
+   // contains userID for entire site
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
       "myUniversityID",
       4
    );
-   const [currentOrg, setCurrentOrg] = useSessionStorage(
-      "currentOrg",
-      orgPlaceholder
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+
+   // contains data for university page
+   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
+      "currentUniversity",
+      null
    );
+   // contains data for org/rso page
+   const [currentOrg, setCurrentOrg] = useSessionStorage("currentOrg", null);
+   // contains data for event page
    const [currentEvent, setCurrentEvent] = useSessionStorage(
       "currentEvent",
       null
@@ -50,6 +55,8 @@ export default function Org() {
       eventEndpoints.getEventsByOrg(currentOrg.rsoID).then((events) => {
          if (events) {
             setOrgEvents([...events]);
+         } else {
+            setOrgEvents([]);
          }
       });
       // get events for current org
@@ -62,11 +69,11 @@ export default function Org() {
             <div className={styles.sidebarWrapper}>
                <Sidebar className={styles.sidebar}>
                   <div>
-                     <p>{currentOrg.description}</p>
+                     <p>Description {currentOrg.description}</p>
                      INFO LOGO
                   </div>
                   <div>
-                     <p>{currentOrg.numMembers}</p>
+                     <p>Number of Members: {currentOrg.numMembers}</p>
                      PERSON LOGO
                   </div>
                </Sidebar>
@@ -84,7 +91,14 @@ export default function Org() {
                               <h2 className={styles.eventItemDate}>
                                  Date:{event.date}
                               </h2>
-                              <Button size="sm" hug={true}>
+                              <Button
+                                 size="sm"
+                                 hug={true}
+                                 onClick={(e) => {
+                                    e.preventDefault();
+                                    openEvent(event);
+                                 }}
+                              >
                                  Info
                               </Button>
                            </li>

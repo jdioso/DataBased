@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "usehooks-ts";
 import Square from "../../components/Square/Square";
 import * as uniEndpoints from "../../utils/UniversityEndpoints";
+import * as orgEndpoints from "../../utils/OrgEndpoints";
 import * as eventEndpoints from "../../utils/EventEndpoints";
 
 export default function Discover() {
@@ -35,6 +36,11 @@ export default function Discover() {
    // data exclusive to discover page
    const [myUniversityEvents, setMyUniversityEvents] = useState([]);
    const [universityList, setUniversityList] = useState([]);
+   const [orgs, setOrgs] = useState([]);
+
+   // data for search inputs
+   const [orgInput, setOrgInput] = useState(null);
+   const [universityInput, setUniversityInput] = useState(null);
 
    // grabs information of selected university and opens university info page
    const openUniversity = async (university) => {
@@ -43,7 +49,8 @@ export default function Discover() {
    };
 
    // grabs information of selected org and opens university info page
-   const openOrg = async () => {
+   const openOrg = async (org) => {
+      setCurrentOrg({ ...org });
       navigate("/org");
    };
 
@@ -54,18 +61,29 @@ export default function Discover() {
    };
 
    useEffect(() => {
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
       eventEndpoints.getEventsByUniversity(myUniversityID).then((events) => {
          if (events) {
             setMyUniversityEvents([...events]);
          }
       });
-      uniEndpoints.getAllUniversities().then((universities) => {
-         if (universities) {
-            setUniversityList([...universities]);
+      orgEndpoints.getOrgs(orgInput).then((orgs) => {
+         if (orgs) {
+            setOrgs([...orgs]);
+         } else {
+            setOrgs([]);
          }
       });
-   }, []);
+      uniEndpoints.getAllUniversities(universityInput).then((universities) => {
+         if (universities) {
+            setUniversityList([...universities]);
+         } else {
+            setUniversityList([]);
+         }
+      });
+      console.log(orgInput);
+      console.log(universityInput);
+   }, [orgInput, universityInput]);
    return (
       <>
          <Navbar></Navbar>
@@ -73,7 +91,7 @@ export default function Discover() {
             <div className={styles.section}>
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>
-                     Events at My University{" "}
+                     Events at My University
                   </h1>
                   <Button
                      onClick={(e) => {
@@ -104,86 +122,28 @@ export default function Discover() {
             <div className={styles.section}>
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>Search By RSO</h1>
-                  <input placeholder="Enter RSO"></input>
+                  <input
+                     placeholder="Enter RSO"
+                     onChange={(e) => {
+                        setOrgInput(e.target.value);
+                     }}
+                  ></input>
                </div>
                <div className={styles.slider}>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openOrg();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
+                  {orgs &&
+                     orgs.map((org) => (
+                        <Square squareTitle={org.name} key={org.rsoID}>
+                           <Button
+                              size="sm"
+                              onClick={(e) => {
+                                 e.preventDefault();
+                                 openOrg(org);
+                              }}
+                           >
+                              Open
+                           </Button>
+                        </Square>
+                     ))}
                </div>
             </div>
             <div className={styles.section}>
@@ -191,7 +151,13 @@ export default function Discover() {
                   <h1 className={styles.sectionHeaderTitle}>
                      Search By University
                   </h1>
-                  <input placeholder="Enter University"></input>
+                  <input
+                     placeholder="Enter University"
+                     onChange={(e) => {
+                        e.preventDefault();
+                        setUniversityInput(e.target.value);
+                     }}
+                  ></input>
                </div>
                <div className={styles.slider}>
                   {universityList &&
