@@ -105,13 +105,12 @@ async function register(requestBody) {
 }
 
 // function that calls login endpoint
-async function getByID(requestBody) {
-   if (id == null || !requestBody) {
+async function getByID(id) {
+   if (id == null) {
       return null;
    }
 
    const url = buildPath(`/api/users/user/${id}`);
-   let obj = requestBody;
 
    let config = {
       method: "post",
@@ -124,7 +123,6 @@ async function getByID(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -156,4 +154,4 @@ async function getByID(requestBody) {
    }
 }
 
-export { login, register, getByID};
+export { login, register, getByID };

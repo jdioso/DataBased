@@ -54,7 +54,7 @@ async function createRSO(requestBody) {
 }
 
 // function to edit RSO
-async function editRSO(requestBody) {
+async function editRSO(id = null, requestBody) {
    if (id === null || !requestBody) {
       return null;
    }
@@ -107,7 +107,7 @@ async function editRSO(requestBody) {
 }
 
 // function to delete RSO
-async function deleteRSO(requestBody) {
+async function deleteRSO(id = null, requestBody) {
    if (id === null || !requestBody) {
       return null;
    }
@@ -210,7 +210,7 @@ async function searchAllRSOs(rsoName = null) {
 }
 
 // function to add user to rso
-async function addRSOMember(requestBody) {
+async function addRSOMember(rsoID = null, requestBody) {
    if (rsoID === null || !requestBody) {
       return null;
    }
@@ -263,7 +263,7 @@ async function addRSOMember(requestBody) {
 }
 
 // function to remove user from rso
-async function removeRSOMember(requestBody) {
+async function removeRSOMember(rsoID = null, userID = null, requestBody) {
    if (rsoID === null || userID == null || !requestBody) {
       return null;
    }
@@ -316,8 +316,8 @@ async function removeRSOMember(requestBody) {
 }
 
 // function to remove user from rso
-async function returnUsersRSOs(userID = null) {
-   if (userID == null) {
+async function returnUsersRSOs(userID = null, requestBody) {
+   if (userID == null || !requestBody) {
       return null;
    }
 
@@ -367,7 +367,7 @@ async function returnUsersRSOs(userID = null) {
 }
 
 // function to remove user from rso
-async function searchNameRSO(requestBody) {
+async function searchNameRSO(rsoName = null, requestBody) {
    if (rsoName == null || !requestBody) {
       return null;
    }
@@ -420,7 +420,7 @@ async function searchNameRSO(requestBody) {
 }
 
 // function to remove user from rso
-async function getRSOMembers(requestBody) {
+async function getRSOMembers(rsoID = null, requestBody) {
    if (rsoID == null || !requestBody) {
       return null;
    }
