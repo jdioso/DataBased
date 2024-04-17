@@ -67,7 +67,7 @@ export default function Discover() {
             setMyUniversityEvents([...events]);
          }
       });
-      orgEndpoints.getRSOs(orgInput).then((orgs) => {
+      orgEndpoints.searchAllRSOs(orgInput).then((orgs) => {
          if (orgs) {
             setOrgs([...orgs]);
          } else {

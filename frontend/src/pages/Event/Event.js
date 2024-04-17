@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Event.module.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Card from "../../components/Card/Card";
 import { useSessionStorage } from "usehooks-ts";
-import * as commentsEndpoints from "../../utils/CommentsEndpoints";
-import { useForm } from "../../hooks/useForm";
 import Button from "../../components/Button/Button";
-import EventForm from "./EventForm";
+import Card from "../../components/Card/Card";
+import Navbar from "../../components/Navbar/Navbar";
+import * as commentsEndpoints from "../../utils/CommentsEndpoints";
+import * as orgEndpoints from "../../utils/OrgEndpoints";
 import CommentForm from "./CommentForm";
+import styles from "./Event.module.css";
+import EventForm from "./EventForm";
 
 const eventPlaceholder = {
    eventID: -1,
@@ -34,7 +34,7 @@ export default function Event() {
       "myUniversityID",
       1
    );
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 2);
 
    // contains data for university page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
@@ -61,6 +61,9 @@ export default function Event() {
    // function that checks if current user is an admin of the event's rso
    const canEditEvent = async () => {
       // get list of rso's that the user is an admin for
+      const managedRSOs = await orgEndpoints.returnUsersRSOs(currentUser);
+      console.log(managedRSOs);
+
       // check to see if this list includes the current event's rso
       // if so, return true
       // if not return false
@@ -129,8 +132,11 @@ export default function Event() {
          await commentsEndpoints.addComment(requestBody);
       }
 
-      resetForm();
-      renderComments();
+      if (canEditEvent) {
+      }
+      // resetForm();
+      // setCurrentEvent()
+      // renderComments();
    };
    useEffect(() => {
       window.scrollTo(0, 0);

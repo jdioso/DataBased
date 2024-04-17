@@ -6,7 +6,7 @@ async function createRSO(requestBody) {
    if (!requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+   const url = buildPath("/api/rso/add");
    let obj = requestBody;
 
    // settings for request
@@ -42,20 +42,24 @@ async function createRSO(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to edit RSO
 async function editRSO(requestBody) {
-   if (!requestBody) {
+   if (id === null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+
+   const url = buildPath(`/api/rso/edit/${id}`);
    let obj = requestBody;
 
    // settings for request
@@ -91,20 +95,24 @@ async function editRSO(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to delete RSO
 async function deleteRSO(requestBody) {
-   if (!requestBody) {
+   if (id === null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+
+   const url = buildPath(`/api/rso/delete/${id}`);
    let obj = requestBody;
 
    // settings for request
@@ -140,16 +148,19 @@ async function deleteRSO(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to search rso's with optional name parameter
-async function getRSOs(rsoName = null) {
+async function searchAllRSOs(rsoName = null) {
    let url = buildPath(`/api/rso/searchAll/`);
    if (rsoName) {
       url = buildPath(`/api/rso/searchAll/${rsoName}`);
@@ -187,10 +198,8 @@ async function getRSOs(rsoName = null) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
    });
+
    // return for failed request
    if (!response) {
       return null;
@@ -202,10 +211,11 @@ async function getRSOs(rsoName = null) {
 
 // function to add user to rso
 async function addRSOMember(requestBody) {
-   if (!requestBody) {
+   if (rsoID === null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+
+   const url = buildPath(`/api/rso/${rsoID}/members/add`);
    let obj = requestBody;
 
    // settings for request
@@ -241,20 +251,24 @@ async function addRSOMember(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to remove user from rso
 async function removeRSOMember(requestBody) {
-   if (!requestBody) {
+   if (rsoID === null || userID == null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+
+   const url = buildPath(`/api/rso/${rsoID}/members/${userID}`);
    let obj = requestBody;
 
    // settings for request
@@ -290,21 +304,24 @@ async function removeRSOMember(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to remove user from rso
-async function returnUsersRSOs(requestBody) {
-   if (!requestBody) {
+async function returnUsersRSOs(userID = null) {
+   if (userID == null) {
       return null;
    }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
+
+   const url = buildPath(`/api/rso/rsoAdmin/${userID}`);
 
    // settings for request
    let config = {
@@ -318,7 +335,6 @@ async function returnUsersRSOs(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -339,20 +355,24 @@ async function returnUsersRSOs(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Return Users RSOs", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to remove user from rso
 async function searchNameRSO(requestBody) {
-   if (!requestBody) {
+   if (rsoName == null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+
+   const url = buildPath(`/api/rso/searchAll/${rsoName}`);
    let obj = requestBody;
 
    // settings for request
@@ -388,20 +408,24 @@ async function searchNameRSO(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Search Name RSO", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to remove user from rso
 async function getRSOMembers(requestBody) {
-   if (!requestBody) {
+   if (rsoID == null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+
+   const url = buildPath(`/api/rso/${rsoID}/members`);
    let obj = requestBody;
 
    // settings for request
@@ -437,18 +461,25 @@ async function getRSOMembers(requestBody) {
          // Something happened in setting up the request that triggered an Error
          console.log("Error", error.message);
       }
-
-      // return something if there was an error
-      return { message: "Failed to Get RSO Members", userID: null };
    });
-   // return data if success
-   return response.data;
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
-export { createRSO, getRSOs, addRSOMember, removeRSOMember, editRSO, deleteRSO, returnUsersRSOs, searchNameRSO, getRSOMembers};
-
-
-
-
-
-
+export {
+   createRSO,
+   searchAllRSOs,
+   addRSOMember,
+   removeRSOMember,
+   editRSO,
+   deleteRSO,
+   returnUsersRSOs,
+   searchNameRSO,
+   getRSOMembers,
+};
