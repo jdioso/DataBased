@@ -23,19 +23,26 @@ const universityPlaceholder = {
 export default function University() {
    const navigate = useNavigate();
 
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
-
-   // contains data for event page
-   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
-      "currentUniversity",
-      universityPlaceholder
-   );
+   // contains userID for entire site
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
       "myUniversityID",
       4
    );
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+
+   // contains data for university page
+   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
+      "currentUniversity",
+      universityPlaceholder
+   );
+   // contains data for org/rso page
    const [currentOrg, setCurrentOrg] = useSessionStorage("currentOrg", null);
+   // contains data for event page
+   const [currentEvent, setCurrentEvent] = useSessionStorage(
+      "currentEvent",
+      null
+   );
 
    // page specific data
    const [orgs, setOrgs] = useState([]);
@@ -57,6 +64,13 @@ export default function University() {
       setCurrentOrg({ ...org });
       navigate("/org");
    };
+
+   // grabs information of event university and opens event info page
+   const openEvent = async (event) => {
+      setCurrentEvent({ ...event });
+      navigate("/event");
+   };
+
    useEffect(() => {
       // window.scrollTo(0, 0);
       orgEndpoints.getOrgs().then((orgs) => {
@@ -151,7 +165,14 @@ export default function University() {
                                  <h2 className={styles.eventItemDate}>
                                     Date:{event.date}
                                  </h2>
-                                 <Button size="sm" hug={true}>
+                                 <Button
+                                    size="sm"
+                                    onClick={(e) => {
+                                       e.preventDefault();
+                                       openEvent(event);
+                                    }}
+                                    hug={true}
+                                 >
                                     Info
                                  </Button>
                               </li>
@@ -172,7 +193,14 @@ export default function University() {
                                  <h2 className={styles.eventItemDate}>
                                     Date:{event.date}
                                  </h2>
-                                 <Button size="sm" hug={true}>
+                                 <Button
+                                    size="sm"
+                                    onClick={(e) => {
+                                       e.preventDefault();
+                                       openEvent(event);
+                                    }}
+                                    hug={true}
+                                 >
                                     Info
                                  </Button>
                               </li>

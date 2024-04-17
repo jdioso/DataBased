@@ -11,30 +11,30 @@ import * as eventEndpoints from "../../utils/EventEndpoints";
 export default function Discover() {
    const navigate = useNavigate();
 
-   // contains data for event page
-   const [currentEvent, setCurrentEvent] = useSessionStorage(
-      "currentEvent",
-      null
-   );
-   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
-      "currentUniversity",
-      null
-   );
+   // contains userID for entire site
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
       "myUniversityID",
       4
    );
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+
+   // contains data for university page
+   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
+      "currentUniversity",
+      null
+   );
+   // contains data for org/rso page
+   const [currentOrg, setCurrentOrg] = useSessionStorage("currentOrg", null);
+   // contains data for event page
+   const [currentEvent, setCurrentEvent] = useSessionStorage(
+      "currentEvent",
+      null
+   );
 
    // data exclusive to discover page
    const [myUniversityEvents, setMyUniversityEvents] = useState([]);
    const [universityList, setUniversityList] = useState([]);
-
-   // grabs information of event university and opens event info page
-   const openEvent = async (event) => {
-      setCurrentEvent({ ...event });
-      navigate("/event");
-   };
 
    // grabs information of selected university and opens university info page
    const openUniversity = async (university) => {
@@ -45,6 +45,12 @@ export default function Discover() {
    // grabs information of selected org and opens university info page
    const openOrg = async () => {
       navigate("/org");
+   };
+
+   // grabs information of event university and opens event info page
+   const openEvent = async (event) => {
+      setCurrentEvent({ ...event });
+      navigate("/event");
    };
 
    useEffect(() => {
