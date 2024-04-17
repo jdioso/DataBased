@@ -5,10 +5,7 @@ import buildPath from "./Path";
 // if query is successful, returns object with success message and new event's id
 async function addEvent(requestBody) {
    if (!requestBody) {
-      return {
-         message: "Insufficnent Information to add event.",
-         eventID: null,
-      };
+      return null;
    }
    const url = buildPath("api/events/add");
    let obj = requestBody;
@@ -50,10 +47,7 @@ async function addEvent(requestBody) {
 
    // return for failed request
    if (!response) {
-      return {
-         message: "Failed to add event",
-         eventID: null,
-      };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -119,10 +113,7 @@ async function editEvent(eventID, requestBody) {
 // if query is successful, returns object with success message and deleted event's id
 async function deleteEvent(eventID = null) {
    if (eventID === null) {
-      return {
-         message: "Insufficient information to delete event.",
-         eventID: null,
-      };
+      return null;
    }
    const url = buildPath(`/api/events/delete/${eventID}`);
 
@@ -162,7 +153,7 @@ async function deleteEvent(eventID = null) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to delete event", eventID: null };
+      return null;
    } else {
       // return data if success
       return response.data;

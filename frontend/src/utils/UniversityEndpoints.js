@@ -5,10 +5,7 @@ import buildPath from "./Path";
 // if query is successful, returns object with success message and new university's id
 async function addUniversity(requestBody) {
    if (!requestBody) {
-      return {
-         message: "Insufficient information to add new unversity",
-         universityID: null,
-      };
+      return null;
    }
    const url = buildPath("/api/universities/add");
    let obj = requestBody;
@@ -50,7 +47,7 @@ async function addUniversity(requestBody) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to add new university", universityID: null };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -61,10 +58,7 @@ async function addUniversity(requestBody) {
 // if query is successful, returns object with success message and edited university's id
 async function editUniversity(universityID = null, requestBody) {
    if (universityID === null || !requestBody) {
-      return {
-         message: "Insufficient information to edit university.",
-         universityID: null,
-      };
+      return null;
    }
    const url = buildPath(`/api/universities/edit/${universityID}`);
    let obj = requestBody;
@@ -106,7 +100,7 @@ async function editUniversity(universityID = null, requestBody) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to edit university.", universityID: null };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -117,10 +111,7 @@ async function editUniversity(universityID = null, requestBody) {
 // if query is successful, returns object with success message and deleted university's id
 async function deleteUniversity(universityID = null) {
    if (universityID === null) {
-      return {
-         message: "Insufficient information to delete university.",
-         universityID: null,
-      };
+      return null;
    }
    const url = buildPath(`/api/universities/delete/${universityID}`);
 
@@ -160,7 +151,7 @@ async function deleteUniversity(universityID = null) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to delete university.", universityID: null };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -219,10 +210,7 @@ async function getAllUniversities() {
 // if query is successful, returns university associated with id
 async function getUniversityByID(universityID = null) {
    if (universityID === null) {
-      return {
-         message: "Insufficient information to get university from id.",
-         universityID: universityID,
-      };
+      return null;
    }
    const url = buildPath(`api/universities/search/${universityID}`);
 
@@ -262,10 +250,7 @@ async function getUniversityByID(universityID = null) {
 
    // return for failed request
    if (!response) {
-      return {
-         message: "Failed to get university from id.",
-         universityID: universityID,
-      };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -276,10 +261,7 @@ async function getUniversityByID(universityID = null) {
 // if query is successful, returns university associated with domain
 async function getUniversityByDomain(universityDomain = null) {
    if (universityDomain === null) {
-      return {
-         message: "Insufficient information to get university from id.",
-         universityDomain: universityDomain,
-      };
+      return null;
    }
    const url = buildPath(`api/universities/searchByDomain/${universityDomain}`);
 
@@ -319,10 +301,7 @@ async function getUniversityByDomain(universityDomain = null) {
 
    // return for failed request
    if (!response) {
-      return {
-         message: "Failed to get university from id.",
-         universityDomain: universityDomain,
-      };
+      return null;
    } else {
       // return data if success
       return response.data;

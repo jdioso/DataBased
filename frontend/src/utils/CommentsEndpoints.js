@@ -5,10 +5,7 @@ import buildPath from "./Path";
 // if query is successful, returns object with success message and new comment's id
 async function addComment(requestBody) {
    if (!requestBody) {
-      return {
-         message: "Insufficient information to add comment.",
-         commentID: null,
-      };
+      return null;
    }
    const url = buildPath("/api/comments/add");
    let obj = requestBody;
@@ -50,7 +47,7 @@ async function addComment(requestBody) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to post comment.", commentID: null };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -61,10 +58,7 @@ async function addComment(requestBody) {
 // if query is successful, returns object with success message and edited comment's id
 async function editComment(commentID = null, requestBody) {
    if (commentID === null || !requestBody) {
-      return {
-         message: "Insufficient information to edit comment.",
-         commentID: null,
-      };
+      return null;
    }
    const url = buildPath(`/api/comments/edit/${commentID}`);
    let obj = requestBody;
@@ -106,7 +100,7 @@ async function editComment(commentID = null, requestBody) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to edit comment.", commentID: null };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -117,10 +111,7 @@ async function editComment(commentID = null, requestBody) {
 // if query is successful, returns object with success message and deleted comment's id
 async function deleteComment(commentID = null) {
    if (commentID === null) {
-      return {
-         message: "Insufficient information to delete comment.",
-         commentID: null,
-      };
+      return null;
    }
    const url = buildPath(`/api/comments/delete/${commentID}`);
 
@@ -160,7 +151,7 @@ async function deleteComment(commentID = null) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to delete comment.", commentID: null };
+      return null;
    } else {
       // return data if success
       return response.data;
@@ -170,10 +161,7 @@ async function deleteComment(commentID = null) {
 // function to get all comments under an event
 async function getEventComments(eventID = null) {
    if (eventID === null) {
-      return {
-         message: "Insufficient inforamtion to get event's comments.",
-         eventID: null,
-      };
+      return null;
    }
 
    const url = buildPath(`/api/comments/search/${eventID}`);
@@ -214,7 +202,7 @@ async function getEventComments(eventID = null) {
 
    // return for failed request
    if (!response) {
-      return { message: "Failed to get event commments", eventID: eventID };
+      return null;
    } else {
       // return data if success
       return response.data;

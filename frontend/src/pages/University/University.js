@@ -19,6 +19,8 @@ const universityPlaceholder = {
 };
 
 export default function University() {
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+
    // contains data for event page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
       "currentUniversity",
@@ -34,6 +36,16 @@ export default function University() {
    const [publicEvents, setPublicEvents] = useState([]);
    const [privateEvents, setPrivateEvents] = useState([]);
 
+   // returns true if current user is a student of the current university
+   // returns false if not
+   function isUniStudent() {
+      // get email of student
+      // get univeristy from email domain
+      // compare the the id of that university and the current university
+      // return true if they are the same, return else if not
+      return true;
+   }
+
    useEffect(() => {
       // window.scrollTo(0, 0);
       eventEndpoints
@@ -46,8 +58,8 @@ export default function University() {
       eventEndpoints
          .getEventsByUniversity(currentUniversity.universityID, "private")
          .then((privateEvents) => {
-            if (privateEvents) {
-               setPublicEvents([...privateEvents]);
+            if (privateEvents && isUniStudent()) {
+               setPrivateEvents([...privateEvents]);
             }
          });
    }, [currentUniversity]);
