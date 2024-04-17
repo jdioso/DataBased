@@ -56,8 +56,8 @@ async function addEvent(requestBody) {
 
 // function to edit event
 // if query is successful, returns object with success message and edited event's id
-async function editEvent(eventID, requestBody) {
-   if (eventID != null || !requestBody) {
+async function editEvent(eventID = null, requestBody) {
+   if (eventID == null || !requestBody) {
       return {
          message: "Insufficient information to edit comment.",
          eventID: null,

@@ -28,7 +28,7 @@ export default function CommentForm({ recordForEdit, addOrEdit }) {
    return (
       <form id="commentForm" className={styles.commentForm}>
          <div className={styles.inputGroup}>
-            <label for="commentText">Enter Comment Text</label>
+            <label>Enter Comment Text</label>
             <input
                id="text"
                name="text"
@@ -41,7 +41,7 @@ export default function CommentForm({ recordForEdit, addOrEdit }) {
          </div>
 
          <div className={styles.inputGroup}>
-            <label for="rating">Rating 1-5</label>
+            <label>Rating 1-5</label>
             <input
                id="rating"
                name="rating"
