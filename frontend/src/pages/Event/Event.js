@@ -6,14 +6,8 @@ import { useSessionStorage } from "usehooks-ts";
 import * as commentsEndpoints from "../../utils/CommentsEndpoints";
 import { useForm } from "../../hooks/useForm";
 import Button from "../../components/Button/Button";
-
-const initialFormData = {
-   commentID: null,
-   text: "",
-   rating: 0,
-   userID: 0,
-   eventID: 0,
-};
+import EventForm from "./EventForm";
+import CommentForm from "./CommentForm";
 
 const eventPlaceholder = {
    eventID: -1,
@@ -34,15 +28,6 @@ const eventPlaceholder = {
 };
 
 export default function Event() {
-   const [
-      formData,
-      setFormData,
-      errors,
-      setErrors,
-      handleInputChange,
-      resetForm,
-   ] = useForm(initialFormData);
-
    // contains userID for entire site
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
@@ -68,6 +53,19 @@ export default function Event() {
    const [eventOrg, setEventOrg] = useState(null);
    const [comments, setComments] = useState([]);
 
+   // variables that control form
+   const [openEdit, setOpenEdit] = useState(false);
+   const [recordForEdit, setRecordForEdit] = useState(null);
+
+   // function that checks if current user is an admin of the event's rso
+   const canEditEvent = async () => {
+      // get list of rso's that the user is an admin for
+      // check to see if this list includes the current event's rso
+      // if so, return true
+      // if not return false
+      return true;
+   };
+
    // function that highlights an element then unhilights it after 3 seconds
    const highlightCommentForm = () => {
       const commentForm = document.querySelector("#commentForm");
@@ -76,16 +74,16 @@ export default function Event() {
          commentForm.classList.remove(styles.highlighted);
       }, 1000);
    };
-   const addOrEditComment = async () => {
+   const addOrEditComment = async (comment, resetForm) => {
       const requestBody = {
-         text: formData.text,
-         rating: formData.rating,
+         text: comment.text,
+         rating: comment.rating,
          userID: currentUser,
          eventID: currentEvent.eventID,
       };
 
-      if (formData.commentID) {
-         await commentsEndpoints.editComment(formData.commentID, requestBody);
+      if (comment.commentID) {
+         await commentsEndpoints.editComment(comment.commentID, requestBody);
       } else {
          await commentsEndpoints.addComment(requestBody);
       }
@@ -129,7 +127,24 @@ export default function Event() {
       <>
          <Navbar></Navbar>
          <div className={styles.container}>
-            <h1 className={styles.header}>{currentEvent.name}</h1>
+            <div className={styles.header}>
+               <h1>{currentEvent.name}</h1>
+               {canEditEvent() ? (
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        setOpenEdit(!openEdit);
+                        setRecordForEdit({ ...currentEvent });
+                     }}
+                  >
+                     {openEdit ? "Close" : "Edit"}
+                  </Button>
+               ) : (
+                  ""
+               )}
+            </div>
+            {openEdit ? <EventForm recordForEdit={recordForEdit} /> : ""}
+
             <Card cardTitle="Info">
                {/* <p>Affipated RSO: RSO Name</p> */}
                <p>Event Type: {currentEvent.eventType}</p>
@@ -149,51 +164,15 @@ export default function Event() {
                <p>Latitude: {currentEvent.latitude}</p>
                <p>Longitude: {currentEvent.longitude}</p>
             </Card>
+
             <div className={styles.commentSection}>
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>Comments</h1>
                </div>
-               <form id="commentForm" className={styles.commentForm}>
-                  <div className={styles.inputGroup}>
-                     <label for="commentText">Enter Comment Text</label>
-                     <input
-                        id="text"
-                        name="text"
-                        value={formData.text}
-                        minLength={1}
-                        maxLength={1024}
-                        placeholder="Leave a comment..."
-                        onChange={handleInputChange}
-                     />
-                  </div>
-
-                  <div className={styles.inputGroup}>
-                     <label for="rating">Rating 1-5</label>
-                     <input
-                        id="rating"
-                        name="rating"
-                        value={formData.rating}
-                        type="number"
-                        maxLength="1"
-                        min="1"
-                        max="5"
-                        placeholder="Rating..."
-                        className={styles.commentRating}
-                        onChange={handleInputChange}
-                     />
-                  </div>
-                  <div className={styles.commentFormControls}>
-                     <Button
-                        type="submit"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           addOrEditComment();
-                        }}
-                     >
-                        Submit
-                     </Button>
-                  </div>
-               </form>
+               <CommentForm
+                  recordForEdit={recordForEdit}
+                  addOrEdit={addOrEditComment}
+               />
                <ul className={styles.commentList}>
                   {comments &&
                      comments.map((comment) => (
@@ -216,7 +195,7 @@ export default function Event() {
                                     <Button
                                        onClick={(e) => {
                                           e.preventDefault();
-                                          setFormData({
+                                          setRecordForEdit({
                                              ...comment,
                                              commentID: comment.commentID,
                                           });
