@@ -11,16 +11,34 @@ import * as eventEndpoints from "../../utils/EventEndpoints";
 export default function Discover() {
    const navigate = useNavigate();
 
+   // contains data for event page
+   const [currentEvent, setCurrentEvent] = useSessionStorage(
+      "currentEvent",
+      null
+   );
+   const [currentUniversity, setCurrentUniversity] = useSessionStorage(
+      "currentUniversity",
+      null
+   );
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
       "myUniversityID",
       4
    );
 
+   // data exclusive to discover page
    const [myUniversityEvents, setMyUniversityEvents] = useState([]);
+   const [universityList, setUniversityList] = useState([]);
+
+   // grabs information of event university and opens event info page
+   const openEvent = async (event) => {
+      setCurrentEvent({ ...event });
+      navigate("/event");
+   };
 
    // grabs information of selected university and opens university info page
-   const openUniversity = async () => {
+   const openUniversity = async (university) => {
+      setCurrentUniversity({ ...university });
       navigate("/university");
    };
    // grabs information of selected org and opens university info page
@@ -28,16 +46,16 @@ export default function Discover() {
       navigate("/org");
    };
 
-   const openEvent = async (eventID) => {
-      console.log(eventID);
-      navigate("/event");
-   };
-
    useEffect(() => {
       window.scrollTo(0, 0);
       eventEndpoints.getEventsByUniversity(myUniversityID).then((events) => {
          if (events) {
             setMyUniversityEvents([...events]);
+         }
+      });
+      uniEndpoints.getAllUniversities().then((universities) => {
+         if (universities) {
+            setUniversityList([...universities]);
          }
       });
    }, []);
@@ -67,7 +85,7 @@ export default function Discover() {
                               size="sm"
                               onClick={(e) => {
                                  e.preventDefault();
-                                 openEvent(event.eventID);
+                                 openEvent(event);
                               }}
                            >
                               Open
@@ -169,83 +187,23 @@ export default function Discover() {
                   <input placeholder="Enter University"></input>
                </div>
                <div className={styles.slider}>
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="University Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openUniversity();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
+                  {universityList &&
+                     universityList.map((university) => (
+                        <Square
+                           squareTitle={university.name}
+                           key={university.universityID}
+                        >
+                           <Button
+                              size="sm"
+                              onClick={(e) => {
+                                 e.preventDefault();
+                                 openUniversity(university);
+                              }}
+                           >
+                              Open
+                           </Button>
+                        </Square>
+                     ))}
                </div>
             </div>
          </div>
