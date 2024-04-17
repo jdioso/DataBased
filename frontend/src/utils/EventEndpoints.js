@@ -271,7 +271,7 @@ async function getEventsByOrg(orgID) {
 // takes additional privacy category to filter events by privacy
 // if query is successful, returns list of all events from rso associated with inputed university
 async function getEventsByUniversity(universityID = null, privacy = null) {
-   if ((universityID = null)) {
+   if (universityID === null) {
       return null;
    }
 

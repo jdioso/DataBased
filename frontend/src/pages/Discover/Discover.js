@@ -14,7 +14,7 @@ export default function Discover() {
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
       "myUniversityID",
-      1
+      4
    );
 
    const [myUniversityEvents, setMyUniversityEvents] = useState([]);
@@ -28,14 +28,17 @@ export default function Discover() {
       navigate("/org");
    };
 
-   const openEvent = async () => {
+   const openEvent = async (eventID) => {
+      console.log(eventID);
       navigate("/event");
    };
 
    useEffect(() => {
       window.scrollTo(0, 0);
       eventEndpoints.getEventsByUniversity(myUniversityID).then((events) => {
-         setMyUniversityEvents([...events]);
+         if (events) {
+            setMyUniversityEvents([...events]);
+         }
       });
    }, []);
    return (
@@ -57,105 +60,20 @@ export default function Discover() {
                   </Button>
                </div>
                <div className={styles.slider}>
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>{" "}
-                  <Square squareTitle="Event Name">
-                     <Button
-                        size="sm"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           openEvent();
-                        }}
-                     >
-                        Open
-                     </Button>
-                  </Square>
+                  {myUniversityEvents &&
+                     myUniversityEvents.map((event) => (
+                        <Square squareTitle={event.name} key={event.eventID}>
+                           <Button
+                              size="sm"
+                              onClick={(e) => {
+                                 e.preventDefault();
+                                 openEvent(event.eventID);
+                              }}
+                           >
+                              Open
+                           </Button>
+                        </Square>
+                     ))}
                </div>
             </div>
             <div className={styles.section}>
