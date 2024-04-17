@@ -5,6 +5,7 @@ import Card from "../../components/Card/Card";
 import Navbar from "../../components/Navbar/Navbar";
 import * as commentsEndpoints from "../../utils/CommentsEndpoints";
 import * as orgEndpoints from "../../utils/OrgEndpoints";
+import * as eventEndpoints from "../../utils/EventEndpoints";
 import CommentForm from "./CommentForm";
 import styles from "./Event.module.css";
 import EventForm from "./EventForm";
@@ -58,16 +59,13 @@ export default function Event() {
    const [commentForEdit, setCommentForEdit] = useState(null);
    const [eventForEdit, setEventForEdit] = useState(null);
 
-   // function that checks if current user is an admin of the event's rso
    const canEditEvent = async () => {
-      // get list of rso's that the user is an admin for
-      const managedRSOs = await orgEndpoints.returnUsersRSOs(currentUser);
-      console.log(managedRSOs);
-
-      // check to see if this list includes the current event's rso
-      // if so, return true
-      // if not return false
-      return true;
+      let retval = false;
+      const admins = await orgEndpoints.returnUsersRSOs(currentUser);
+      admins.forEach(
+         (admin) => (retval = retval || currentEvent.rsoID === admin.rsoID)
+      );
+      return retval;
    };
 
    const renderComments = async () => {
@@ -118,25 +116,32 @@ export default function Event() {
       renderComments();
    };
 
-   const addOrEditEvent = async (comment, resetForm) => {
+   const editEvent = async (event, resetForm) => {
+      // potentially edit this to reflect new values
       const requestBody = {
-         text: comment.text,
-         rating: comment.rating,
-         userID: currentUser,
-         eventID: currentEvent.eventID,
+         privacy: event.privacy,
+         name: event.name,
+         description: event.description,
+         latitude: event.latitude,
+         longitude: event.longitude,
+         contactName: event.contactName,
+         contactEmail: event.contactEmail,
+         contactNumber: event.contactNumber,
+         time: event.time,
       };
 
-      if (comment.commentID) {
-         await commentsEndpoints.editComment(comment.commentID, requestBody);
+      const check = window.confirm("Are you sure you want to edit this event?");
+      if (canEditEvent() && check) {
+         const response = await eventEndpoints.editEvent(
+            event.eventID,
+            requestBody
+         );
+         console.log(response);
+         setCurrentEvent({ ...event });
       } else {
-         await commentsEndpoints.addComment(requestBody);
+         window.alert("You do not not have permission to edit this event");
       }
-
-      if (canEditEvent) {
-      }
-      // resetForm();
-      // setCurrentEvent()
-      // renderComments();
+      setOpenEdit(false);
    };
    useEffect(() => {
       window.scrollTo(0, 0);
@@ -155,10 +160,14 @@ export default function Event() {
                      setEventForEdit({ ...currentEvent });
                   }}
                >
-                  {openEdit ? "Close" : "Edit"}
+                  {openEdit ? "Close" : "Edit Event"}
                </Button>
             </div>
-            {openEdit ? <EventForm recordForEdit={eventForEdit} /> : ""}
+            {openEdit ? (
+               <EventForm recordForEdit={eventForEdit} addOrEdit={editEvent} />
+            ) : (
+               ""
+            )}
 
             <Card cardTitle="Info">
                {/* <p>Affipated RSO: RSO Name</p> */}
@@ -191,11 +200,8 @@ export default function Event() {
                <ul className={styles.commentList}>
                   {comments &&
                      comments.map((comment) => (
-                        <>
-                           <li
-                              className={styles.comment}
-                              key={comment.commentID}
-                           >
+                        <div key={comment.commentID}>
+                           <li className={styles.comment}>
                               <div className={styles.commentAuthor}>
                                  User #{comment.userID}
                               </div>
@@ -236,7 +242,7 @@ export default function Event() {
                                  ""
                               )}
                            </li>
-                        </>
+                        </div>
                      ))}
                </ul>
             </div>

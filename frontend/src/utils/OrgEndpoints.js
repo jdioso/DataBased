@@ -316,8 +316,8 @@ async function removeRSOMember(rsoID = null, userID = null, requestBody) {
 }
 
 // function to remove user from rso
-async function returnUsersRSOs(userID = null, requestBody) {
-   if (userID == null || !requestBody) {
+async function returnUsersRSOs(userID = null) {
+   if (userID == null) {
       return null;
    }
 
