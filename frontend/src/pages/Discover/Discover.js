@@ -41,6 +41,7 @@ export default function Discover() {
       setCurrentUniversity({ ...university });
       navigate("/university");
    };
+
    // grabs information of selected org and opens university info page
    const openOrg = async () => {
       navigate("/org");

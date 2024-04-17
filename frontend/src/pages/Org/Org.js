@@ -1,54 +1,73 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import styles from "./Org.module.css";
 import Card from "../../components/Card/Card";
 import Button from "../../components/Button/Button";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { useNavigate } from "react-router-dom";
+import { useSessionStorage } from "usehooks-ts";
+import * as eventEndpoints from "../../utils/EventEndpoints";
+const orgPlaceholder = {
+   rsoID: -1,
+   adminID: -1,
+   status: null,
+   name: "RSO NAME",
+   numMembers: 5,
+   description: "RSO DESCRIPTION",
+};
 export default function Org() {
    const navigate = useNavigate();
 
-   const openEvent = async () => {
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+
+   // change default value to null later
+   const [myUniversityID, setMyUniversityID] = useSessionStorage(
+      "myUniversityID",
+      4
+   );
+   const [currentOrg, setCurrentOrg] = useSessionStorage(
+      "currentOrg",
+      orgPlaceholder
+   );
+   const [currentEvent, setCurrentEvent] = useSessionStorage(
+      "currentEvent",
+      null
+   );
+
+   // page specific data
+   const [orgEvents, setOrgEvents] = useState([]);
+   // grabs information of event university and opens event info page
+   const openEvent = async (event) => {
+      setCurrentEvent({ ...event });
       navigate("/event");
    };
+
+   // function that returns true if current user is member of rso
+   // returns false if not
+   const isOrgMember = () => {};
    useEffect(() => {
       window.scrollTo(0, 0);
-   }, []);
+      eventEndpoints.getEventsByOrg(currentOrg.rsoID).then((events) => {
+         if (events) {
+            setOrgEvents([...events]);
+         }
+      });
+      // get events for current org
+   }, [currentOrg]);
    return (
       <>
          <Navbar />
-         <h1 className={styles.header}>Org</h1>
+         <h1 className={styles.header}>{currentOrg.name}</h1>
          <div className={styles.container}>
             <div className={styles.sidebarWrapper}>
                <Sidebar className={styles.sidebar}>
                   <div>
-                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unksnown printer took a galley of type and.
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unksnown printer took a galley of type and.Lorem
-                        Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unksnown printer took a galley of type and.Lorem
-                        Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,
-                        when an unksnown printer took a galley of type and.
-                     </p>
+                     <p>{currentOrg.description}</p>
                      INFO LOGO
                   </div>
                   <div>
-                     <p>Number of Students</p>
+                     <p>{currentOrg.numMembers}</p>
                      PERSON LOGO
-                  </div>
-                  <div>
-                     <p>Map</p>
-                     MAP LOGO
                   </div>
                </Sidebar>
             </div>
@@ -56,81 +75,20 @@ export default function Org() {
             <div className={styles.eventsWrapper}>
                <Card cardTitle="Events">
                   <ul className={styles.eventList}>
-                     <li className={styles.eventItem}>
-                        <h2 className={styles.eventItemTitle}>Event Name</h2>
-                        <h2 className={styles.eventItemDate}>
-                           Date:xxx/xx/xxx
-                        </h2>
-                        <Button
-                           size="sm"
-                           onClick={(e) => {
-                              e.preventDefault();
-                              openEvent();
-                           }}
-                        >
-                           Open
-                        </Button>
-                     </li>
-                     <li className={styles.eventItem}>
-                        <h2 className={styles.eventItemTitle}>Event Name</h2>
-                        <h2 className={styles.eventItemDate}>
-                           Date:xxx/xx/xxx
-                        </h2>
-                        <Button
-                           size="sm"
-                           onClick={(e) => {
-                              e.preventDefault();
-                              openEvent();
-                           }}
-                        >
-                           Open
-                        </Button>
-                     </li>
-                     <li className={styles.eventItem}>
-                        <h2 className={styles.eventItemTitle}>Event Name</h2>
-                        <h2 className={styles.eventItemDate}>
-                           Date:xxx/xx/xxx
-                        </h2>
-                        <Button
-                           size="sm"
-                           onClick={(e) => {
-                              e.preventDefault();
-                              openEvent();
-                           }}
-                        >
-                           Open
-                        </Button>
-                     </li>
-                     <li className={styles.eventItem}>
-                        <h2 className={styles.eventItemTitle}>Event Name</h2>
-                        <h2 className={styles.eventItemDate}>
-                           Date:xxx/xx/xxx
-                        </h2>
-                        <Button
-                           size="sm"
-                           onClick={(e) => {
-                              e.preventDefault();
-                              openEvent();
-                           }}
-                        >
-                           Open
-                        </Button>
-                     </li>
-                     <li className={styles.eventItem}>
-                        <h2 className={styles.eventItemTitle}>Event Name</h2>
-                        <h2 className={styles.eventItemDate}>
-                           Date:xxx/xx/xxx
-                        </h2>
-                        <Button
-                           size="sm"
-                           onClick={(e) => {
-                              e.preventDefault();
-                              openEvent();
-                           }}
-                        >
-                           Open
-                        </Button>
-                     </li>
+                     {orgEvents &&
+                        orgEvents.map((event) => (
+                           <li className={styles.eventItem} key={event.eventID}>
+                              <h2 className={styles.eventItemTitle}>
+                                 {event.name}
+                              </h2>
+                              <h2 className={styles.eventItemDate}>
+                                 Date:{event.date}
+                              </h2>
+                              <Button size="sm" hug={true}>
+                                 Info
+                              </Button>
+                           </li>
+                        ))}
                   </ul>
                </Card>
             </div>

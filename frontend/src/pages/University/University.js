@@ -5,20 +5,24 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import styles from "./University.module.css";
 import { useSessionStorage } from "usehooks-ts";
 import * as eventEndpoints from "../../utils/EventEndpoints";
+import * as orgEndpoints from "../../utils/OrgEndpoints";
 import Button from "../../components/Button/Button";
 import Square from "../../components/Square/Square";
+import { useNavigate } from "react-router-dom";
 
 const universityPlaceholder = {
-   universityID: 4,
-   name: "UCFItsedlf",
-   location: "Atlanta dummy",
-   description: "smart people factory",
-   saID: 3,
-   domain: "UCF",
-   numStudents: 10000,
+   universityID: -1,
+   name: "UNIVERSITY NAME",
+   location: "UNIVERSITY ADDRESS",
+   description: "UNIVESRITY DESCRIPTION",
+   saID: -1,
+   domain: "UNIVERSITY DOMAIN",
+   numStudents: 5,
 };
 
 export default function University() {
+   const navigate = useNavigate();
+
    const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
 
    // contains data for event page
@@ -31,8 +35,10 @@ export default function University() {
       "myUniversityID",
       4
    );
+   const [currentOrg, setCurrentOrg] = useSessionStorage("currentOrg", null);
 
    // page specific data
+   const [orgs, setOrgs] = useState([]);
    const [publicEvents, setPublicEvents] = useState([]);
    const [privateEvents, setPrivateEvents] = useState([]);
 
@@ -46,8 +52,19 @@ export default function University() {
       return true;
    }
 
+   // grabs information of selected org and opens university info page
+   const openOrg = async (org) => {
+      setCurrentOrg({ ...org });
+      navigate("/org");
+   };
    useEffect(() => {
       // window.scrollTo(0, 0);
+      orgEndpoints.getOrgs().then((orgs) => {
+         if (orgs) {
+            setOrgs([...orgs]);
+         }
+      });
+      // populate public events list
       eventEndpoints
          .getEventsByUniversity(currentUniversity.universityID, "public")
          .then((publicEvents) => {
@@ -55,6 +72,7 @@ export default function University() {
                setPublicEvents([...publicEvents]);
             }
          });
+      // populate private event list if user is student of univeristy
       eventEndpoints
          .getEventsByUniversity(currentUniversity.universityID, "private")
          .then((privateEvents) => {
@@ -97,30 +115,20 @@ export default function University() {
                </div>
 
                <div className={styles.slider}>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
-                  <Square squareTitle="Organization Name">
-                     <Button size="sm">Open</Button>
-                  </Square>
+                  {orgs &&
+                     orgs.map((org) => (
+                        <Square squareTitle={org.name} key={org.rsoID}>
+                           <Button
+                              size="sm"
+                              onClick={(e) => {
+                                 e.preventDefault();
+                                 openOrg(org);
+                              }}
+                           >
+                              Open
+                           </Button>
+                        </Square>
+                     ))}
                </div>
             </div>
             <div className={`${styles.section} ${styles.eventsWrapper}`}>

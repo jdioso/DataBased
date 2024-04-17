@@ -149,7 +149,7 @@ async function deleteOrg(requestBody) {
 }
 
 // function to search rso's with optional name parameter
-async function searchOrgs(orgName = null) {
+async function getOrgs(orgName = null) {
    let url = buildPath(`/api/rso/searchAll/`);
    if (orgName) {
       url = buildPath(`/api/rso/searchAll/${orgName}`);
@@ -297,3 +297,5 @@ async function removeOrgMember(requestBody) {
    // return data if success
    return response.data;
 }
+
+export { getOrgs };
