@@ -3,7 +3,7 @@ import styles from "./Event.module.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Card from "../../components/Card/Card";
 import { useSessionStorage } from "usehooks-ts";
-
+import * as commentsEndpoints from "../../utils/CommentsEndpoints";
 const eventPlaceholder = {
    eventID: -1,
    eventType: "EVENT TYPE",
@@ -40,9 +40,16 @@ export default function Event() {
 
    // page specific data
    const [eventOrg, setEventOrg] = useState(null);
-
+   const [comments, setComments] = useState([]);
    useEffect(() => {
       window.scrollTo(0, 0);
+      commentsEndpoints
+         .getEventComments(currentEvent.eventID)
+         .then((comments) => {
+            if (comments) {
+               setComments([...comments]);
+            }
+         });
    }, [currentEvent]);
    return (
       <>
@@ -72,70 +79,22 @@ export default function Event() {
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>Comments</h1>
                </div>
+               <form>Comment form to be added!!!!!</form>
                <ul className={styles.commentList}>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
-                  <li className={styles.comment}>
-                     <div className={styles.commentAuthor}>Author Name</div>
-                     <div className={styles.commentText}>
-                        This is the bulk of the text that will make up the
-                        comment. It should describe why the event was rated the
-                        way it was
-                     </div>
-                     <div className={styles.commentRating}>Rating: 5/5</div>
-                  </li>
+                  {comments &&
+                     comments.map((comment) => (
+                        <li className={styles.comment} key={comment.commentID}>
+                           <div className={styles.commentAuthor}>
+                              User #{comment.userID}
+                           </div>
+                           <div className={styles.commentText}>
+                              {comment.text}
+                           </div>
+                           <div className={styles.commentRating}>
+                              Rating: {comment.rating}/5
+                           </div>
+                        </li>
+                     ))}
                </ul>
             </div>
          </div>
