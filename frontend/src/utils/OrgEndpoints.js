@@ -148,13 +148,12 @@ async function deleteOrg(requestBody) {
    return response.data;
 }
 
-// function to search rso's based on name
-async function searchOrgs(requestBody) {
-   if (!requestBody) {
-      return null;
+// function to search rso's with optional name parameter
+async function searchOrgs(orgName = null) {
+   let url = buildPath(`/api/rso/searchAll/`);
+   if (orgName) {
+      url = buildPath(`/api/rso/searchAll/${orgName}`);
    }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
 
    // settings for request
    let config = {
@@ -168,7 +167,6 @@ async function searchOrgs(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -193,8 +191,13 @@ async function searchOrgs(requestBody) {
       // return something if there was an error
       return { message: "Failed to Register User", userID: null };
    });
-   // return data if success
-   return response.data;
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
 }
 
 // function to add user to rso
