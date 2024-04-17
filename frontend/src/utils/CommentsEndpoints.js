@@ -6,7 +6,7 @@ async function addComment(requestBody) {
    if (!requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+   const url = buildPath("/api/comments/add");
    let obj = requestBody;
 
    // settings for request
@@ -44,18 +44,18 @@ async function addComment(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to post comment", commentID: null };
    });
    // return data if success
    return response.data;
 }
 
 // function to edit comment
-async function editComment(requestBody) {
-   if (!requestBody) {
+async function editComment(commentID = null, requestBody) {
+   if (commentID === null || !requestBody) {
       return null;
    }
-   const url = buildPath("/api/users/register");
+   const url = buildPath(`/api/comments/edit/${commentID}`);
    let obj = requestBody;
 
    // settings for request
@@ -93,19 +93,18 @@ async function editComment(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to edit comment.", commentID: null };
    });
    // return data if success
    return response.data;
 }
 
 // function to delete comment
-async function deleteComment(requestBody) {
-   if (!requestBody) {
+async function deleteComment(commentID = null) {
+   if (commentID === null) {
       return null;
    }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
+   const url = buildPath(`/api/comments/delete/${commentID}`);
 
    // settings for request
    let config = {
@@ -119,7 +118,6 @@ async function deleteComment(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -142,19 +140,19 @@ async function deleteComment(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to delete comment", commentID: null };
    });
    // return data if success
    return response.data;
 }
 
 // function to get all comments under an event
-async function getEventComments(requestBody) {
-   if (!requestBody) {
-      return null;
+async function getEventComments(eventID = null) {
+   if (eventID === null) {
+      return { message: "Event information not entered", eventID: null };
    }
-   const url = buildPath("/api/users/register");
-   let obj = requestBody;
+
+   const url = buildPath(`/api/comments/search/${eventID}`);
 
    // settings for request
    let config = {
@@ -168,7 +166,6 @@ async function getEventComments(requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -191,8 +188,10 @@ async function getEventComments(requestBody) {
       }
 
       // return something if there was an error
-      return { message: "Failed to Register User", userID: null };
+      return { message: "Failed to get event commments", eventID: null };
    });
    // return data if success
    return response.data;
 }
+
+export { addComment, editComment, deleteComment, getEventComments };
