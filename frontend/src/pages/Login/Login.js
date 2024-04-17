@@ -1,38 +1,91 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar/Navbar";
-import Button from "../../components/Button/Button";
-import LoginForm from "../../pages/Login/LoginForm";
-import RegisterForm from "../../pages/Register/RegisterForm";
 import styles from "./Login.module.css";
+import Navbar from "../../components/Navbar/Navbar";
+import Form from "../../components/Form/Form";
+import { useSessionStorage } from "usehooks-ts";
 import { useNavigate } from "react-router-dom";
+import * as userEndpoints from "../../utils/UserEndpoints";
+import Button from "../../components/Button/Button";
+
+const initialFormData = {
+   email: "",
+   password: "",
+ };
+
 export default function Login() {
-   
-   const navigate = useNavigate();
+   const [formData, setFormData] = useState(initialFormData);
+   const [currentUser, setCurrentUser] = useSessionStorage(
+      "currentUser",
+      null
+   ); 
+   const [errors, setErrors] = useState({});
+
+   const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+   };
+
+   const navigate = useNavigate(); 
 
    const openDashboard = async () => {
       navigate("/dashboard");
    };
 
-   const [isLoginForm, setShowLoginForm] = useState(true);
+   const loginUser = async () => {
+      try {
+        // Making sure email and password are provided
+        if (!formData.email || !formData.password) {
+          setErrors({ message: "Please provide both email and password!" });
+          return;
+        }
 
-   const toggleComponent = () => {
-      setShowLoginForm((prevState) => !prevState);
-   };
+        // Calling the login endpoint passing email and password
+        const response = await userEndpoints.login(formData.email, formData.password);
+        
+        // Handling the response
+        if (response.success) {
+          setCurrentUser(response.user);
+          setFormData(initialFormData); 
+          setErrors({});
+        } else {
+          setErrors({ message: response.message });
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+        setErrors({ message: "An unexpected error occurred" });
+   }
 
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+   openDashboard(); 
+}
 
    return (
       <>
-         <Navbar />
+         <Navbar></Navbar>
          <div className={styles.container}>
-            <div className={styles.flexCol}>
-               {isLoginForm ? <LoginForm /> : <RegisterForm />}
-               <Button size="sm" onClick={toggleComponent}>
-                  {isLoginForm ? "Change to Register" : "Change to Login"}
-               </Button>
-
-            </div>
+         <Form formTitle="Login">
+            <h2 className={styles.formDescriptor}>Email</h2>
+            <center>
+               <input className={styles.formInput} type="text" name="email" value={formData.email} onChange={handleInputChange}/>
+                <br />
+             </center>
+             <h2 className={styles.formDescriptor}>Password</h2>
+            <center>
+                <input className={styles.formInput} type="password" name="password" value={formData.password} onChange={handleInputChange}/>
+                <br />
+               </center>
+            <center>
+             <Button size="sm" onClick={loginUser}>
+               Login
+             </Button>
+               {errors.message && <p>{errors.message}</p>}
+            </center>
+            </Form>
          </div>
       </>
    );
 }
+
+
