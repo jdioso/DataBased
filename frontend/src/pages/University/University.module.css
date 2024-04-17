@@ -126,3 +126,62 @@
    align-items: center;
    gap: 10px;
 }
+
+.flexCol {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
+}
+
+.flexGrow {
+   flex-grow: 1;
+}
+
+:root {
+  --textColor: #F2ECF8; 
+  --backgroundColor: #564A94; 
+  --primaryColor: #F2ECF8; 
+  --secondaryColor: #27254C;
+  --accentColor: #46B2D2;  
+}
+
+.formDescriptor {
+  font-family: 'Jua'; 
+  font-size: 1rem; 
+  color: var(--backgroundColor); 
+}
+
+.formInput {
+  width: 30em; 
+  font-family: 'Jua';
+  font-size: 1.3rem;
+  text-align: left;
+  color: var(--backgroundColor); 
+  height: 1.6em; 
+  padding-top: 0.2em; 
+  padding-bottom: 0.2em; 
+  padding-left: 0.5em;
+  background-color: white;
+  border-radius: 10px; 
+  border: solid; 
+  border-width: 1px;
+  margin-top: 16px; 
+  margin-bottom: 16px; 
+}
+
+.formTitle {
+  font-family: 'Jua';
+  font-size: 2rem;
+  color: var(--backgroundColor);
+  background-color: var(--primaryColor);
+  text-align: center; 
+  justify-content: center;
+  flex-wrap: wrap;
+  float: left; 
+  align-items: center;
+  padding-bottom: 1.5em; 
+}
+
