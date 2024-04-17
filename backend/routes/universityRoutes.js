@@ -193,5 +193,41 @@ router.get('/searchName/:name', async (req, res) => {
 	}
 });
 
+// Add photos to Uni
+router.post('/addPhoto', async (req, res) => {
+	const { universityID, picture_url } = req.body;
+	if (!universityID || !picture_url) {
+		return res.status(400).json({ error: 'University ID and picture url must be filled out.' });
+	}
+	try {
+		const photo = await db.photos.create({
+			universityID,
+			picture_url
+		})
+		res.status(201).json({ message: 'Photo added successfully.', picID: photo.picID });
+	} catch (err) {
+		console.error('Error adding photo:', err.message);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
+
+// Get photos from Uni
+router.get('/searchAll/:universityID/photos', async (req, res) => {
+	const { universityID } = req.params;
+
+	try {
+		const photos = await db.photos.findAll({
+			where: { universityID }
+		});
+
+		res.status(200).json(photos);
+	} catch (err) {
+		console.error('Failed to retrieve Uni photos:', err);
+		res.status(500).json({ error: 'Server error retrieving photos', message: err.message });
+	}
+});
+
+
+
 
 module.exports = router;

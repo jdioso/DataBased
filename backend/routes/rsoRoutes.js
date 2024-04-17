@@ -227,7 +227,7 @@ router.delete('/:rsoID/members/:userID', async (req, res) => {
 	}
 });
 
-
+// Get all members of an RSO
 router.get('/searchAll/:rsoID/members', async (req, res) => {
 	const { rsoID } = req.params;
 
