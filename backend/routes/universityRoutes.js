@@ -177,7 +177,21 @@ router.get('/searchByDomain/:domain', async (req, res) => {
 	}
 });
 
-
+// Get University by Name
+router.get('/searchName/:name', async (req, res) => {
+	const { name } = req.params;
+	try {
+		const existingUniversity = await db.university.findOne({ where: { name: name } });
+		if (existingUniversity) {
+			res.status(200).json(existingUniversity);
+		} else {
+			res.status(404).json({ message: 'University not found', name: name });
+		}
+	} catch (err) {
+		console.error('Error fetching university:', err.message);
+		res.status(500).json({ message: 'Server error', error: err.message });
+	}
+});
 
 
 module.exports = router;
