@@ -54,16 +54,21 @@
    grid-template-columns: 1fr auto;
    grid-template-rows: auto 1fr;
    grid-template-areas:
-      "author rating"
-      "text rating";
+      "input rating"
+      "controls controls";
 
    gap: 10px;
 }
 .commentInput {
+   grid-area: input;
 }
 .commentRating {
+   grid-area: rating;
 }
 .commentFormControls {
+   display: flex;
+   justify-content: center;
+   grid-area: controls;
 }
 .commentList {
    width: 100%;
@@ -101,6 +106,17 @@
 }
 
 .commentRating {
-   min-width: 100px;
    grid-area: rating;
+}
+
+.commentControls {
+   display: flex;
+   justify-content: center;
+   gap: 20px;
+}
+.inputGroup {
+   padding: 5px;
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
 }

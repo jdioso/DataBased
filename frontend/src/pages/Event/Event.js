@@ -4,6 +4,17 @@ import Navbar from "../../components/Navbar/Navbar";
 import Card from "../../components/Card/Card";
 import { useSessionStorage } from "usehooks-ts";
 import * as commentsEndpoints from "../../utils/CommentsEndpoints";
+import { useForm } from "../../hooks/useForm";
+import Button from "../../components/Button/Button";
+
+const initialFormData = {
+   commentID: null,
+   text: "",
+   rating: 0,
+   userID: 0,
+   eventID: 0,
+};
+
 const eventPlaceholder = {
    eventID: -1,
    eventType: "EVENT TYPE",
@@ -23,24 +34,80 @@ const eventPlaceholder = {
 };
 
 export default function Event() {
-   // contains data for event page
-   const [currentEvent, setCurrentEvent] = useSessionStorage(
-      "currentEvent",
-      eventPlaceholder
+   const [
+      formData,
+      setFormData,
+      errors,
+      setErrors,
+      handleInputChange,
+      resetForm,
+   ] = useForm(initialFormData);
+
+   // contains userID for entire site
+   // change default value to null later
+   const [myUniversityID, setMyUniversityID] = useSessionStorage(
+      "myUniversityID",
+      1
    );
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+
+   // contains data for university page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
       "currentUniversity",
       null
    );
-   // change default value to null later
-   const [myUniversityID, setMyUniversityID] = useSessionStorage(
-      "myUniversityID",
-      4
+   // contains data for org/rso page
+   const [currentOrg, setCurrentOrg] = useSessionStorage("currentOrg", null);
+   // contains data for event page
+   const [currentEvent, setCurrentEvent] = useSessionStorage(
+      "currentEvent",
+      null
    );
 
    // page specific data
    const [eventOrg, setEventOrg] = useState(null);
    const [comments, setComments] = useState([]);
+   // const [formDate, setFormData] = useState(null);
+
+   const addOrEditComment = async () => {
+      const requestBody = {
+         text: formData.text,
+         rating: formData.rating,
+         userID: currentUser,
+         eventID: currentEvent.eventID,
+      };
+
+      if (formData.commentID) {
+         await commentsEndpoints.editComment(formData.commentID, requestBody);
+      } else {
+         await commentsEndpoints.addComment(requestBody);
+      }
+
+      resetForm();
+      commentsEndpoints
+         .getEventComments(currentEvent.eventID)
+         .then((comments) => {
+            if (comments) {
+               setComments(comments);
+            }
+         });
+   };
+
+   const deleteComment = async (commentID) => {
+      const check = window.confirm(
+         "Are you sure you want to delete this comment?"
+      );
+      if (check) {
+         await commentsEndpoints.deleteComment(commentID);
+      }
+      commentsEndpoints
+         .getEventComments(currentEvent.eventID)
+         .then((comments) => {
+            if (comments) {
+               setComments(comments);
+            }
+         });
+   };
    useEffect(() => {
       window.scrollTo(0, 0);
       commentsEndpoints
@@ -79,35 +146,101 @@ export default function Event() {
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>Comments</h1>
                </div>
-               <form className={styles.commentForm}>
-                  <input
-                     minLength={1}
-                     maxLength={1024}
-                     placeholder="Leave a comment..."
-                  ></input>
+               <form id="commentForm" className={styles.commentForm}>
+                  <div className={styles.inputGroup}>
+                     <label for="commentText">Enter Comment Text</label>
+                     <input
+                        id="text"
+                        name="text"
+                        value={formData.text}
+                        minLength={1}
+                        maxLength={1024}
+                        placeholder="Leave a comment..."
+                        onChange={handleInputChange}
+                     />
+                  </div>
 
-                  <input
-                     type="number"
-                     min={0}
-                     max={5}
-                     placeholder="Leave a comment..."
-                     className={styles.commentRating}
-                  ></input>
+                  <div className={styles.inputGroup}>
+                     <label for="rating">Rating 1-5</label>
+                     <input
+                        id="rating"
+                        name="rating"
+                        value={formData.rating}
+                        type="number"
+                        maxLength="1"
+                        min="1"
+                        max="5"
+                        placeholder="Rating..."
+                        className={styles.commentRating}
+                        onChange={handleInputChange}
+                     />
+                  </div>
+                  <div className={styles.commentFormControls}>
+                     <Button
+                        type="submit"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           addOrEditComment();
+                        }}
+                     >
+                        Submit
+                     </Button>
+                  </div>
                </form>
                <ul className={styles.commentList}>
                   {comments &&
                      comments.map((comment) => (
-                        <li className={styles.comment} key={comment.commentID}>
-                           <div className={styles.commentAuthor}>
-                              User #{comment.userID}
-                           </div>
-                           <div className={styles.commentText}>
-                              {comment.text}
-                           </div>
-                           <div className={styles.commentRating}>
-                              Rating: {comment.rating}/5
-                           </div>
-                        </li>
+                        <>
+                           <li
+                              className={styles.comment}
+                              key={comment.commentID}
+                           >
+                              <div className={styles.commentAuthor}>
+                                 User #{comment.userID}
+                              </div>
+                              <div className={styles.commentText}>
+                                 {comment.text}
+                              </div>
+                              <div className={styles.commentRating}>
+                                 Rating: {comment.rating}/5
+                              </div>
+                           </li>
+                           {currentUser === comment.userID ? (
+                              <div className={styles.commentControls}>
+                                 <Button
+                                    onClick={(e) => {
+                                       e.preventDefault();
+                                       setFormData({
+                                          ...comment,
+                                          commentID: comment.commentID,
+                                       });
+                                       window.location.replace("#commentForm");
+                                    }}
+                                 >
+                                    Edit
+                                 </Button>
+                                 <Button
+                                    onClick={(e) => {
+                                       e.preventDefault();
+                                       deleteComment(comment.commentID);
+                                       commentsEndpoints
+                                          .getEventComments(
+                                             currentEvent.eventID
+                                          )
+                                          .then((comments) => {
+                                             if (comments) {
+                                                setComments([...comments]);
+                                             }
+                                          });
+                                    }}
+                                 >
+                                    Delete
+                                 </Button>
+                              </div>
+                           ) : (
+                              ""
+                           )}
+                        </>
                      ))}
                </ul>
             </div>
