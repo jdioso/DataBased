@@ -10,7 +10,7 @@ import Button from "../../components/Button/Button";
 const initialFormData = {
    email: "",
    password: "",
- };
+};
 
 export default function Login() {
    const [formData, setFormData] = useState(initialFormData);
@@ -28,18 +28,18 @@ export default function Login() {
    const handleInputChange = (e) => {
       const { name, value } = e.target;
       setFormData({
-        ...formData,
-        [name]: value
+         ...formData,
+         [name]: value,
       });
    };
 
    const loginUser = async () => {
       try {
-        // Making sure email and password are provided
-        if (!formData.email || !formData.password) {
-          setErrors({ message: "Please provide both email and password!" });
-          return;
-        }
+         // Making sure email and password are provided
+         if (!formData.email || !formData.password) {
+            setErrors({ message: "Please provide both email and password!" });
+            return;
+         }
 
         // Calling the login endpoint passing email and password
         const response = await userEndpoints.login(formData.email, formData.password);
@@ -102,5 +102,3 @@ export default function Login() {
    </>
 );
 }
-
-

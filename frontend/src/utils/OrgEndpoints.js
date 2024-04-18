@@ -58,7 +58,7 @@ async function editRSO(id = null, requestBody) {
    if (id === null || !requestBody) {
       return null;
    }
-   
+
    const url = buildPath(`/api/rso/edit/${id}`);
    let obj = requestBody;
 
@@ -211,7 +211,6 @@ async function searchAllRSOs(rsoName = null) {
 
 // function to add user to rso
 async function addRSOMember(rsoID = null, requestBody) {
-
    if (rsoID === null || !requestBody) {
       return null;
    }
@@ -317,13 +316,12 @@ async function removeRSOMember(rsoID = null, userID = null, requestBody) {
 }
 
 // function to remove user from rso
-async function returnUsersRSOs(userID = null, requestBody) {
-   if (userID == null || !requestBody) {
+async function returnUsersRSOs(userID = null) {
+   if (userID == null) {
       return null;
    }
 
    const url = buildPath(`/api/rso/rsoAdmin/${userID}`);
-   let obj = requestBody;
 
    // settings for request
    let config = {
@@ -337,7 +335,6 @@ async function returnUsersRSOs(userID = null, requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -475,10 +472,14 @@ async function getRSOMembers(rsoID = null, requestBody) {
    }
 }
 
-export { createRSO, searchAllRSOs, addRSOMember, removeRSOMember, editRSO, deleteRSO, returnUsersRSOs, searchNameRSO, getRSOMembers};
-
-
-
-
-
-
+export {
+   createRSO,
+   searchAllRSOs,
+   addRSOMember,
+   removeRSOMember,
+   editRSO,
+   deleteRSO,
+   returnUsersRSOs,
+   searchNameRSO,
+   getRSOMembers,
+};

@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Event.module.css";
-import Navbar from "../../components/Navbar/Navbar";
-import Card from "../../components/Card/Card";
 import { useSessionStorage } from "usehooks-ts";
-import * as commentsEndpoints from "../../utils/CommentsEndpoints";
-import { useForm } from "../../hooks/useForm";
 import Button from "../../components/Button/Button";
-
-const initialFormData = {
-   commentID: null,
-   text: "",
-   rating: 0,
-   userID: 0,
-   eventID: 0,
-};
+import Card from "../../components/Card/Card";
+import Navbar from "../../components/Navbar/Navbar";
+import * as commentsEndpoints from "../../utils/CommentsEndpoints";
+import * as orgEndpoints from "../../utils/OrgEndpoints";
+import * as eventEndpoints from "../../utils/EventEndpoints";
+import CommentForm from "./CommentForm";
+import styles from "./Event.module.css";
+import EventForm from "./EventForm";
 
 const eventPlaceholder = {
    eventID: -1,
@@ -34,22 +29,13 @@ const eventPlaceholder = {
 };
 
 export default function Event() {
-   const [
-      formData,
-      setFormData,
-      errors,
-      setErrors,
-      handleInputChange,
-      resetForm,
-   ] = useForm(initialFormData);
-
    // contains userID for entire site
    // change default value to null later
    const [myUniversityID, setMyUniversityID] = useSessionStorage(
       "myUniversityID",
       1
    );
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 2);
 
    // contains data for university page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
@@ -68,6 +54,32 @@ export default function Event() {
    const [eventOrg, setEventOrg] = useState(null);
    const [comments, setComments] = useState([]);
 
+   // variables that control forms
+   const [openEdit, setOpenEdit] = useState(false);
+   const [commentForEdit, setCommentForEdit] = useState(null);
+   const [eventForEdit, setEventForEdit] = useState(null);
+
+   const canEditEvent = async () => {
+      let retval = false;
+      const admins = await orgEndpoints.returnUsersRSOs(currentUser);
+      admins.forEach(
+         (admin) => (retval = retval || currentEvent.rsoID === admin.rsoID)
+      );
+      return retval;
+   };
+
+   const renderComments = async () => {
+      const comments = await commentsEndpoints.getEventComments(
+         currentEvent.eventID
+      );
+
+      if (comments) {
+         setComments(comments);
+      } else {
+         setComments([]);
+      }
+   };
+
    // function that highlights an element then unhilights it after 3 seconds
    const highlightCommentForm = () => {
       const commentForm = document.querySelector("#commentForm");
@@ -76,30 +88,24 @@ export default function Event() {
          commentForm.classList.remove(styles.highlighted);
       }, 1000);
    };
-   const addOrEditComment = async () => {
+   const addOrEditComment = async (comment, resetForm) => {
       const requestBody = {
-         text: formData.text,
-         rating: formData.rating,
+         text: comment.text,
+         rating: comment.rating,
          userID: currentUser,
          eventID: currentEvent.eventID,
       };
 
-      if (formData.commentID) {
-         await commentsEndpoints.editComment(formData.commentID, requestBody);
+      if (comment.commentID) {
+         await commentsEndpoints.editComment(comment.commentID, requestBody);
       } else {
          await commentsEndpoints.addComment(requestBody);
       }
-
       resetForm();
-      commentsEndpoints
-         .getEventComments(currentEvent.eventID)
-         .then((comments) => {
-            if (comments) {
-               setComments(comments);
-            }
-         });
+      renderComments();
    };
 
+   // function that handles deleting comment
    const deleteComment = async (commentID) => {
       const check = window.confirm(
          "Are you sure you want to delete this comment?"
@@ -107,29 +113,65 @@ export default function Event() {
       if (check) {
          await commentsEndpoints.deleteComment(commentID);
       }
-      commentsEndpoints
-         .getEventComments(currentEvent.eventID)
-         .then((comments) => {
-            if (comments) {
-               setComments(comments);
-            }
-         });
+      renderComments();
+   };
+
+   const addOrEditEvent = async (event, resetForm) => {
+      // potentially edit this to reflect new values
+      const requestBody = {
+         privacy: event.privacy,
+         name: event.name,
+         description: event.description,
+         latitude: event.latitude,
+         longitude: event.longitude,
+         contactName: event.contactName,
+         contactEmail: event.contactEmail,
+         contactNumber: event.contactNumber,
+         time: event.time,
+      };
+
+      const check = window.confirm("Are you sure you want to edit this event?");
+      if (canEditEvent() && check) {
+         const response = await eventEndpoints.editEvent(
+            event.eventID,
+            requestBody
+         );
+         console.log(response);
+         setCurrentEvent({ ...event });
+      } else {
+         window.alert("You do not not have permission to edit this event");
+      }
+      setOpenEdit(false);
    };
    useEffect(() => {
       window.scrollTo(0, 0);
-      commentsEndpoints
-         .getEventComments(currentEvent.eventID)
-         .then((comments) => {
-            if (comments) {
-               setComments([...comments]);
-            }
-         });
+      renderComments();
    }, [currentEvent]);
    return (
       <>
          <Navbar></Navbar>
          <div className={styles.container}>
-            <h1 className={styles.header}>{currentEvent.name}</h1>
+            <div className={styles.header}>
+               <h1>{currentEvent.name}</h1>
+               <Button
+                  onClick={(e) => {
+                     e.preventDefault();
+                     setOpenEdit(!openEdit);
+                     setEventForEdit({ ...currentEvent });
+                  }}
+               >
+                  {openEdit ? "Close" : "Edit Event"}
+               </Button>
+            </div>
+            {openEdit ? (
+               <EventForm
+                  recordForEdit={eventForEdit}
+                  addOrEdit={addOrEditEvent}
+               />
+            ) : (
+               ""
+            )}
+
             <Card cardTitle="Info">
                {/* <p>Affipated RSO: RSO Name</p> */}
                <p>Event Type: {currentEvent.eventType}</p>
@@ -149,59 +191,20 @@ export default function Event() {
                <p>Latitude: {currentEvent.latitude}</p>
                <p>Longitude: {currentEvent.longitude}</p>
             </Card>
+
             <div className={styles.commentSection}>
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>Comments</h1>
                </div>
-               <form id="commentForm" className={styles.commentForm}>
-                  <div className={styles.inputGroup}>
-                     <label for="commentText">Enter Comment Text</label>
-                     <input
-                        id="text"
-                        name="text"
-                        value={formData.text}
-                        minLength={1}
-                        maxLength={1024}
-                        placeholder="Leave a comment..."
-                        onChange={handleInputChange}
-                     />
-                  </div>
-
-                  <div className={styles.inputGroup}>
-                     <label for="rating">Rating 1-5</label>
-                     <input
-                        id="rating"
-                        name="rating"
-                        value={formData.rating}
-                        type="number"
-                        maxLength="1"
-                        min="1"
-                        max="5"
-                        placeholder="Rating..."
-                        className={styles.commentRating}
-                        onChange={handleInputChange}
-                     />
-                  </div>
-                  <div className={styles.commentFormControls}>
-                     <Button
-                        type="submit"
-                        onClick={(e) => {
-                           e.preventDefault();
-                           addOrEditComment();
-                        }}
-                     >
-                        Submit
-                     </Button>
-                  </div>
-               </form>
+               <CommentForm
+                  recordForEdit={commentForEdit}
+                  addOrEdit={addOrEditComment}
+               />
                <ul className={styles.commentList}>
                   {comments &&
                      comments.map((comment) => (
-                        <>
-                           <li
-                              className={styles.comment}
-                              key={comment.commentID}
-                           >
+                        <div key={comment.commentID}>
+                           <li className={styles.comment}>
                               <div className={styles.commentAuthor}>
                                  User #{comment.userID}
                               </div>
@@ -216,7 +219,7 @@ export default function Event() {
                                     <Button
                                        onClick={(e) => {
                                           e.preventDefault();
-                                          setFormData({
+                                          setCommentForEdit({
                                              ...comment,
                                              commentID: comment.commentID,
                                           });
@@ -232,15 +235,7 @@ export default function Event() {
                                        onClick={(e) => {
                                           e.preventDefault();
                                           deleteComment(comment.commentID);
-                                          commentsEndpoints
-                                             .getEventComments(
-                                                currentEvent.eventID
-                                             )
-                                             .then((comments) => {
-                                                if (comments) {
-                                                   setComments([...comments]);
-                                                }
-                                             });
+                                          renderComments();
                                        }}
                                     >
                                        Delete
@@ -250,7 +245,7 @@ export default function Event() {
                                  ""
                               )}
                            </li>
-                        </>
+                        </div>
                      ))}
                </ul>
             </div>

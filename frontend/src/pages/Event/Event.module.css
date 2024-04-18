@@ -4,7 +4,7 @@
    padding: 20px 40px;
    display: grid;
    grid-template-columns: 1fr 1fr;
-   grid-template-rows: auto 300px 1fr;
+   grid-template-rows: auto minmax(300, auto) 300px 1fr;
 
    gap: 20px;
 }
@@ -16,6 +16,108 @@
    grid-column: 1/3;
    font-size: var(--heading);
    text-align: center;
+}
+
+.container {
+   width: 100%;
+   padding: 20px 40px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: stretch;
+}
+
+.flexRow {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: row;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
+}
+
+.flexCol {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 10px;
+}
+
+.flexGrow {
+   flex-grow: 1;
+}
+
+:root {
+   --textColor: #f2ecf8;
+   --backgroundColor: #564a94;
+   --primaryColor: #f2ecf8;
+   --secondaryColor: #27254c;
+   --accentColor: #46b2d2;
+}
+
+.formDescriptor {
+   font-family: "Jua";
+   font-size: 1rem;
+   color: var(--backgroundColor);
+}
+
+.formInput {
+   width: 30em;
+   font-family: "Jua";
+   font-size: 1.3rem;
+   text-align: left;
+   color: var(--backgroundColor);
+   height: 1.6em;
+   padding-top: 0.2em;
+   padding-bottom: 0.2em;
+   padding-left: 0.5em;
+   background-color: white;
+   border-radius: 10px;
+   border: solid;
+   border-width: 1px;
+   margin-top: 16px;
+   margin-bottom: 16px;
+}
+
+.formTitle {
+   font-family: "Jua";
+   font-size: 2rem;
+   color: var(--backgroundColor);
+   background-color: var(--primaryColor);
+   text-align: center;
+   justify-content: center;
+   flex-wrap: wrap;
+   float: left;
+   align-items: center;
+   padding-bottom: 1.5em;
+}
+
+.uploadPictureButton {
+   float: right;
+   padding: 5px;
+   min-height: 20px;
+   min-width: 80px;
+   font-size: 12px;
+   padding: 10px;
+   background-color: var(--accent);
+   color: var(--text);
+   font-family: "Jua";
+   text-align: center;
+   cursor: pointer;
+   outline: inherit;
+   border: none;
+   border-radius: 10px;
+   box-shadow: 0 2px 6px var(--shadow-primary);
+}
+
+.uploadPictureButton:hover {
+   filter: brightness(0.8);
+}
+
+.uploadPictureButton:active {
+   filter: brightness(0.6);
 }
 
 .section,

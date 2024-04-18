@@ -111,7 +111,6 @@ async function getByID(id = null, requestBody) {
    }
 
    const url = buildPath(`/api/users/user/${id}`);
-   let obj = requestBody;
 
    let config = {
       method: "post",
@@ -124,7 +123,6 @@ async function getByID(id = null, requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request
@@ -156,4 +154,4 @@ async function getByID(id = null, requestBody) {
    }
 }
 
-export { login, register, getByID};
+export { login, register, getByID };
