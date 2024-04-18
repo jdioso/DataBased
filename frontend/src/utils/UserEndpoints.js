@@ -105,15 +105,15 @@ async function register(requestBody) {
 }
 
 // function that calls login endpoint
-async function getByID(id = null, requestBody) {
-   if (id == null || !requestBody) {
+async function getByID(id = null) {
+   if (id == null) {
       return null;
    }
 
    const url = buildPath(`/api/users/user/${id}`);
 
    let config = {
-      method: "post",
+      method: "get",
       url: url,
       headers: {
          headers: {

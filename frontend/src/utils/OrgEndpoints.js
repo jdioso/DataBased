@@ -315,7 +315,58 @@ async function removeRSOMember(rsoID = null, userID = null, requestBody) {
    }
 }
 
-// function to remove user from rso
+// function to return RSO's that the user is a member of
+async function returnMemberRSOs(userID = null) {
+   if (userID == null) {
+      return null;
+   }
+
+   const url = buildPath(`/api/rso/userRSOs/${userID}`);
+
+   // settings for request
+   let config = {
+      method: "get",
+      url: url,
+      headers: {
+         headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers":
+               "Origin, X-Requested-With, Content-Type, Accept",
+            "Content-Type": "application/json",
+         },
+      },
+   };
+
+   // handles calling request
+   const response = await axios.request(config).catch((error) => {
+      // handles different error cases
+      if (error.response) {
+         // The request was made and the server responded with a status code
+         // that falls out of the range of 2xx
+         console.log(error.response.data);
+         console.log(error.response.status);
+         console.log(error.response.headers);
+      } else if (error.request) {
+         // The request was made but no response was received
+         // `error.request` is an instance of XMLHttpRequest in the browser
+         // and an instance of http.ClientRequest in node.js
+         console.log(error.request);
+      } else {
+         // Something happened in setting up the request that triggered an Error
+         console.log("Error", error.message);
+      }
+   });
+
+   // return for failed request
+   if (!response) {
+      return null;
+   } else {
+      // return data if success
+      return response.data;
+   }
+}
+
+// function to return RSO's that the user is admin for
 async function returnUsersRSOs(userID = null) {
    if (userID == null) {
       return null;
@@ -482,4 +533,5 @@ export {
    returnUsersRSOs,
    searchNameRSO,
    getRSOMembers,
+   returnMemberRSOs,
 };
