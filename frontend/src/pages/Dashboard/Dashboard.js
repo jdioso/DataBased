@@ -9,6 +9,7 @@ import { useSessionStorage } from "usehooks-ts";
 import * as orgEndpoints from "../../utils/OrgEndpoints";
 import * as uniEndpoints from "../../utils/UniversityEndpoints";
 import * as userEndpoints from "../../utils/UserEndpoints";
+import UniversityForm from "../University/UniversityForm";
 
 export default function Dashboard() {
    const navigate = useNavigate();
@@ -37,6 +38,11 @@ export default function Dashboard() {
    // page specific data
    const [orgs, setOrgs] = useState([]);
 
+   // variables that control forms
+   const [openUniForm, setOpenUniForm] = useState(false);
+   const [uniRecord, setUniRecord] = useState(null);
+   const [openOrgForm, setOpenOrgForm] = useState(false);
+   const [orgRecord, setOrgRecord] = useState(null);
    // grabs information of selected university and opens university info page
    const openUniversity = async (university) => {
       setCurrentUniversity({ ...university });
@@ -94,11 +100,73 @@ export default function Dashboard() {
                   Open University
                </Button>
             </div>
+            <Button
+               onClick={(e) => {
+                  e.preventDefault();
+                  setOpenUniForm(!openUniForm);
+                  // setEventForEdit({ ...currentEvent });
+               }}
+            >
+               {openUniForm ? "Close" : "Add University"}
+            </Button>
+            <Button
+               onClick={(e) => {
+                  e.preventDefault();
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        setUniRecord(myUniversity);
+                        setOpenUniForm(!openUniForm);
+                        // setEventForEdit({ ...currentEvent });
+                     }}
+                  >
+                     {openUniForm ? "Close" : "Add Uni"}
+                  </Button>;
+                  setOpenUniForm(!openUniForm);
+                  setOrgRecord({ ...myUniversity });
+               }}
+            >
+               {openUniForm ? "Close" : "Edit University"}
+            </Button>
+            {openUniForm ? <UniversityForm recordForEdit={uniRecord} /> : ""}
             <div className={styles.section}>
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>
                      My Organizations
                   </h1>
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        setOpenUniForm(!openUniForm);
+                        // setEventForEdit({ ...currentEvent });
+                     }}
+                  >
+                     {openUniForm ? "Close" : "Add University"}
+                  </Button>
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        <Button
+                           onClick={(e) => {
+                              e.preventDefault();
+                              setUniRecord(myUniversity);
+                              setOpenUniForm(!openUniForm);
+                              // setEventForEdit({ ...currentEvent });
+                           }}
+                        >
+                           {openUniForm ? "Close" : "Add Uni"}
+                        </Button>;
+                        setOpenUniForm(!openUniForm);
+                        setOrgRecord({ uniRecord });
+                     }}
+                  >
+                     {openUniForm ? "Close" : "Edit University"}
+                  </Button>
+                  {openUniForm ? (
+                     <UniversityForm recordForEdit={uniRecord} />
+                  ) : (
+                     ""
+                  )}
                </div>
                <div
                   style={{
