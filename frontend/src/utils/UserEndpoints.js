@@ -1,7 +1,6 @@
 import axios from "axios";
 import buildPath from "./Path";
 
-// function that calls register endpoint
 async function login(requestBody) {
    if (!requestBody) {
       return null;
