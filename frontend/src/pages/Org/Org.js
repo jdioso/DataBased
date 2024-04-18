@@ -73,7 +73,14 @@ export default function Org() {
       } else {
          window.alert("You do not not have permission to add events.");
       }
-      // setOpenAdd(false);
+      setOpenAdd(false);
+      eventEndpoints.getEventsByOrg(currentOrg.rsoID).then((events) => {
+         if (events) {
+            setOrgEvents([...events]);
+         } else {
+            setOrgEvents([]);
+         }
+      });
    };
 
    // grabs information of event university and opens event info page

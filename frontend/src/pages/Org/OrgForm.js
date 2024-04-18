@@ -5,6 +5,14 @@ import styles from "./Org.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "usehooks-ts";
 
+const initialFormData = {
+   name: "",
+   description: "",
+   saID: null,
+   domain: "",
+   picture: "",
+   numStudents: 0,
+};
 export default function OrgForm() {
    const navigate = useNavigate();
 
@@ -18,12 +26,9 @@ export default function OrgForm() {
 
    return (
       <>
-         <div className={styles.container}>
+         <div>
             <div className={styles.flexRow}>
                <Form formTitle="Create RSO">
-                  <Button className={styles.backButton} size="sm">
-                     Back
-                  </Button>
                   <h2 className={styles.formDescriptor}>Name</h2>
                   <center>
                      <input className={styles.formInput} type="text" />

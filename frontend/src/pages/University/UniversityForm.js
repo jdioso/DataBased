@@ -31,16 +31,13 @@ export default function UniversityForm(recordForEdit, addOrEdit) {
    const handleSubmit = () => addOrEdit(formData, resetForm);
 
    useEffect(() => {
-      setFormData(recordForEdit, addOrEdit);
+      setFormData(recordForEdit);
    }, [recordForEdit]);
    return (
       <>
-         <div className={styles.container}>
+         <div>
             <div className={styles.flexRow}>
-               <Form formTitle="Add/Edit University">
-                  <Button className={styles.backButton} size="sm">
-                     Back
-                  </Button>
+               <Form formTitle="Edit University">
                   <h2 className={styles.formDescriptor}>University Name</h2>
                   <center>
                      <input

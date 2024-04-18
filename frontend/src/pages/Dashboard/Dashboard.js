@@ -10,6 +10,7 @@ import * as orgEndpoints from "../../utils/OrgEndpoints";
 import * as uniEndpoints from "../../utils/UniversityEndpoints";
 import * as userEndpoints from "../../utils/UserEndpoints";
 import UniversityForm from "../University/UniversityForm";
+import OrgForm from "../Org/OrgForm";
 
 export default function Dashboard() {
    const navigate = useNavigate();
@@ -20,7 +21,8 @@ export default function Dashboard() {
       "myUniversity",
       null
    );
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 3);
+
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", null);
 
    // contains data for university page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
@@ -29,11 +31,6 @@ export default function Dashboard() {
    );
    // contains data for org/rso page
    const [currentOrg, setCurrentOrg] = useSessionStorage("currentOrg", null);
-   // contains data for event page
-   const [currentEvent, setCurrentEvent] = useSessionStorage(
-      "currentEvent",
-      null
-   );
 
    // page specific data
    const [orgs, setOrgs] = useState([]);
@@ -43,6 +40,7 @@ export default function Dashboard() {
    const [uniRecord, setUniRecord] = useState(null);
    const [openOrgForm, setOpenOrgForm] = useState(false);
    const [orgRecord, setOrgRecord] = useState(null);
+
    // grabs information of selected university and opens university info page
    const openUniversity = async (university) => {
       setCurrentUniversity({ ...university });
@@ -60,7 +58,8 @@ export default function Dashboard() {
       const index = email.indexOf("@");
       return email.substring(index);
    };
-   // gets user's university
+
+   // function that returns user's univerisity
    const getUserUniversity = async () => {
       const userInfo = await userEndpoints.getByID(currentUser);
 
@@ -68,9 +67,30 @@ export default function Dashboard() {
          getDomain(userInfo.email)
       );
       if (userUniversity) {
-         setCurrentUniversity(userUniversity);
+         setMyUniversity(userUniversity);
       }
    };
+
+   // function that adds new rso
+   const addOrg = async (org, resetForm) => {
+      console.log(org);
+      const responseBody = {
+         // fill with only add rso body
+      };
+
+      // checks
+      // check if all the members exist
+      // if not, send alert that vaguely says check all member emails
+      // call request to add new rso
+      // use current user id for rso creation
+      // individually add all 4 other members to rso
+      //
+   };
+
+   // function that edits existing rso
+   const editOrg = async (org, restForm) => {};
+
+   // function that the RSOs that the user is apart of
    const renderMyOrgs = async () => {
       const orgs = await orgEndpoints.returnMemberRSOs(currentUser);
 
@@ -88,47 +108,30 @@ export default function Dashboard() {
       <>
          <Navbar />
          <div className={styles.container}>
-            <div className={styles.sectionHeader}>
-               <h1 className={styles.sectionHeaderTitle}>University</h1>
-               <Button
-                  onClick={(e) => {
-                     e.preventDefault();
-                     getUserUniversity();
-                     openUniversity();
-                  }}
-               >
-                  Open University
-               </Button>
-            </div>
-            <Button
-               onClick={(e) => {
-                  e.preventDefault();
-                  setOpenUniForm(!openUniForm);
-                  // setEventForEdit({ ...currentEvent });
-               }}
-            >
-               {openUniForm ? "Close" : "Add University"}
-            </Button>
-            <Button
-               onClick={(e) => {
-                  e.preventDefault();
+            <div className={styles.section}>
+               <div className={styles.sectionHeader}>
+                  <h1 className={styles.sectionHeaderTitle}>University</h1>
                   <Button
                      onClick={(e) => {
                         e.preventDefault();
-                        setUniRecord(myUniversity);
-                        setOpenUniForm(!openUniForm);
-                        // setEventForEdit({ ...currentEvent });
+                        getUserUniversity();
+                        openUniversity();
                      }}
                   >
-                     {openUniForm ? "Close" : "Add Uni"}
-                  </Button>;
-                  setOpenUniForm(!openUniForm);
-                  setOrgRecord({ ...myUniversity });
-               }}
-            >
-               {openUniForm ? "Close" : "Edit University"}
-            </Button>
-            {openUniForm ? <UniversityForm recordForEdit={uniRecord} /> : ""}
+                     Open University
+                  </Button>
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        setUniRecord({ ...myUniversity });
+                        setOpenUniForm(!openUniForm);
+                     }}
+                  >
+                     {openUniForm ? "Close" : "Edit University"}
+                  </Button>
+               </div>
+               {openUniForm ? <UniversityForm recordForEdit={uniRecord} /> : ""}
+            </div>
             <div className={styles.section}>
                <div className={styles.sectionHeader}>
                   <h1 className={styles.sectionHeaderTitle}>
@@ -137,37 +140,16 @@ export default function Dashboard() {
                   <Button
                      onClick={(e) => {
                         e.preventDefault();
-                        setOpenUniForm(!openUniForm);
-                        // setEventForEdit({ ...currentEvent });
+
+                        setOpenOrgForm(!openOrgForm);
+                        setOrgRecord({ ...myUniversity });
                      }}
                   >
-                     {openUniForm ? "Close" : "Add University"}
+                     {openOrgForm ? "Close" : "Add Org"}
                   </Button>
-                  <Button
-                     onClick={(e) => {
-                        e.preventDefault();
-                        <Button
-                           onClick={(e) => {
-                              e.preventDefault();
-                              setUniRecord(myUniversity);
-                              setOpenUniForm(!openUniForm);
-                              // setEventForEdit({ ...currentEvent });
-                           }}
-                        >
-                           {openUniForm ? "Close" : "Add Uni"}
-                        </Button>;
-                        setOpenUniForm(!openUniForm);
-                        setOrgRecord({ uniRecord });
-                     }}
-                  >
-                     {openUniForm ? "Close" : "Edit University"}
-                  </Button>
-                  {openUniForm ? (
-                     <UniversityForm recordForEdit={uniRecord} />
-                  ) : (
-                     ""
-                  )}
                </div>
+               {openOrgForm ? <OrgForm /> : ""}
+
                <div
                   style={{
                      display: "flex",
@@ -186,6 +168,14 @@ export default function Dashboard() {
                               }}
                            >
                               Open
+                           </Button>
+                           <Button
+                              size="sm"
+                              onClick={(e) => {
+                                 e.preventDefault();
+                              }}
+                           >
+                              Edit
                            </Button>
                         </Square>
                      ))}
