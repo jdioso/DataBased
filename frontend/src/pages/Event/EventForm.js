@@ -46,9 +46,9 @@ export default function EventForm({ recordForEdit, addOrEdit }) {
          <div className={styles.container}>
             <div className={styles.flexRow}>
                <Form formTitle="Add/Edit Event">
-                  <Button className={styles.backButton} size="sm">
+                  {/* <Button className={styles.backButton} size="sm">
                      Back
-                  </Button>
+                  </Button> */}
                   <h2 className={styles.formDescriptor}>Event Name</h2>
                   <center>
                      <input
@@ -74,14 +74,36 @@ export default function EventForm({ recordForEdit, addOrEdit }) {
                   </center>
                   <h2 className={styles.formDescriptor}>Event Privacy</h2>
                   <center>
-                     <input
-                        id="privacy"
-                        name="privacy"
-                        value={formData.privacy}
-                        onChange={handleInputChange}
-                        className={styles.formInput}
-                        type="text"
-                     />
+                     <div>
+                        <input
+                           type="radio"
+                           id="public"
+                           name="privacy"
+                           value="Public"
+                           onChange={handleInputChange}
+                           required
+                        />
+                        <label for="public">Public</label>
+
+                        <input
+                           type="radio"
+                           id="private"
+                           name="privacy"
+                           value="Private"
+                           onChange={handleInputChange}
+                        />
+                        <label for="private">Private</label>
+
+                        <input
+                           type="radio"
+                           id="rso"
+                           name="privacy"
+                           value="RSO"
+                           onChange={handleInputChange}
+                        />
+                        <label for="rso">RSO</label>
+                     </div>
+
                      <br />
                   </center>
                   <h2 className={styles.formDescriptor}>Description</h2>
@@ -113,7 +135,7 @@ export default function EventForm({ recordForEdit, addOrEdit }) {
                      <input
                         id="longitude"
                         name="longitude"
-                        value={formData.latitude}
+                        value={formData.longitude}
                         onChange={handleInputChange}
                         className={styles.formInput}
                         type="text"
@@ -137,7 +159,7 @@ export default function EventForm({ recordForEdit, addOrEdit }) {
                      <input
                         id="contactEmail"
                         name="contactEmail"
-                        value={formData.latitude}
+                        value={formData.contactEmail}
                         onChange={handleInputChange}
                         className={styles.formInput}
                         type="text"
@@ -164,19 +186,19 @@ export default function EventForm({ recordForEdit, addOrEdit }) {
                         value={formData.date}
                         onChange={handleInputChange}
                         className={styles.formInput}
-                        type="text"
+                        type="date"
                      />
                      <br />
                   </center>
                   <h2 className={styles.formDescriptor}>Time</h2>
                   <center>
                      <input
+                        type="time"
                         id="time"
                         name="time"
                         value={formData.time}
                         onChange={handleInputChange}
                         className={styles.formInput}
-                        type="text"
                      />
                      <br />
                   </center>

@@ -27,7 +27,7 @@ export default function Org() {
       "myUniversityID",
       4
    );
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 1);
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 2);
 
    // contains data for university page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
@@ -48,7 +48,7 @@ export default function Org() {
    // variables that control forms
    const [eventForEdit, setEventForEdit] = useState(null);
    const [openAdd, setOpenAdd] = useState(false);
-   const canEditEvent = async () => {
+   const canAddEvent = async () => {
       let retval = false;
       const admins = await orgEndpoints.returnUsersRSOs(currentUser);
       admins.forEach(
@@ -59,26 +59,21 @@ export default function Org() {
    const addEvent = async (event, resetForm) => {
       // potentially edit this to reflect new values
       const requestBody = {
-         privacy: event.privacy,
-         name: event.name,
-         description: event.description,
-         latitude: event.latitude,
-         longitude: event.longitude,
-         contactName: event.contactName,
-         contactEmail: event.contactEmail,
-         contactNumber: event.contactNumber,
-         time: event.time,
+         ...event,
+         rsoID: currentOrg.rsoID,
+         universityID: currentUniversity.universityID,
+         approved: "true",
       };
 
       const check = window.confirm("Are you sure you want to edit this event?");
-      if (canEditEvent() && check) {
+      if (canAddEvent() && check) {
+         // console.log(requestBody);
          const response = await eventEndpoints.addEvent(requestBody);
          console.log(response);
-         setCurrentEvent({ ...event });
       } else {
          window.alert("You do not not have permission to add events.");
       }
-      setOpenAdd(false);
+      // setOpenAdd(false);
    };
 
    // grabs information of event university and opens event info page
@@ -121,7 +116,6 @@ export default function Org() {
 
             <div className={styles.eventsWrapper}>
                <Card cardTitle="Events">
-                  <Button o>Add Event</Button>
                   <Button
                      onClick={(e) => {
                         e.preventDefault();
