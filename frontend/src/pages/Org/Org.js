@@ -9,6 +9,7 @@ import { useSessionStorage } from "usehooks-ts";
 import * as eventEndpoints from "../../utils/EventEndpoints";
 import EventForm from "../Event/EventForm";
 import * as orgEndpoints from "../../utils/OrgEndpoints";
+import * as userEndpoints from "../../utils/UserEndpoints";
 
 const orgPlaceholder = {
    rsoID: -1,
@@ -20,14 +21,12 @@ const orgPlaceholder = {
 };
 export default function Org() {
    const navigate = useNavigate();
-
-   // contains userID for entire site
-   // change default value to null later
-   const [myUniversityID, setMyUniversityID] = useSessionStorage(
-      "myUniversityID",
-      4
+   const [myUniversity, setMyUniversity] = useSessionStorage(
+      "myUniversity",
+      null
    );
-   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", 2);
+   // contains userID for entire site
+   const [currentUser, setCurrentUser] = useSessionStorage("currentUser", null);
 
    // contains data for university page
    const [currentUniversity, setCurrentUniversity] = useSessionStorage(
@@ -44,6 +43,7 @@ export default function Org() {
 
    // page specific data
    const [orgEvents, setOrgEvents] = useState([]);
+   const [isMember, setIsMember] = useState(false);
 
    // variables that control forms
    const [eventForEdit, setEventForEdit] = useState(null);
@@ -56,31 +56,53 @@ export default function Org() {
       );
       return retval;
    };
+
+   const isOverlapping = async (latitude, longitude, time) => {
+      const events = await eventEndpoints.getAllEvents();
+      let retval = false;
+      events.forEach((event) => {
+         retval =
+            retval ||
+            (event.time === time &&
+               event.latitude === latitude &&
+               event.longitude === longitude);
+      });
+      return retval;
+   };
    const addEvent = async (event, resetForm) => {
       // potentially edit this to reflect new values
       const requestBody = {
          ...event,
-         rsoID: currentOrg.rsoID,
-         universityID: currentUniversity.universityID,
+         rsoID: event.privacy === "RSO" ? currentOrg.rsoID : null,
+         universityID: myUniversity.universityID,
          approved: "true",
       };
 
-      const check = window.confirm("Are you sure you want to edit this event?");
-      if (canAddEvent() && check) {
+      const check = window.confirm("Are you sure you want to add this event?");
+      if (canAddEvent()) {
          // console.log(requestBody);
-         const response = await eventEndpoints.addEvent(requestBody);
-         console.log(response);
+         if (check) {
+            if (isOverlapping(event.latitude, event.longitude, event.time)) {
+               window.alert(
+                  `There is already a location happening at latitude: ${event.latitude} longitude: ${event.longitude} at time: ${event.time}`
+               );
+            } else {
+               const response = await eventEndpoints.addEvent(requestBody);
+               // setOpenAdd(false);
+               eventEndpoints
+                  .getEventsByOrg(currentOrg.rsoID)
+                  .then((events) => {
+                     if (events) {
+                        setOrgEvents([...events]);
+                     } else {
+                        setOrgEvents([]);
+                     }
+                  });
+            }
+         }
       } else {
          window.alert("You do not not have permission to add events.");
       }
-      setOpenAdd(false);
-      eventEndpoints.getEventsByOrg(currentOrg.rsoID).then((events) => {
-         if (events) {
-            setOrgEvents([...events]);
-         } else {
-            setOrgEvents([]);
-         }
-      });
    };
 
    // grabs information of event university and opens event info page
@@ -91,22 +113,38 @@ export default function Org() {
 
    // function that returns true if current user is member of rso
    // returns false if not
-   const isOrgMember = () => {};
+   const checkIfMember = async () => {
+      let retval = false;
+      const userRSOs = await orgEndpoints.returnMemberRSOs(currentUser);
+      console.log(userRSOs);
+      if (userRSOs) {
+         userRSOs.forEach((rso) => {
+            retval = retval || rso.rsoID === currentOrg.rsoID;
+         });
+      }
+      setIsMember(retval);
+   };
    useEffect(() => {
       window.scrollTo(0, 0);
+      checkIfMember();
+
       eventEndpoints.getEventsByOrg(currentOrg.rsoID).then((events) => {
-         if (events) {
+         if (events && isMember) {
             setOrgEvents([...events]);
          } else {
             setOrgEvents([]);
          }
       });
+
       // get events for current org
-   }, [currentOrg]);
+   }, [isMember]);
    return (
       <>
          <Navbar />
-         <h1 className={styles.header}>{currentOrg.name}</h1>
+         <div>
+            <h1 className={styles.header}>{currentOrg.name}</h1>
+         </div>
+
          <div className={styles.container}>
             <div className={styles.sidebarWrapper}>
                <Sidebar className={styles.sidebar}>
@@ -118,6 +156,36 @@ export default function Org() {
                      <p>Number of Members: {currentOrg.numMembers}</p>
                      PERSON LOGgit
                   </div>
+
+                  {isMember ? (
+                     <Button
+                        onClick={(e) => {
+                           e.preventDefault();
+                           orgEndpoints
+                              .removeRSOMember(currentOrg.rsoID, currentUser)
+                              .then(() => {
+                                 checkIfMember();
+                              });
+                        }}
+                     >
+                        Leave RSO
+                     </Button>
+                  ) : (
+                     <Button
+                        onClick={(e) => {
+                           e.preventDefault();
+                           orgEndpoints
+                              .addRSOMember(currentOrg.rsoID, {
+                                 userID: currentUser,
+                              })
+                              .then(() => {
+                                 checkIfMember();
+                              });
+                        }}
+                     >
+                        Join
+                     </Button>
+                  )}
                </Sidebar>
             </div>
 

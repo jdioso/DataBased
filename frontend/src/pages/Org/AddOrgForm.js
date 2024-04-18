@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Button from "../../components/Button/Button";
 import Form from "../../components/Form/Form";
-import styles from "./University.module.css";
+import styles from "./Org.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "usehooks-ts";
 import { useForm } from "../../hooks/useForm";
@@ -9,12 +9,13 @@ import { useForm } from "../../hooks/useForm";
 const initialFormData = {
    name: "",
    description: "",
-   saID: null,
-   domain: "",
-   picture: "",
-   numStudents: 0,
+   primaryEmail: "",
+   email1: "",
+   email2: "",
+   email3: "",
+   email4: "",
 };
-export default function UniversityForm({ recordForEdit, addOrEdit }) {
+export default function AddOrgForm({ addOrEdit }) {
    const [
       formData,
       setFormData,
@@ -24,22 +25,18 @@ export default function UniversityForm({ recordForEdit, addOrEdit }) {
       resetForm,
    ] = useForm(initialFormData);
 
-   const navigate = useNavigate();
-
    const [userID, setUserID] = useSessionStorage("userID", null);
+   // function that handles login
+   // also saves userid to session storage
 
    const handleSubmit = () => addOrEdit(formData, resetForm);
-
-   useEffect(() => {
-      setFormData(recordForEdit);
-   }, [recordForEdit]);
 
    return (
       <>
          <div>
             <div className={styles.flexRow}>
-               <Form formTitle="Edit University">
-                  <h2 className={styles.formDescriptor}>University Name</h2>
+               <Form formTitle="Create RSO">
+                  <h2 className={styles.formDescriptor}>Name</h2>
                   <center>
                      <input
                         id="name"
@@ -49,6 +46,7 @@ export default function UniversityForm({ recordForEdit, addOrEdit }) {
                         className={styles.formInput}
                         type="text"
                      />
+                     <br />
                   </center>
                   <h2 className={styles.formDescriptor}>Description</h2>
                   <center>
@@ -60,43 +58,68 @@ export default function UniversityForm({ recordForEdit, addOrEdit }) {
                         className={styles.formInput}
                         type="text"
                      />
+                     <br />
                   </center>
-                  <h2 className={styles.formDescriptor}>Number of Students</h2>
+                  <h2 className={styles.formDescriptor}>Primary Owner Email</h2>
                   <center>
                      <input
-                        id="numStudents"
-                        name="numStudents"
-                        value={formData.numStudents}
-                        onChange={handleInputChange}
-                        className={styles.formInput}
-                        type="text"
-                     />
-                  </center>
-                  <h2 className={styles.formDescriptor}>Location</h2>
-                  <center>
-                     <input
-                        id="location"
-                        name="location"
-                        value={formData.location}
+                        id="primaryEmail"
+                        name="primaryEmail"
+                        value={formData.primaryEmail}
                         onChange={handleInputChange}
                         className={styles.formInput}
                         type="text"
                      />
                      <br />
                   </center>
-                  <h2 className={styles.formDescriptor}>Picture Link</h2>
+                  <h2 className={styles.formDescriptor}>Member 1 Email</h2>
                   <center>
                      <input
-                        id="picture"
-                        name="picture"
-                        value={formData.picture}
+                        id="email1"
+                        name="email1"
+                        value={formData.email1}
                         onChange={handleInputChange}
                         className={styles.formInput}
                         type="text"
                      />
                      <br />
                   </center>
-
+                  <h2 className={styles.formDescriptor}>Member 2 Email</h2>
+                  <center>
+                     <input
+                        id="email2"
+                        name="email2"
+                        value={formData.email2}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        type="text"
+                     />
+                     <br />
+                  </center>
+                  <h2 className={styles.formDescriptor}>Member 3 Email</h2>
+                  <center>
+                     <input
+                        id="email3"
+                        name="email3"
+                        value={formData.email3}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        type="text"
+                     />
+                     <br />
+                  </center>
+                  <h2 className={styles.formDescriptor}>Member 4 Email</h2>
+                  <center>
+                     <input
+                        id="email4"
+                        name="email4"
+                        value={formData.email4}
+                        onChange={handleInputChange}
+                        className={styles.formInput}
+                        type="text"
+                     />
+                     <br />
+                  </center>
                   <center>
                      <Button
                         size="sm"

@@ -10,7 +10,8 @@ import * as orgEndpoints from "../../utils/OrgEndpoints";
 import * as uniEndpoints from "../../utils/UniversityEndpoints";
 import * as userEndpoints from "../../utils/UserEndpoints";
 import UniversityForm from "../University/UniversityForm";
-import OrgForm from "../Org/OrgForm";
+import OrgForm from "../Org/AddOrgForm";
+import AddOrgForm from "../Org/AddOrgForm";
 
 export default function Dashboard() {
    const navigate = useNavigate();
@@ -69,22 +70,50 @@ export default function Dashboard() {
       if (userUniversity) {
          setMyUniversity(userUniversity);
       }
+      return userUniversity;
+   };
+
+   const emailToUserID = async (email) => {
+      let user = await userEndpoints.getByEmail(email);
+
+      return user ? user.userID : null;
    };
 
    // function that adds new rso
-   const addOrg = async (org, resetForm) => {
-      console.log(org);
-      const responseBody = {
-         // fill with only add rso body
-      };
+   const addOrg = async (orgData, resetForm) => {
+      const primMember = await emailToUserID(orgData.primaryEmail);
+      const member1 = await emailToUserID(orgData.email1);
+      const member2 = await emailToUserID(orgData.email2);
+      const member3 = await emailToUserID(orgData.email3);
+      const member4 = await emailToUserID(orgData.email4);
 
-      // checks
-      // check if all the members exist
-      // if not, send alert that vaguely says check all member emails
-      // call request to add new rso
-      // use current user id for rso creation
-      // individually add all 4 other members to rso
-      //
+      if (primMember && member1 && member2 && member3 && member4) {
+         const requestBody = {
+            userID: primMember,
+            name: orgData.name,
+            numMembers: 5,
+            description: orgData.description,
+         };
+         const response = await orgEndpoints.createRSO(requestBody);
+         if (!response) {
+            window.alert("RSO already exists");
+            return;
+         }
+
+         const newRSOID = response.rsoID;
+         console.log(response);
+         await orgEndpoints.addRSOMember(newRSOID, { userID: primMember });
+         await orgEndpoints.addRSOMember(newRSOID, { userID: member1 });
+         await orgEndpoints.addRSOMember(newRSOID, { userID: member2 });
+         await orgEndpoints.addRSOMember(newRSOID, { userID: member3 });
+         await orgEndpoints.addRSOMember(newRSOID, { userID: member4 });
+
+         // setOpenOrgForm(false);
+         // resetForm();
+         renderMyOrgs();
+      } else {
+         window.alert("One of the emails is not valid.");
+      }
    };
 
    // function that edits existing rso
@@ -114,7 +143,9 @@ export default function Dashboard() {
                   <Button
                      onClick={(e) => {
                         e.preventDefault();
-                        getUserUniversity();
+                        getUserUniversity().then((university) => {
+                           setCurrentUniversity(university);
+                        });
                         openUniversity();
                      }}
                   >
@@ -142,13 +173,13 @@ export default function Dashboard() {
                         e.preventDefault();
 
                         setOpenOrgForm(!openOrgForm);
-                        setOrgRecord({ ...myUniversity });
+                        setOrgRecord(null);
                      }}
                   >
                      {openOrgForm ? "Close" : "Add Org"}
                   </Button>
                </div>
-               {openOrgForm ? <OrgForm /> : ""}
+               {openOrgForm ? <AddOrgForm addOrEdit={addOrg} /> : ""}
 
                <div
                   style={{

@@ -163,15 +163,15 @@ export default function Event() {
                >
                   {openEdit ? "Close" : "Edit Event"}
                </Button>
+               {openEdit ? (
+                  <EventForm
+                     recordForEdit={eventForEdit}
+                     addOrEdit={addOrEditEvent}
+                  />
+               ) : (
+                  ""
+               )}
             </div>
-            {openEdit ? (
-               <EventForm
-                  recordForEdit={eventForEdit}
-                  addOrEdit={addOrEditEvent}
-               />
-            ) : (
-               ""
-            )}
 
             <Card cardTitle="Info">
                {/* <p>Affipated RSO: RSO Name</p> */}

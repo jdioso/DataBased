@@ -263,13 +263,12 @@ async function addRSOMember(rsoID = null, requestBody) {
 }
 
 // function to remove user from rso
-async function removeRSOMember(rsoID = null, userID = null, requestBody) {
-   if (rsoID === null || userID == null || !requestBody) {
+async function removeRSOMember(rsoID = null, userID = null) {
+   if (rsoID === null || userID == null) {
       return null;
    }
 
    const url = buildPath(`/api/rso/${rsoID}/members/${userID}`);
-   let obj = requestBody;
 
    // settings for request
    let config = {
@@ -283,7 +282,6 @@ async function removeRSOMember(rsoID = null, userID = null, requestBody) {
             "Content-Type": "application/json",
          },
       },
-      data: obj,
    };
 
    // handles calling request

@@ -1,10 +1,19 @@
+/* 
+.container {
+   width: 100%;
+   padding: 20px 40px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: stretch;
+} */
 .container {
    box-sizing: border-box;
    width: 100%;
    padding: 20px 40px;
    display: grid;
    grid-template-columns: 1fr 1fr;
-   grid-template-rows: auto minmax(300, auto) 300px 1fr;
+   grid-template-rows: auto 300px 1fr;
 
    gap: 20px;
 }
@@ -16,15 +25,9 @@
    grid-column: 1/3;
    font-size: var(--heading);
    text-align: center;
-}
-
-.container {
-   width: 100%;
-   padding: 20px 40px;
+   align-items: center;
    display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: stretch;
+   gap: 30px;
 }
 
 .flexRow {
