@@ -19,7 +19,7 @@ export default function Register() {
    const [formData, setFormData] = useState(initialFormData);
    const [currentUser, setCurrentUser] = useSessionStorage(
       "currentUser",
-      1
+      null
    ); 
    const [errors, setErrors] = useState({});
    const navigate = useNavigate(); 
