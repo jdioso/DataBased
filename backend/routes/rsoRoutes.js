@@ -280,11 +280,19 @@ router.get('/rsoAdmin/:userID', async (req, res) => {
 router.get('/userRSOs/:userID', async (req, res) => {
 	const userID = req.params;
 	try {
-		const rsoList = await db.rso_members.findAll({
-			where: { userID }
+		const rsoLists = await db.rso_members.findAll({
+			where: { userID: userID }
 		});
-		if (rsoList.length > 0) {
-			res.status(200).json(rsoList);
+
+		const rsoIDs = rsoLists.map(entry => entry.rsoID);
+
+		const userRSOs = await db.rsos.findAll({
+			where: {
+				rsoID: rsoIDs
+			}
+		});
+		if (userRSOs.length > 0) {
+			res.status(200).json(userRSOs);
 		} else {
 			res.status(404).json({ message: 'User is not a part of any RSOs '});
 		}
