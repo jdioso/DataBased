@@ -73,7 +73,7 @@ export default function University() {
 
    useEffect(() => {
       // window.scrollTo(0, 0);
-      orgEndpoints.getOrgs().then((orgs) => {
+      orgEndpoints.searchAllRSOs().then((orgs) => {
          if (orgs) {
             setOrgs([...orgs]);
          }

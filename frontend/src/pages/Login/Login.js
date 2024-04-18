@@ -16,9 +16,14 @@ export default function Login() {
    const [formData, setFormData] = useState(initialFormData);
    const [currentUser, setCurrentUser] = useSessionStorage(
       "currentUser",
-      null
+      1
    ); 
    const [errors, setErrors] = useState({});
+   const navigate = useNavigate(); 
+
+   const toggleComponent = () => {
+      navigate("/register"); 
+   };
 
    const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -26,12 +31,6 @@ export default function Login() {
         ...formData,
         [name]: value
       });
-   };
-
-   const navigate = useNavigate(); 
-
-   const openDashboard = async () => {
-      navigate("/dashboard");
    };
 
    const loginUser = async () => {
@@ -50,6 +49,7 @@ export default function Login() {
           setCurrentUser(response.user);
           setFormData(initialFormData); 
           setErrors({});
+          navigate("/dashboard"); 
         } else {
           setErrors({ message: response.message });
         }
@@ -57,8 +57,6 @@ export default function Login() {
         console.error("Error during login:", error);
         setErrors({ message: "An unexpected error occurred" });
    }
-
-   openDashboard(); 
 }
 
    return (
@@ -68,24 +66,41 @@ export default function Login() {
          <Form formTitle="Login">
             <h2 className={styles.formDescriptor}>Email</h2>
             <center>
-               <input className={styles.formInput} type="text" name="email" value={formData.email} onChange={handleInputChange}/>
+               <input 
+                  className={styles.formInput}
+                  type="text" 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleInputChange}
+               />
                 <br />
              </center>
-             <h2 className={styles.formDescriptor}>Password</h2>
+
+            <h2 className={styles.formDescriptor}>Password</h2>
             <center>
-                <input className={styles.formInput} type="password" name="password" value={formData.password} onChange={handleInputChange}/>
-                <br />
-               </center>
+                <input 
+                  className={styles.formInput}
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+               />
+               <br />
+            </center>
+
             <center>
-             <Button size="sm" onClick={loginUser}>
-               Login
-             </Button>
+               <Button size="sm" onClick={loginUser}>
+                  Login
+               </Button>
                {errors.message && <p>{errors.message}</p>}
             </center>
-            </Form>
+         </Form>
+         <div className={styles.flexCol}>
+            <Button size="sm" onClick={toggleComponent}>Change to Register</Button>
          </div>
-      </>
-   );
+      </div>
+   </>
+);
 }
 
 

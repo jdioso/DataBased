@@ -105,7 +105,7 @@ async function register(requestBody) {
 }
 
 // function that calls login endpoint
-async function getByID(requestBody) {
+async function getByID(id = null, requestBody) {
    if (id == null || !requestBody) {
       return null;
    }
