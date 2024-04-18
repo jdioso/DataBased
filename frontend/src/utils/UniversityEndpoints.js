@@ -314,4 +314,5 @@ export {
    deleteUniversity,
    getAllUniversities,
    getUniversityByID,
+   getUniversityByDomain,
 };
