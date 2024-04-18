@@ -44,18 +44,11 @@ export default function Org() {
    // page specific data
    const [orgEvents, setOrgEvents] = useState([]);
    const [isMember, setIsMember] = useState(false);
+   const [isAdmin, setIsAdmin] = useState(false);
 
    // variables that control forms
    const [eventForEdit, setEventForEdit] = useState(null);
    const [openAdd, setOpenAdd] = useState(false);
-   const canAddEvent = async () => {
-      let retval = false;
-      const admins = await orgEndpoints.returnUsersRSOs(currentUser);
-      admins.forEach(
-         (admin) => (retval = retval || currentOrg.rsoID === admin.rsoID)
-      );
-      return retval;
-   };
 
    const isOverlapping = async (latitude, longitude, time) => {
       const events = await eventEndpoints.getAllEvents();
@@ -79,13 +72,13 @@ export default function Org() {
       };
 
       const check = window.confirm("Are you sure you want to add this event?");
-      if (canAddEvent()) {
+      if (isAdmin) {
+         console.log(isAdmin);
          // console.log(requestBody);
          if (check) {
-            if (isOverlapping(event.latitude, event.longitude, event.time)) {
-               window.alert(
-                  `There is already a location happening at latitude: ${event.latitude} longitude: ${event.longitude} at time: ${event.time}`
-               );
+            if (
+               await isOverlapping(event.latitude, event.longitude, event.time)
+            ) {
             } else {
                const response = await eventEndpoints.addEvent(requestBody);
                // setOpenAdd(false);
@@ -124,10 +117,23 @@ export default function Org() {
       }
       setIsMember(retval);
    };
+
+   // returns false if not
+   const checkIfAdmin = async () => {
+      let retval = false;
+      const userRSOs = await orgEndpoints.returnMemberRSOs(currentUser);
+      if (userRSOs) {
+         userRSOs.forEach((rso) => {
+            retval = retval || rso.rsoID === currentOrg.rsoID;
+         });
+      }
+      setIsAdmin(retval);
+   };
+
    useEffect(() => {
       window.scrollTo(0, 0);
       checkIfMember();
-
+      checkIfAdmin();
       eventEndpoints.getEventsByOrg(currentOrg.rsoID).then((events) => {
          if (events && isMember) {
             setOrgEvents([...events]);
