@@ -278,7 +278,7 @@ router.get('/rsoAdmin/:userID', async (req, res) => {
 });
 
 router.get('/userRSOs/:userID', async (req, res) => {
-	const userID = req.params;
+	const { userID } = req.params;
 	try {
 		const rsoLists = await db.rso_members.findAll({
 			where: { userID: userID }
