@@ -147,7 +147,7 @@ export default function Event() {
       window.scrollTo(0, 0);
       renderComments();
    }, [currentEvent]);
-   
+
    return (
       <>
          <Navbar></Navbar>

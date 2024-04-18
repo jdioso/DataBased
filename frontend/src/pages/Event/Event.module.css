@@ -228,3 +228,7 @@
 .highlighted {
    transform: scale(1.03);
 }
+
+label {
+   color: var(--background);
+}
