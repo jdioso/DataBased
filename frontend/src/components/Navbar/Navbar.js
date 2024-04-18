@@ -30,7 +30,7 @@ export default function Navbar() {
             <Button
                onClick={(e) => {
                   e.preventDefault();
-                  navigate("/ ");
+                  navigate("/");
                }}
             >
                Login
