@@ -160,7 +160,7 @@ export default function Event() {
                      setEventForEdit({ ...currentEvent });
                   }}
                >
-                  {openEdit ? "Close" : "Edit"}
+                  {openEdit ? "Close" : "Edit Event"}
                </Button>
             </div>
             {openEdit ? (

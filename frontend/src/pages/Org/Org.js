@@ -7,6 +7,9 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { useSessionStorage } from "usehooks-ts";
 import * as eventEndpoints from "../../utils/EventEndpoints";
+import EventForm from "../Event/EventForm";
+import * as orgEndpoints from "../../utils/OrgEndpoints";
+
 const orgPlaceholder = {
    rsoID: -1,
    adminID: -1,
@@ -41,6 +44,43 @@ export default function Org() {
 
    // page specific data
    const [orgEvents, setOrgEvents] = useState([]);
+
+   // variables that control forms
+   const [eventForEdit, setEventForEdit] = useState(null);
+   const [openAdd, setOpenAdd] = useState(false);
+   const canEditEvent = async () => {
+      let retval = false;
+      const admins = await orgEndpoints.returnUsersRSOs(currentUser);
+      admins.forEach(
+         (admin) => (retval = retval || currentOrg.rsoID === admin.rsoID)
+      );
+      return retval;
+   };
+   const addEvent = async (event, resetForm) => {
+      // potentially edit this to reflect new values
+      const requestBody = {
+         privacy: event.privacy,
+         name: event.name,
+         description: event.description,
+         latitude: event.latitude,
+         longitude: event.longitude,
+         contactName: event.contactName,
+         contactEmail: event.contactEmail,
+         contactNumber: event.contactNumber,
+         time: event.time,
+      };
+
+      const check = window.confirm("Are you sure you want to edit this event?");
+      if (canEditEvent() && check) {
+         const response = await eventEndpoints.addEvent(requestBody);
+         console.log(response);
+         setCurrentEvent({ ...event });
+      } else {
+         window.alert("You do not not have permission to add events.");
+      }
+      setOpenAdd(false);
+   };
+
    // grabs information of event university and opens event info page
    const openEvent = async (event) => {
       setCurrentEvent({ ...event });
@@ -74,13 +114,25 @@ export default function Org() {
                   </div>
                   <div>
                      <p>Number of Members: {currentOrg.numMembers}</p>
-                     PERSON LOGO
+                     PERSON LOGgit
                   </div>
                </Sidebar>
             </div>
 
             <div className={styles.eventsWrapper}>
                <Card cardTitle="Events">
+                  <Button o>Add Event</Button>
+                  <Button
+                     onClick={(e) => {
+                        e.preventDefault();
+                        setOpenAdd(!openAdd);
+                        setEventForEdit({ ...currentEvent });
+                     }}
+                  >
+                     {openAdd ? "Close" : "Add Event"}
+                  </Button>
+                  {openAdd ? <EventForm addOrEdit={addEvent} /> : ""}
+
                   <ul className={styles.eventList}>
                      {orgEvents &&
                         orgEvents.map((event) => (

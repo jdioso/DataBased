@@ -42,6 +42,12 @@ export default function Discover() {
    const [orgInput, setOrgInput] = useState(null);
    const [universityInput, setUniversityInput] = useState(null);
 
+   // grabs information of event university and opens event info page
+   const openEvent = async (event) => {
+      setCurrentEvent({ ...event });
+      navigate("/event");
+   };
+
    // grabs information of selected university and opens university info page
    const openUniversity = async (university) => {
       setCurrentUniversity({ ...university });
@@ -52,12 +58,6 @@ export default function Discover() {
    const openOrg = async (org) => {
       setCurrentOrg({ ...org });
       navigate("/org");
-   };
-
-   // grabs information of event university and opens event info page
-   const openEvent = async (event) => {
-      setCurrentEvent({ ...event });
-      navigate("/event");
    };
 
    useEffect(() => {
