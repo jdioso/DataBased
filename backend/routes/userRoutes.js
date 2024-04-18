@@ -3,12 +3,18 @@ const db = require('../models');
 
 const router = express.Router();
 
-// Create User
 router.post('/register', async (req, res) => {
 	const { email, password, firstName, lastName } = req.body;
 	if (!email || !password || !firstName || !lastName) {
 		return res.status(400).json({ error: 'All fields are required to register a user.' });
 	}
+
+	// Extract domain from email, including '@'
+	const domainIndex = email.indexOf('@');
+	if (domainIndex === -1) {  // Check if '@' is present
+		return res.status(400).json({ error: 'Invalid email address.' });
+	}
+	const domain = email.substring(domainIndex);  // Get everything from '@' onward
 
 	try {
 		const existingUser = await db.users.findOne({ where: { email } });
@@ -16,18 +22,32 @@ router.post('/register', async (req, res) => {
 			return res.status(409).json({ error: 'A user with this email already exists.' });
 		}
 
+		// Check if the domain corresponds to a registered university
+		const university = await db.university.findOne({ where: { domain } });
+		let universityID = null;
+		if (university) {
+			universityID = university.universityID;
+		}
+
 		const newUser = await db.users.create({
 			email,
 			password,
 			firstName,
-			lastName
+			lastName,
+			universityID: universityID  // This will be null if no matching university is found
 		});
-		res.status(201).json({ message: 'User registered successfully.', userID: newUser.userID });
+
+		res.status(201).json({
+			message: 'User registered successfully.',
+			userID: newUser.userID,
+			universityID: universityID ? universityID : "No associated university"
+		});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ error: 'Failed to register user due to internal server error.' });
 	}
 });
+
 
 router.post('/login', async (req, res) => {
 	try {
