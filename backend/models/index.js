@@ -21,6 +21,7 @@ db.sequelize = sequelize;
 db.users = require('./user')(sequelize, Sequelize);
 db.comments = require('./comments')(sequelize, Sequelize);
 db.university = require('./university')(sequelize, Sequelize);
+db.photos = require('./photos')(sequelize, Sequelize);
 db.rsos = require('./rso')(sequelize, Sequelize);
 db.rso_members = require('./rso_members')(sequelize, Sequelize);
 db.events = require('./events')(sequelize, Sequelize);
@@ -45,6 +46,9 @@ db.users.belongsTo(db.university, { foreignKey: 'universityID' });
 
 db.university.hasMany(db.events, { foreignKey: 'universityID' });
 db.events.belongsTo(db.university, { foreignKey: 'universityID' });
+
+db.university.hasMany(db.photos, { foreignKey: 'universityID' });
+db.photos.belongsTo(db.university, { foreignKey: 'universityID' });
 
 db.rsos.hasMany(db.events, { foreignKey: 'rsoID' });
 db.events.belongsTo(db.rsos, { foreignKey: 'rsoID' });
